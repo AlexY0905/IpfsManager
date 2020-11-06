@@ -1,0 +1,11 @@
+.homesider a.active{
+     color:#1890ff !important;
+}
+
+.homesider .ant-menu-item-selected{
+    background-color: transparent !important;
+}
+
+.homesider .ant-menu-item-selected:after{
+    border-right: none  !important;
+}

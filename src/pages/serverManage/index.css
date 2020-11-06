@@ -1,0 +1,15 @@
+.newAddBtnWrap {
+    text-align: right;
+    height    : 40px;
+}
+
+.newContentWrap {
+    display   : inline-block;
+    width     : 200px;
+    height    : 50px;
+    overflow-y: auto;
+}
+
+.edit {
+    margin-bottom: 10px;
+}

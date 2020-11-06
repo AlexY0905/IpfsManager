@@ -1,0 +1,11 @@
+.logo {
+    font-size   : 28px;
+    font-weight : 600;
+    color       : #1890ff;
+    float       : left;
+    margin-right: 24px;
+}
+
+.ant-dropdown-link {
+    float: right;
+}
