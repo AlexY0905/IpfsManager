@@ -1,5 +1,5 @@
 {
-  "name": "myapp",
+  "name": "Ipfs-Lotus",
   "version": "1.0.0",
   "description": "",
   "main": "webpack-config.js",
@@ -8,7 +8,7 @@
     "start": "webpack-dev-server --open"
   },
   "keywords": [],
-  "author": "wkk",
+  "author": "wkk&wkq",
   "license": "ISC",
   "devDependencies": {
     "babel-core": "^6.26.3",
