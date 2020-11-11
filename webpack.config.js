@@ -121,9 +121,10 @@ module.exports = {
                 // 配置跨域代理
                 // changeOrigin: true,
                 context: [ // 例: 以 '/v1' 开头的请求接口, 都是以target指定的地址去代理请求数据
-                    '/v1'
+                    '/v1',
+                    '/v2'
                 ],
-                target: 'http://192.168.172.103:9000' // lotus-jp接口地址
+                target: 'http://61.147.123.84:10011' // lotus-jp接口地址
             }
         ],
         historyApiFallback: true//让h5路由不向后端发送请求

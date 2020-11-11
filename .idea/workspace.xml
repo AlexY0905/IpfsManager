@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="88ea14c9-992d-4cc0-abdb-ea3de4a15d76" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common/header/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/header/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/serverManage/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/serverManage/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/serverManage/store/actionCreator.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/serverManage/store/actionCreator.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/serverManage/store/actionTypes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/serverManage/store/actionTypes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/serverManage/store/reducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/serverManage/store/reducer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webpack.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.config.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1k4vYhDT7YAOQniZkJ2D98o8j8S" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../project-lotusApp/lotus-app" />
+    <property name="nodejs_package_manager_path" value="yarn" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="88ea14c9-992d-4cc0-abdb-ea3de4a15d76" name="Default Changelist" comment="" />
+      <created>1604972731352</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1604972731352</updated>
+      <workItem from="1604972732981" duration="3976000" />
+      <workItem from="1604984857190" duration="179000" />
+      <workItem from="1605058564030" duration="7273000" />
+      <workItem from="1605076418936" duration="3802000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1605078651865">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1605078651865" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1605079956122">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1605079956122" />
+  </component>
+</project>

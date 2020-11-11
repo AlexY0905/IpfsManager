@@ -15,6 +15,31 @@ export const API_CONFIG = {
     adminLogin: [
         '/v1/loginbypassword',
         'get'
+    ],
+    // 添加服务器页面, 获取所有服务器数据
+    getAllServer: [
+        '/v2/showallservers',
+        'get'
+    ],
+    // 添加服务器页面, 添加服务器接口
+    addServer: [
+        '/v2/addserver',
+        'get'
+    ],
+    // 添加服务器页面, 编辑服务器接口
+    editServer: [
+        '/v2/updateserver',
+        'get'
+    ],
+    // 添加服务器页面, 获取服务器的数据回填接口
+    getEditServerData: [
+        '/v2/showserver',
+        'get'
+    ],
+    // 添加服务器页面, 删除机器id接口
+    delip: [
+        '/v2/delserver',
+        'get'
     ]
 }
 

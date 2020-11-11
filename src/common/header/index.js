@@ -39,7 +39,7 @@ class HomeHeader extends Component {
             <div>
                 <Header className="header">
                     <div className="logo">
-                        lotus-jp
+                        lotus管理
                     </div>
                     <Dropdown overlay={menu} trigger={['click']}>
                         <a className="ant-dropdown-link" href=" ">
