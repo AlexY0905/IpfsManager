@@ -2,14 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88ea14c9-992d-4cc0-abdb-ea3de4a15d76" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/common/header/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/header/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/serverManage/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/serverManage/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/serverManage/store/actionCreator.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/serverManage/store/actionCreator.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/serverManage/store/actionTypes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/serverManage/store/actionTypes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/serverManage/store/reducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/serverManage/store/reducer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webpack.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common/sider/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/sider/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/reducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/reducer.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,9 +23,14 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../project-lotusApp/lotus-app" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../project-lotusweb/lotus-web" />
     <property name="nodejs_package_manager_path" value="yarn" />
     <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\WKQ\project-lotusJP\IpfsManager\src\pages" />
+    </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -42,7 +43,9 @@
       <workItem from="1604972732981" duration="3976000" />
       <workItem from="1604984857190" duration="179000" />
       <workItem from="1605058564030" duration="7273000" />
-      <workItem from="1605076418936" duration="3802000" />
+      <workItem from="1605076418936" duration="4717000" />
+      <workItem from="1605082868343" duration="2855000" />
+      <workItem from="1605157415121" duration="5563000" />
     </task>
     <servers />
   </component>
@@ -50,10 +53,10 @@
     <option name="version" value="3" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1605078651865">
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1605161719357">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1605078651865" />
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1605161719357" />
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1605079956122">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

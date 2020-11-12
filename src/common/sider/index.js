@@ -53,6 +53,14 @@ class HomeSider extends Component {
                             <Menu.Item key="3">
                                 <NavLink to='/Monitor'><Icon type="video-camera" /> 本地机器监控</NavLink>
                             </Menu.Item>
+                            {
+                                /*
+                                <Menu.Item key="4">
+                                    <NavLink to='/ipssh'><Icon type="laptop" />ipssh</NavLink>
+                                </Menu.Item>
+                                 */
+                            }
+
                         </SubMenu>
                     </Menu>
                 </Sider>
