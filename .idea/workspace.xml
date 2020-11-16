@@ -3,7 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="88ea14c9-992d-4cc0-abdb-ea3de4a15d76" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/util/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common/sider/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/sider/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/ipssh/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ipssh/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,7 +22,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="C:/code/lotus-app-t" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../project-lotusweb/lotus-web" />
     <property name="nodejs_package_manager_path" value="yarn" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -44,7 +45,10 @@
       <workItem from="1605076418936" duration="4717000" />
       <workItem from="1605082868343" duration="2855000" />
       <workItem from="1605157415121" duration="10953000" />
-      <workItem from="1605237874195" duration="6849000" />
+      <workItem from="1605237874195" duration="8754000" />
+      <workItem from="1605494241830" duration="1331000" />
+      <workItem from="1605495771540" duration="743000" />
+      <workItem from="1605496584490" duration="4018000" />
     </task>
     <servers />
   </component>
@@ -52,10 +56,10 @@
     <option name="version" value="3" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1605244876934">
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1605496745841">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1605244876934" />
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1605496745841" />
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1605079956122">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
