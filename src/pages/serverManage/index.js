@@ -52,6 +52,8 @@ class ServerManage extends Component {
         console.log('close')
     }
     handleLinkShowModal(record) { // 显示链接对话框
+        console.log('链接')
+        /*
         this.setState({ linkVisible: true }, () => {
             // setTimeout(() => {console.log(3333333333, this.terminalDom.current);})
             setTimeout(() => {
@@ -86,6 +88,7 @@ class ServerManage extends Component {
                 })
             })
         })
+        */
     }
     handleLinkCancel() { // 处理链接对话框中取消按钮
         this.setState({
