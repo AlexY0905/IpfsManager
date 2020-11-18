@@ -1,13 +1,13 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Link, Switch, Redirect, } from "react-router-dom";
-import Register from 'pages/register/index'
-import Login from 'pages/login/index'
-import Home from 'pages/home/index'
-import ServerManage from 'pages/serverManage/index'
-import Monitor from 'pages/monitor/index'
-import Ipssh from 'pages/ipssh/index'
-import { getUsername } from 'util'
+import Register from 'pages/register/index';
+import Login from 'pages/login/index';
+import Home from 'pages/home/index';
+import ServerManage from 'pages/serverManage/index';
+import Monitor from 'pages/monitor/index';
+import Ipssh from 'pages/ipssh/index';
+import { getUsername } from 'util';
 
 function App() {
   // 自定义路由

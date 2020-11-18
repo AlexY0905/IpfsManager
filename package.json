@@ -47,6 +47,7 @@
     "redux-immutable": "^4.0.0",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
-    "simditor": "^2.3.19"
+    "simditor": "^2.3.19",
+    "xterm": "^3.14.5"
   }
 }

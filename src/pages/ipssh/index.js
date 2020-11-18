@@ -20,7 +20,7 @@ class Ipssh extends Component {
         // 调用发送方的数据 显示服务器列表
         // this.props.handleGetServerHostData()
     }
-    pressEnter (e) {
+    pressEnter(e) {
         // 获取文本框中的值
         console.log(11111111111, e.target.value)
     }
@@ -31,7 +31,7 @@ class Ipssh extends Component {
         const { serverhostlist } = this.props
         const columns = [
             {
-                title: '服务器地址',
+                title: '服务器IP地址',
                 dataIndex: 'host',
                 align: 'center',
                 key: 'host',
@@ -46,12 +46,11 @@ class Ipssh extends Component {
             }
         };
 
-
         return (
             <div className="News">
                 <Layout>
                     <Breadcrumb style={{ margin: '16px 0', textAlign: 'left', fontSize: '16px' }}>
-                        <Breadcrumb.Item>ipssh</Breadcrumb.Item>
+                        <Breadcrumb.Item>批量命令</Breadcrumb.Item>
                     </Breadcrumb>
                     <div style={{ textAlign: 'right', marginBottom: '15px' }}>
 
@@ -74,7 +73,9 @@ class Ipssh extends Component {
                                 />
                             </div>
                             <div className='terminal_box'>
-                                <div className='terminal_top'>结果</div>
+                                <div className='terminal_top'>
+                                    结果
+                                </div>
                                 <div className='terminal_bottom'>
                                     <TextArea
                                         rows={8}
@@ -84,6 +85,9 @@ class Ipssh extends Component {
                                 </div>
                             </div>
                         </div>
+                        <Button type="primary" style={{ float: 'right', marginTop: '10px' }}>
+                            提交
+                        </Button>
                     </div>
                 </Layout>
             </div>

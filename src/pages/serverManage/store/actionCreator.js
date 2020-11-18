@@ -22,7 +22,7 @@ export const handleGetServerDataAction = () => {
         dispatch(getIsLoadingStart())
         api.getAllServer()
             .then(result => {
-                console.log(':::::::::::::::', result)
+                // console.log(':::::::::::::::', result)
                 dispatch(handleGetServerData(result))
             })
             .catch(err => {
@@ -39,7 +39,7 @@ export const handleAddServerAction = (options) => {
     return (dispatch, getState) => {
         api.addServer(options)
             .then(result => {
-                console.log(':::::::::::::::', result)
+                // console.log(':::::::::::::::', result)
                 if (result.code == 0) {
                     message.success('添加成功')
                     setTimeout(() => {
@@ -64,7 +64,7 @@ export const handleGetEditDataAction = (id) => {
     return (dispatch, getState) => {
         api.getEditServerData({id})
             .then(result => {
-                console.log(':::::::::::::::', result)
+                // console.log(':::::::::::::::', result)
                 dispatch(handleGetServerEdit(result))
             })
             .catch(err => {

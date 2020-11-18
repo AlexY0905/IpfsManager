@@ -13,3 +13,32 @@
 .edit {
     margin-bottom: 10px;
 }
+
+#terminal {
+    width: 100%;
+    height: 100%;
+}
+#terminal .xterm-viewport {
+    display: none !important;
+}
+#terminal .xterm-screen .xterm-helpers {
+    opacity: 0;
+    height: 0 !important;
+}
+#terminal .xterm-screen .xterm-selection-layer {
+    display: none !important;
+}
+#terminal .xterm-screen .xterm-link-layer {
+    display: none !important;
+}
+#terminal .xterm-screen .xterm-cursor-layer {
+    display: none !important;
+}
+.xterm-screen {
+    width: 100% !important;
+    height: 100% !important;
+}
+.xterm-screen canvas {
+    width: 100% !important;
+    height: 100% !important;
+}

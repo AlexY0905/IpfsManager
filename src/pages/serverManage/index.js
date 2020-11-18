@@ -1,9 +1,10 @@
-// 批量部署页面
+// 添加账户页面
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import "./index.css"
 import { actionCreator } from './store'
 import Layout from 'common/layout'
+import Terminal from './Xterm'
 import { Breadcrumb, Table, Divider, Button, Modal, Input, Form, notification } from 'antd'
 
 const { confirm } = Modal
@@ -11,21 +12,26 @@ const { confirm } = Modal
 class ServerManage extends Component {
     constructor(props) {
         super(props)
+        this.terminalDom = React.createRef();
         this.state = {
-            seeVisible: false,
+            linkVisible: false,
             editVisible: false,
             addVisible: false,
-            serverId: ''
+            serverId: '',
+            term: null,
+            terminalSocket: null
         }
-        this.handleSeeShowModal = this.handleSeeShowModal.bind(this)
-        this.handleSeeOk = this.handleSeeOk.bind(this)
-        this.handleSeeCancel = this.handleSeeCancel.bind(this)
+        this.runRealTerminal = this.runRealTerminal.bind(this)
+        this.errorRealTerminal = this.errorRealTerminal.bind(this)
+        this.closeRealTerminal = this.closeRealTerminal.bind(this)
+
+        this.handleLinkShowModal = this.handleLinkShowModal.bind(this)
+        this.handleLinkCancel = this.handleLinkCancel.bind(this)
         this.handleEditShowModal = this.handleEditShowModal.bind(this)
         this.handleeditCancel = this.handleeditCancel.bind(this)
         this.handleEditSubmitBtn = this.handleEditSubmitBtn.bind(this)
         this.handleAddServerBtn = this.handleAddServerBtn.bind(this)
         this.handleAddCancel = this.handleAddCancel.bind(this)
-        this.handleLink = this.handleLink.bind(this)
         this.handleDel = this.handleDel.bind(this)
 
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -36,19 +42,54 @@ class ServerManage extends Component {
         // 调用发送方的数据 显示服务器列表
         this.props.handleGetServerData()
     }
-    handleSeeShowModal() { // 显示查看对话框
-        this.setState({
-            seeVisible: true
+    runRealTerminal() {
+        console.log('webSocket is finished')
+    }
+    errorRealTerminal() {
+        console.log('error')
+    }
+    closeRealTerminal() {
+        console.log('close')
+    }
+    handleLinkShowModal(record) { // 显示链接对话框
+        this.setState({ linkVisible: true }, () => {
+            // setTimeout(() => {console.log(3333333333, this.terminalDom.current);})
+            setTimeout(() => {
+                console.log(':::::::::::::', record);
+                var jsonStr = `{"username":"${record.username}", "ipaddress":"${record.host}", "port":${record.port}, "password":"${record.password}"}`
+                var msg = window.btoa(jsonStr)
+                var containerHeight = window.screen.height;
+                // var containerHeight = window.screen.width;
+                var cols = Math.floor((containerHeight - 30) / 9);
+                var rows = Math.floor(window.innerHeight / 17) - 2;
+                // var rows = Math.floor(window.innerHeight / 10) - 2;
+                console.log('cols------------', cols);
+                console.log('rows-------------', rows);
+                if (this.username === undefined) {
+                    var url = (location.protocol === "http:" ? "ws" : "wss") + "://" + "192.168.1.111:10011" + "/ws" + "?" + "msg=" + msg + "&rows=" + rows + "&cols=" + cols;
+                } else {
+                    var url = (location.protocol === "http:" ? "ws" : "wss") + "://" + "192.168.1.111:10011" + "/ws" + "?" + "msg=" + msg + "&rows=" + rows + "&cols=" + cols + "&username=" + record.username + "&password=" + record.password;
+                }
+                let terminalContainer = this.terminalDom.current
+
+                this.setState({
+                    term: new Terminal(),
+                    terminalSocket: new WebSocket(url)
+                }, () => {
+                    this.state.term.open(terminalContainer)
+                    this.state.terminalSocket.onopen = this.runRealTerminal
+                    this.state.terminalSocket.onclose = this.closeRealTerminal
+                    this.state.terminalSocket.onerror = this.errorRealTerminal
+                    this.state.term.attach(this.state.terminalSocket)
+                    this.state.term._initialized = true
+                    console.log('mounted is going on')
+                })
+            })
         })
     }
-    handleSeeOk() { // 处理查看对话框中确定按钮
+    handleLinkCancel() { // 处理链接对话框中取消按钮
         this.setState({
-            seeVisible: false
-        })
-    }
-    handleSeeCancel() { // 处理查看对话框中取消按钮
-        this.setState({
-            seeVisible: false
+            linkVisible: false
         })
     }
 
@@ -74,11 +115,13 @@ class ServerManage extends Component {
         let addServerPassword = this.passwordInput.state.value
         let addServerHost = this.hostInput.state.value
         let addServerPort = this.portInput.state.value
+        /*
         console.log(addServerName);
         console.log(addServerUserName);
         console.log(addServerPassword);
         console.log(addServerHost);
         console.log(addServerPort);
+        */
         if (addServerName == undefined) {
             notification['warning']({
                 message: 'name 不能为空 !'
@@ -120,10 +163,6 @@ class ServerManage extends Component {
         }
     }
 
-    handleLink() { // 处理链接按钮
-        console.log('点击了链接按钮')
-    }
-
     handleDel(record) { // 处理删除按钮
         console.log('::::::::::::::', record);
         let { id } = record
@@ -159,11 +198,13 @@ class ServerManage extends Component {
         let addServerPassword = this.passwordInput.state.value
         let addServerHost = this.hostInput.state.value
         let addServerPort = this.portInput.state.value
+        /*
         console.log(addServerName);
         console.log(addServerUserName);
         console.log(addServerPassword);
         console.log(addServerHost);
         console.log(addServerPort);
+        */
         if (addServerName == undefined) {
             notification['warning']({
                 message: 'name 不能为空 !'
@@ -252,7 +293,7 @@ class ServerManage extends Component {
                         }
                         <Button type="primary" onClick={() => { this.handleEditShowModal(record) }} className="bottom2">编辑</Button>
                         <Divider type="vertical" />
-                        <Button type="primary" onClick={() => { this.handleLink(record) }} className="bottom2">链接</Button>
+                        <Button type="primary" onClick={() => { this.handleLinkShowModal(record) }} className="bottom2">链接</Button>
                         <Divider type="vertical" />
                         <Button type="danger" onClick={() => { this.handleDel(record) }} className="bottom2">删除</Button>
                     </span>
@@ -266,7 +307,7 @@ class ServerManage extends Component {
             <div className="News">
                 <Layout>
                     <Breadcrumb style={{ margin: '16px 0', textAlign: 'left', fontSize: '16px' }}>
-                        <Breadcrumb.Item>服务器管理</Breadcrumb.Item>
+                        <Breadcrumb.Item>添加账户</Breadcrumb.Item>
                     </Breadcrumb>
                     <div style={{ textAlign: 'right', marginBottom: '15px' }}>
                         <Button type="primary" onClick={this.handleAddServerBtn} className="bottom2">添加</Button>
@@ -285,19 +326,6 @@ class ServerManage extends Component {
                                     }
                                 }
                             />
-                        </div>
-                        <div>
-                            <Modal
-                                title="查看"
-                                visible={this.state.seeVisible}
-                                onOk={this.handleSeeOk}
-                                onCancel={this.handleSeeCancel}
-                                footer={null}
-                            >
-                                <p>Some contents...</p>
-                                <p>Some contents...</p>
-                                <p>Some contents...</p>
-                            </Modal>
                         </div>
                         <div>
                             <Modal
@@ -368,6 +396,19 @@ class ServerManage extends Component {
                                             添加
                                         </Button>
                                     </Form.Item>
+                                </div>
+                            </Modal>
+                        </div>
+                        <div>
+                            <Modal
+                                title="链接"
+                                width="800px"
+                                visible={this.state.linkVisible}
+                                onCancel={this.handleLinkCancel}
+                                footer={null}
+                            >
+                                <div className="console" id="terminal" ref={this.terminalDom}>
+
                                 </div>
                             </Modal>
                         </div>

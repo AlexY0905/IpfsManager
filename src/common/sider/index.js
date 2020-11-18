@@ -48,13 +48,13 @@ class HomeSider extends Component {
                             }
                         >
                             <Menu.Item key="2">
-                                <NavLink to='/serverManage'><Icon type="laptop" />服务器管理</NavLink>
+                                <NavLink to='/serverManage'><Icon type="laptop" />添加账户</NavLink>
                             </Menu.Item>
                             <Menu.Item key="3">
                                 <NavLink to='/Monitor'><Icon type="video-camera" /> 本地机器监控</NavLink>
                             </Menu.Item>
                             <Menu.Item key="4">
-                                <NavLink to='/ipssh'><Icon type="laptop" />ipssh</NavLink>
+                                <NavLink to='/ipssh'><Icon type="laptop" />批量命令</NavLink>
                             </Menu.Item>
                         </SubMenu>
                     </Menu>
