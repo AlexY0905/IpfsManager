@@ -24,6 +24,3 @@
     height    : 400px;
     overflow-y: scroll;
 }
-.terminal_box .terminal_top div p {
-    margin-bottom: 3px;
-}

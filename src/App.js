@@ -7,6 +7,7 @@ import Home from 'pages/home/index';
 import ServerManage from 'pages/serverManage/index';
 import Monitor from 'pages/monitor/index';
 import Ipssh from 'pages/ipssh/index';
+import Fileupload from 'pages/fileupload/index';
 import { getUsername } from 'util';
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
           <ProtectRoute path='/serverManage' component={ServerManage} />
           <ProtectRoute path='/Monitor' component={Monitor} />
           <ProtectRoute path='/ipssh' component={Ipssh} />
+          <ProtectRoute path='/fileupload' component={Fileupload} />
           <LoginRoute path='/register' component={Register} />
           <LoginRoute path='/login' component={Login} />
         </Switch>

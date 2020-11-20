@@ -40,6 +40,11 @@ export const API_CONFIG = {
     delip: [
         '/v2/delserver',
         'get'
+    ],
+    // 批量部署页面, 批量部署接口
+    getIpSsh: [
+        '/v3/multissh',
+        'post'
     ]
 }
 

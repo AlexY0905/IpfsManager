@@ -122,7 +122,8 @@ module.exports = {
                 // changeOrigin: true,
                 context: [ // 例: 以 '/v1' 开头的请求接口, 都是以target指定的地址去代理请求数据
                     '/v1',
-                    '/v2'
+                    '/v2',
+                    '/v3'
                 ],
                 target: 'http://61.147.123.84:10011' // lotus-jp接口地址
             }
