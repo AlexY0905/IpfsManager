@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import "./index.css"
 import { actionCreator } from './store'
 import Layout from 'common/layout'
-import { Breadcrumb, Table, Divider, Button, Modal, Input, Form, notification, List } from 'antd'
+import { Breadcrumb, Table, Divider, Button, Modal, Input, Form, notification, List, Upload, Icon, message } from 'antd'
 const { TextArea } = Input;
 
 
@@ -31,7 +31,7 @@ class Ipssh extends Component {
             cmds: e.target.value
         }
         // 清空文本输入框
-        this.textAreaIpt.current.state.value = ''
+        // this.textAreaIpt.current.state.value = ''
         // 调用发送方函数, 处理服务器的批量部署
         this.props.handleIpSsh(options)
     }
@@ -69,6 +69,27 @@ class Ipssh extends Component {
             })
         })
 
+        const propsData = {
+            name: 'file',
+            action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+            data: {
+
+            },
+            headers: {
+                authorization: 'authorization-text',
+            },
+            onChange(info) {
+                if (info.file.status !== 'uploading') {
+                    console.log(info.file, info.fileList);
+                }
+                if (info.file.status === 'done') {
+                    message.success(`${info.file.name} file uploaded successfully`);
+                } else if (info.file.status === 'error') {
+                    message.error(`${info.file.name} file upload failed.`);
+                }
+            },
+        };
+
         return (
             <div className="News">
                 <Layout>
@@ -76,6 +97,15 @@ class Ipssh extends Component {
                         <Breadcrumb.Item>批量命令</Breadcrumb.Item>
                     </Breadcrumb>
                     <div style={{ textAlign: 'right', marginBottom: '15px' }}>
+                        {
+                            /*
+                            <Upload {...propsData}>
+                                <Button>
+                                    <Icon type="upload" /> Click to Upload
+                                </Button>
+                            </Upload>
+                            */
+                        }
 
                     </div>
                     <div className="content">
@@ -99,13 +129,15 @@ class Ipssh extends Component {
                                 <div className='terminal_top' style={{background: '#000'}}>
                                     <div>
                                         {
-                                            // ipsshtxtArr.map((item, index) => {
-                                            //     return item.map((v, i) => {
-                                            //         return v.Result.map((s, t) => {
-                                            //             return <p style={{color: '#fff'}}>{s}</p>
-                                            //         })
-                                            //     })
-                                            // })
+                                            /*
+                                            ipsshtxtArr.map((item, index) => {
+                                                return item.map((v, i) => {
+                                                    return v.Result.map((s, t) => {
+                                                        return <p style={{color: '#fff'}}>{s}</p>
+                                                    })
+                                                })
+                                            })
+                                             */
                                             ipsshtxtArr && ipsshtxtArr
                                         }
                                     </div>
@@ -120,9 +152,6 @@ class Ipssh extends Component {
                                 </div>
                             </div>
                         </div>
-                        <Button type="primary" style={{ float: 'right', marginTop: '10px' }}>
-                            提交
-                        </Button>
                     </div>
                 </Layout>
             </div>

@@ -53,24 +53,23 @@ class ServerManage extends Component {
     }
     handleLinkShowModal(record) { // 显示链接对话框
         console.log('链接')
-        /*
         this.setState({ linkVisible: true }, () => {
             // setTimeout(() => {console.log(3333333333, this.terminalDom.current);})
             setTimeout(() => {
                 console.log(':::::::::::::', record);
-                var jsonStr = `{"username":"${record.username}", "ipaddress":"${record.host}", "port":${record.port}, "password":"${record.password}"}`
+                var jsonStr = `{"username":"${record.username}", "host":"${record.host}", "port":${record.port}, "password":"${record.password}"}`
                 var msg = window.btoa(jsonStr)
                 var containerHeight = window.screen.height;
                 // var containerHeight = window.screen.width;
                 var cols = Math.floor((containerHeight - 30) / 9);
-                var rows = Math.floor(window.innerHeight / 17) - 2;
-                // var rows = Math.floor(window.innerHeight / 10) - 2;
+                // var rows = Math.floor(window.innerHeight / 17) - 2;
+                var rows = Math.floor(window.innerHeight / 10) - 2;
                 console.log('cols------------', cols);
                 console.log('rows-------------', rows);
                 if (this.username === undefined) {
-                    var url = (location.protocol === "http:" ? "ws" : "wss") + "://" + "192.168.1.111:10011" + "/ws" + "?" + "msg=" + msg + "&rows=" + rows + "&cols=" + cols;
+                    var url = (location.protocol === "http:" ? "ws" : "wss") + "://" + "61.147.123.84:10011" + "/ws" + "?" + "msg=" + msg + "&rows=" + rows + "&cols=" + cols;
                 } else {
-                    var url = (location.protocol === "http:" ? "ws" : "wss") + "://" + "192.168.1.111:10011" + "/ws" + "?" + "msg=" + msg + "&rows=" + rows + "&cols=" + cols + "&username=" + record.username + "&password=" + record.password;
+                    var url = (location.protocol === "http:" ? "ws" : "wss") + "://" + "61.147.123.84:10011" + "/ws" + "?" + "msg=" + msg + "&rows=" + rows + "&cols=" + cols + "&username=" + record.username + "&password=" + record.password;
                 }
                 let terminalContainer = this.terminalDom.current
 
@@ -88,7 +87,6 @@ class ServerManage extends Component {
                 })
             })
         })
-        */
     }
     handleLinkCancel() { // 处理链接对话框中取消按钮
         this.setState({
@@ -310,7 +308,7 @@ class ServerManage extends Component {
             <div className="News">
                 <Layout>
                     <Breadcrumb style={{ margin: '16px 0', textAlign: 'left', fontSize: '16px' }}>
-                        <Breadcrumb.Item>添加账户</Breadcrumb.Item>
+                        <Breadcrumb.Item>资产管理</Breadcrumb.Item>
                     </Breadcrumb>
                     <div style={{ textAlign: 'right', marginBottom: '15px' }}>
                         <Button type="primary" onClick={this.handleAddServerBtn} className="bottom2">添加</Button>
@@ -405,10 +403,11 @@ class ServerManage extends Component {
                         <div>
                             <Modal
                                 title="链接"
-                                width="800px"
+                                width="1200px"
                                 visible={this.state.linkVisible}
                                 onCancel={this.handleLinkCancel}
                                 footer={null}
+                                destroyOnClose={true}
                             >
                                 <div className="console" id="terminal" ref={this.terminalDom}>
 
