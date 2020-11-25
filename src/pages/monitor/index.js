@@ -148,7 +148,7 @@ class Monitor extends Component {
         let data = monitorList.toJS(); //将immutable对象转换成数组
 
         return (
-            <div>
+            <div className='content' style={{overflowX: 'auto'}}>
                 <Layout>
                     <Breadcrumb style={{ margin: '16px 0', textAlign: 'left', fontSize: '16px' }}>
                         <Breadcrumb.Item>本地机器监控页面</Breadcrumb.Item>

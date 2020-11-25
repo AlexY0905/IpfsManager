@@ -29,7 +29,7 @@ export default (state = defaultState, action) => {
             serverhostlist: fromJS(action.payload)// 将数据数组转换成immutable
         })
     }
-    // 处理批量部署返回的成功或失败的信息
+    // 处理批量命令返回的成功或失败的信息
     if (action.type == types.GET_IPSSH) {
         return state.merge({
             ipsshtxt: fromJS(action.payload)// 将数据数组转换成immutable

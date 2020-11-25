@@ -41,8 +41,18 @@ export const API_CONFIG = {
         '/v2/delserver',
         'get'
     ],
-    // 批量部署页面, 批量部署接口
+    // 批量命令, 展示服务器ip接口
     getIpSsh: [
+        '/v3/multissh',
+        'post'
+    ],
+    // 批量命令, 文件上传
+    uploadfile: [
+        '/v3/uploadfile',
+        'post'
+    ],
+    // 批量命令, 文件下载
+    downloadfile: [
         '/v3/multissh',
         'post'
     ]

@@ -313,7 +313,7 @@ class ServerManage extends Component {
                     <div style={{ textAlign: 'right', marginBottom: '15px' }}>
                         <Button type="primary" onClick={this.handleAddServerBtn} className="bottom2">添加</Button>
                     </div>
-                    <div className="content">
+                    <div className="content" style={{overflowX: 'auto'}}>
                         <div>
                             <Table
                                 columns={columns}
