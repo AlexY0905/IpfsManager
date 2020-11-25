@@ -100,13 +100,23 @@ class Ipssh extends Component {
         })
     }
     handleDownLoadFile () { // 处理下载文件按钮的点击事件
-        const { downLoadFileAddress } = this.state
+        const { downLoadFileAddress, ipAddress } = this.state
         if (downLoadFileAddress == '') { // 判断有没有填写下载的地址, 如果没有, 就提示用户信息
             message.error('请填写文件下载的地址')
             return false
+        } else if (ipAddress.length == 0) { // 判断有没有选中ip地址, 如果没有, 就提示用户信息
+            message.error('请选中需要下载的ip')
+            return false
         } else { // 判断有没有填写下载的地址, 如果有, 就调用发送方函数, 处理文件的下载
+            // 调用发送方, 处理文件上传
+            let options = {
+                path: downLoadFileAddress,
+                ipAddress
+            }
+            console.log(222222222222, options);
+            // return
             // 调用发送方函数, 处理文件的下载
-            this.props.handleDownFile(downLoadFileAddress)
+            this.props.handleDownFile(options)
         }
     }
 
@@ -130,16 +140,18 @@ class Ipssh extends Component {
                 console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
                 const { ipAddress } = this.state
                 // 利用setState方法的回调函数, 可以实时的拿到最新的state中的值, 以用来最新的判断
-                this.setState({selectedRows, ipAddress: selectedRows, upLoadDisable: false}, () => {
+                this.setState({selectedRows, ipAddress: selectedRows, upLoadDisable: false, downLoadBtnDisable: false}, () => {
                     // console.log(333333333, this.state.ipAddress);
                     if (this.state.ipAddress.length == 0) { // 如果没有选中ip地址
                         console.log('1233123======')
                         this.setState({ // 按钮设置为禁止点击状态
-                            upLoadDisable: true
+                            upLoadDisable: true,
+                            downLoadBtnDisable: true
                         })
                     } else { // 如果有选中ip地址
                         this.setState({ // 按钮设置为允许点击状态
-                            upLoadDisable: false
+                            upLoadDisable: false,
+                            downLoadBtnDisable: false
                         })
                     }
                 })
@@ -277,8 +289,8 @@ const mapDispatchToProps = (dispatch) => ({
     handleIpSsh: (options) => { // 处理服务器的批量命令
         dispatch(actionCreator.handleIpSshAction(options))
     },
-    handleDownFile: (downLoadFileAddress) => { // 处理文件的下载
-        dispatch(actionCreator.handleDownFileAction(downLoadFileAddress))
+    handleDownFile: (options) => { // 处理文件的下载
+        dispatch(actionCreator.handleDownFileAction(options))
     },
     handleUpLoadFile: (options) => { // 处理文件的上传
         dispatch(actionCreator.handleUpLoadFileAction(options))

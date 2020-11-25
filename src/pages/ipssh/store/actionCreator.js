@@ -65,9 +65,11 @@ export const handleUpLoadFileAction = (options) => {
         api.uploadfile(options)
             .then(result => {
                 console.log(':::::::::::::::', result)
-                return
-                let data = result.msg
-                dispatch(handleIpSshData(data))
+                if (result.msg == 'success') {
+                    message.success('上传成功')
+                } else {
+                    message.success('上传失败, 请稍后再试 !')
+                }
             })
             .catch(err => {
                 message.error('操作失败, 请稍后再试 !')
@@ -79,15 +81,17 @@ export const handleUpLoadFileAction = (options) => {
 }
 
 // 处理批量命令页面 下载文件
-export const handleDownFileAction = (downLoadFileAddress) => {
+export const handleDownFileAction = (options) => {
     return (dispatch, getState) => {
         dispatch(getIsLoadingStart())
-        api.downloadfile(downLoadFileAddress)
+        api.downloadfile(options)
             .then(result => {
-                console.log(':::::::::::::::', result)
-                return
-                let data = result.msg
-                dispatch(handleIpSshData(data))
+                // console.log(':::::::::::::::', result)
+                if (result.msg == 'success') {
+                    message.success('下载成功')
+                } else {
+                    message.success('下载失败, 请稍后再试 !')
+                }
             })
             .catch(err => {
                 message.error('操作失败, 请稍后再试 !')

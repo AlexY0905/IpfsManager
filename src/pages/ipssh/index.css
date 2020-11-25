@@ -20,8 +20,8 @@
 .terminal_box .terminal_top {
     /* flex      : 1; */
     box-sizing: border-box;
-    padding   : 10px;
-    height    : 400px;
+    padding: 10px;
+    height: 490px !important;
     overflow-y: scroll;
 }
 .terminal_box .terminal_top div p {

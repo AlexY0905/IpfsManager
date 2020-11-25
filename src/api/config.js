@@ -53,7 +53,7 @@ export const API_CONFIG = {
     ],
     // 批量命令, 文件下载
     downloadfile: [
-        '/v3/multissh',
+        '/v3/downloadfile',
         'post'
     ]
 }
