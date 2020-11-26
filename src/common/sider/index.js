@@ -56,9 +56,17 @@ class HomeSider extends Component {
                             <Menu.Item key="4">
                                 <NavLink to='/ipssh'><Icon type="laptop" />批量命令</NavLink>
                             </Menu.Item>
-                            {/*<Menu.Item key="5">*/}
-                            {/*    <NavLink to='/fileupload'><Icon type="file-ppt" />文件传输</NavLink>*/}
-                            {/*</Menu.Item>*/}
+                            <Menu.Item key="5">
+                                <NavLink to='/addgroup'><Icon type="laptop" />添加组</NavLink>
+                            </Menu.Item>
+                            {
+                                /*
+                                <Menu.Item key="6">
+                                    <NavLink to='/grouping'><Icon type="laptop" />分组批量命令</NavLink>
+                                </Menu.Item>
+                                 */
+                            }
+
                         </SubMenu>
                     </Menu>
                 </Sider>

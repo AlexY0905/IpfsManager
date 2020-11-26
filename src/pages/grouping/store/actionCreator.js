@@ -11,12 +11,12 @@ const getIsLoadingStart = () => ({
 const getIsLoadingEnd = () => ({
     type: types.ISLOADING_END
 })
-// 处理批量命令页面 获取所有服务器数据列表
+// 处理分组批量命令页面 获取所有服务器数据列表
 const handleGetServerHostData = (payload) => ({
     type: types.GET_SERVERHOSTLIST,
     payload: payload
 })
-// 处理批量命令页面 获取所有服务器数据列表
+// 处理分组批量命令页面 获取所有服务器数据列表
 export const handleGetServerHostDataAction = () => {
     return (dispatch, getState) => {
         dispatch(getIsLoadingStart())
@@ -34,12 +34,12 @@ export const handleGetServerHostDataAction = () => {
     }
 }
 
-// 处理批量命令页面 批量命令服务器
+// 处理分组批量命令页面 批量命令服务器
 const handleIpSshData = (payload) => ({
     type: types.GET_IPSSH,
     payload: payload
 })
-// 处理批量命令页面 批量命令服务器
+// 处理分组批量命令页面 批量命令服务器
 export const handleIpSshAction = (options) => {
     return (dispatch, getState) => {
         dispatch(getIsLoadingStart())
@@ -58,7 +58,7 @@ export const handleIpSshAction = (options) => {
     }
 }
 
-// 处理批量命令页面 上传文件
+// 处理分组批量命令页面 上传文件
 export const handleUpLoadFileAction = (options) => {
     return (dispatch, getState) => {
         dispatch(getIsLoadingStart())
@@ -77,7 +77,7 @@ export const handleUpLoadFileAction = (options) => {
     }
 }
 
-// 处理批量命令页面 下载文件
+// 处理分组批量命令页面 下载文件
 export const handleDownFileAction = (options) => {
     return (dispatch, getState) => {
         dispatch(getIsLoadingStart())
@@ -87,7 +87,7 @@ export const handleDownFileAction = (options) => {
                 if (result.msg == 'success') {
                     message.success('下载成功')
                 } else {
-                    message.error('下载失败, 请稍后再试 !')
+                    message.success('下载失败, 请稍后再试 !')
                 }
             })
             .catch(err => {

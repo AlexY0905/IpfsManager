@@ -4,7 +4,8 @@ import { fromJS } from 'immutable';
 
 const defaultState = fromJS({
     isLoading: false,
-    serverhostlist: []
+    serverhostlist: [],
+    ipsshtxt: []
 })
 
 export default (state = defaultState, action) => {

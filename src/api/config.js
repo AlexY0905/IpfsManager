@@ -55,6 +55,11 @@ export const API_CONFIG = {
     downloadfile: [
         '/v3/downloadfile',
         'post'
+    ],
+    // 批量命令, 文件下载
+    addGroupName: [
+        '/v4/addgroup',
+        'post'
     ]
 }
 

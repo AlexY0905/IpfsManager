@@ -20,7 +20,25 @@
 .terminal_box .terminal_top {
     /* flex      : 1; */
     box-sizing: border-box;
-    padding   : 10px;
-    height    : 400px;
+    padding: 10px;
+    height: 490px !important;
     overflow-y: scroll;
+}
+.terminal_box .terminal_top div p {
+    margin-bottom: 3px;
+}
+
+.btn_wrap {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+.btn_wrap .upload_wrap {
+    flex: 1;
+    display: flex;
+    text-align: left;
+}
+.btn_wrap .down_wrap {
+    flex: 1;
+    text-align: right;
 }
