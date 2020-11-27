@@ -56,10 +56,30 @@ export const API_CONFIG = {
         '/v3/downloadfile',
         'post'
     ],
-    // 批量命令, 文件下载
+    // 添加组页面, 添加组接口
     addGroupName: [
         '/v4/addgroup',
         'post'
+    ],
+    // 添加组页面, 获取组数据列表接口
+    getGroupList: [
+        '/v4/showgroup',
+        'get'
+    ],
+    // 添加组页面, 分配组接口
+    distributionGroup: [
+        '/v4/addgroup',
+        'post'
+    ],
+    // 添加组页面, 删除组数据接口
+    delGroupData: [
+        '/v4/delgroup',
+        'post'
+    ],
+    // 添加组页面, 编辑组名接口
+    editGroupName: [
+        '/v4/updategroup',
+        'get'
     ]
 }
 

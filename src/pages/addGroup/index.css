@@ -1,8 +1,12 @@
+.ant-table table {
+    border-left: 0 !important;
+}
 .content_wrap {
     display: flex;
 }
 .content_wrap .ip_table_box {
     border-left: none;
+    border-right: none;
 }
 .content_wrap .table_box {
     flex      : 0.5;

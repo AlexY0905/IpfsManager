@@ -6,6 +6,7 @@ import { actionCreator } from './store'
 import Layout from 'common/layout'
 import { Breadcrumb, Table, Divider, Button, Modal, Input, Form, Tree, message } from 'antd'
 const { TreeNode } = Tree;
+const { confirm } = Modal
 
 
 class AddGroup extends Component {
@@ -15,7 +16,10 @@ class AddGroup extends Component {
             selectedRows: [],
             editVisible: false,
             addGroupVisible: false,
-            groupName: ''
+            groupName: '',
+            delSelectedList: [],
+            editName: '',
+            editGroupNameId: ''
         }
         this.handleAddGroup = this.handleAddGroup.bind(this)
         this.handleDistributionGroup = this.handleDistributionGroup.bind(this)
@@ -23,7 +27,7 @@ class AddGroup extends Component {
         this.handleEditShowModal = this.handleEditShowModal.bind(this)
         this.handleEditSubmitBtn = this.handleEditSubmitBtn.bind(this)
         this.handleAddGroupCancel = this.handleAddGroupCancel.bind(this)
-        this.handleDel = this.handleDel.bind(this)
+        this.handleDelBtn = this.handleDelBtn.bind(this)
         this.handleAddGroupBtn = this.handleAddGroupBtn.bind(this)
         this.onSelectGroup = this.onSelectGroup.bind(this)
         this.onCheckGroup = this.onCheckGroup.bind(this)
@@ -32,7 +36,7 @@ class AddGroup extends Component {
         // 调用发送方的数据 显示服务器列表
         this.props.handleGetServerHostData()
         // 调用发送方的数据 显示组名列表
-        // this.props.handleGetGroupList()
+        this.props.handleGetGroupList()
     }
     // -------------------------------------------------处理显示添加组弹出框功能---------------------------------------------------
     handleAddGroup () {
@@ -50,33 +54,46 @@ class AddGroup extends Component {
     handleAddGroupBtn () {
         const { selectedRows } = this.state
         let groupname = this.groupNameInput.state.value
-        // console.log(11111111111, this.groupNameInput.state.value);
+        console.log(11111111111, groupname);
         // console.log('添加按钮---------', selectedRows)
-        if (selectedRows.length == 0) {
-            message.error("请选择需要的ip !")
-            return false
-        } else if (groupname == '') {
-            message.error("输入框不能为空 !")
-            return false
-        } else {
-            let options = {
-                ipAddress: selectedRows,
-                groupname
-            }
-            console.log(111111111, options);
-            // 调用发送方函数, 处理添加组名
-            this.props.handleAddGroupName(options)
+            if (groupname == undefined) {
+                message.error("输入框不能为空 !")
+                return false
+            } else {
+                let options = {
+                    ipAddress: selectedRows.length == 0 ? [] : selectedRows,
+                    groupname
+                }
+                console.log(111111111, options);
+                // 调用发送方函数, 处理添加组名
+                this.props.handleAddGroupName(options)
         }
 
     }
     // -------------------------------------------------处理分配组按钮功能---------------------------------------------------
-    handleDistributionGroup () {
-        console.log('222222222222', '点击了分配组按钮')
+    handleDistributionGroup (record) {
+        console.log('分配组按钮---------', record)
+        let { Id } = record
+        const { selectedRows } = this.state
+        if (selectedRows.length == 0) { // 没有选中ip机器
+            message.error('请选择需要的ip')
+            return false
+        } else { // 选中了ip机器
+            let options = {
+                ipAddress: selectedRows,
+                groupname: record.Title.Name
+            }
+            // 调用发送方函数, 处理分配组
+            this.props.handleDistributionGroupList(options)
+        }
     }
     // -------------------------------------------------处理显示编辑弹出框功能---------------------------------------------------
-    handleEditShowModal () {
+    handleEditShowModal (record) {
+        console.log(record);
         this.setState({
-            editVisible: true
+            editVisible: true,
+            editName: record.Title.Name,
+            editGroupNameId: record.Id
         })
     }
     // -------------------------------------------------处理关闭编辑弹出框功能---------------------------------------------------
@@ -85,24 +102,64 @@ class AddGroup extends Component {
             editVisible: false
         })
     }
-    // -------------------------------------------------处理编辑弹出框中编辑功能---------------------------------------------------
+    // -------------------------------------------------处理编辑弹出框中编辑按钮功能---------------------------------------------------
     handleEditSubmitBtn () {
-        console.log('::::::::::::::编辑按钮');
+        console.log('::::::::::::::编辑按钮', this.nameInput.state.value);
+        let editName = this.nameInput.state.value
+        if (editName == '') {
+            message.error("输入框中不能为空 !")
+            return false
+        } else {
+            let { editGroupNameId } = this.state
+            let options = {
+                groupname: editName,
+                id: editGroupNameId
+            }
+            // 调用发送方函数, 处理编辑组名
+            this.props.handleEditGroup(options)
+        }
+
     }
     // -------------------------------------------------处理删除按钮功能---------------------------------------------------
-    handleDel(record) { // 处理删除按钮
-        console.log('::::::::::::::删除');
-        return
-        console.log('::::::::::::::', record);
-        let { id } = record
-        //调用发送方函数 派发action 删除点击当前的机器数据
-        let { handleDel } = this.props
+    handleDelBtn(record) { // 处理删除按钮
+        // console.log('::::::::::::::record', record);
+        let { Id } = record
+        const { delSelectedList } = this.state
+        // 调用发送方函数 派发action 删除点击当前的机器数据
+        let { handleDelSelected } = this.props
+        console.log('::::::::::::::', Id);
+        console.log('::::::::::::::', delSelectedList);
+        // let options = ""
+        /*
+        delSelectedList.forEach((item, index) => {
+            if (item['children']) {
+                options = {id: Id, ipAddress: []}
+                return false
+            } else {
+                options = {id: Id, ipAddress: delSelectedList}
+                return false
+            }
+        })
+        */
+
+        let options = {
+            id: Id,
+            ipAddress: []
+        }
+        delSelectedList.forEach((item, index) => {
+            if (!item['children']) {
+                options.ipAddress.push(item.title)
+            } else {
+                options.ipAddress = []
+            }
+        })
+        console.log("1111-------", options);
         confirm({
             title: '确定要删除吗?',
             cancelText: '取消',
             okText: '确定',
             onOk() {
-                handleDel(id)
+                handleDelSelected(options)
             },
             onCancel() {
                 console.log('Cancel');
@@ -116,11 +173,15 @@ class AddGroup extends Component {
     // -------------------------------------------------处理组名全选/单选功能---------------------------------------------------
     onCheckGroup(checkedKeys, info) {
         console.log('onCheck', checkedKeys, info);
+        let delSelectedList = info.checkedNodes.map((item, index) => {return item.props})
+        this.setState({
+            delSelectedList: delSelectedList
+        })
     };
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { serverhostlist } = this.props
+        const { serverhostlist, groupList } = this.props
 
         const columns = [
             {
@@ -136,20 +197,22 @@ class AddGroup extends Component {
         const columns2 = [
             {
                 title: '组名',
-                dataIndex: 'name',
-                key: 'name',
-                render: (name, record) => (
+                dataIndex: 'Title',
+                key: 'Title',
+                render: (Title, record) => (
                     <div>
                         <Tree
                             checkable
                             onSelect={this.onSelectGroup}
                             onCheck={this.onCheckGroup}
                         >
-                            <TreeNode title={name.title} key="0-0">
+                            <TreeNode title={Title.Name} key="0-0">
                                 {
-                                    name.data.map((item, index) => {
+                                    Title.Servers != null
+                                    &&
+                                    Title.Servers.map((item, index) => {
                                         return (
-                                            <TreeNode title={item} key={index} name={name.username} pass={name.password} />
+                                            <TreeNode title={item.host} key={index} />
                                         )
                                     })
                                 }
@@ -163,37 +226,199 @@ class AddGroup extends Component {
                 align: 'center',
                 width: '300px',
                 id: 'id',
-                render: (is_valid, record) => (
+                render: (record) => (
                     <span>
                         <Button type="primary" onClick={() => { this.handleEditShowModal(record) }} className="bottom2">编辑</Button>
                         <Divider type="vertical" />
                         <Button type="primary" onClick={() => { this.handleDistributionGroup(record) }} className="bottom2">分配组</Button>
                         <Divider type="vertical" />
-                        <Button type="danger" onClick={() => { this.handleDel(record) }} className="bottom2">删除</Button>
+                        <Button type="danger" onClick={() => { this.handleDelBtn(record) }} className="bottom2">删除</Button>
                     </span>
                 )
             }
         ];
+        /*
         const dataSource2 = [
             {
                 key: '1',
                 name: {
-                    username: 'qqq',
-                    password: '12312',
                     title: 'AMD',
-                    data: ['123.123.12.1', '123.123.12.1', '123.123.12.1', '123.123.12.1', '123.123.12.1', '123.123.12.1']
+                    data: [
+                        {
+                            host: '123.123.12.22',
+                            username: 'server1',
+                            name: 'root',
+                            password: 'qqq123'
+                        },
+                        {
+                            host: '123.123.12.22',
+                            username: 'server1',
+                            name: 'root',
+                            password: 'qqq123'
+                        },
+                        {
+                            host: '123.123.12.22',
+                            username: 'server1',
+                            name: 'root',
+                            password: 'qqq123'
+                        }
+                    ]
                 }
             },
             {
                 key: '2',
                 name: {
-                    username: 'rrrrr',
-                    password: '12312',
                     title: '英特尔',
-                    data: ['321.321.12.1', '321.321.12.1', '321.321.12.1', '321.321.12.1', '321.321.12.1', '321.321.12.1']
+                    data: [
+                        {
+                            host: '321.321.12.22',
+                            username: 'server1',
+                            name: 'root',
+                            password: 'qqq123'
+                        },
+                        {
+                            host: '321.321.12.22',
+                            username: 'server1',
+                            name: 'root',
+                            password: 'qqq123'
+                        },
+                        {
+                            host: '321.321.12.22',
+                            username: 'server1',
+                            name: 'root',
+                            password: 'qqq123'
+                        },
+                        {
+                            host: '321.321.12.22',
+                            username: 'server1',
+                            name: 'root',
+                            password: 'qqq123'
+                        },
+                        {
+                            host: '321.321.12.22',
+                            username: 'server1',
+                            name: 'root',
+                            password: 'qqq123'
+                        },
+                        {
+                            host: '321.321.12.22',
+                            username: 'server1',
+                            name: 'root',
+                            password: 'qqq123'
+                        },
+                        {
+                            host: '321.321.12.22',
+                            username: 'server1',
+                            name: 'root',
+                            password: 'qqq123'
+                        },
+                        {
+                            host: '321.321.12.22',
+                            username: 'server1',
+                            name: 'root',
+                            password: 'qqq123'
+                        },
+                        {
+                            host: '321.321.12.22',
+                            username: 'server1',
+                            name: 'root',
+                            password: 'qqq123'
+                        },
+                        {
+                            host: '321.321.12.22',
+                            username: 'server1',
+                            name: 'root',
+                            password: 'qqq123'
+                        },
+                        {
+                            host: '321.321.12.22',
+                            username: 'server1',
+                            name: 'root',
+                            password: 'qqq123'
+                        },
+                        {
+                            host: '321.321.12.22',
+                            username: 'server1',
+                            name: 'root',
+                            password: 'qqq123'
+                        },
+                        {
+                            host: '321.321.12.22',
+                            username: 'server1',
+                            name: 'root',
+                            password: 'qqq123'
+                        },
+                        {
+                            host: '321.321.12.22',
+                            username: 'server1',
+                            name: 'root',
+                            password: 'qqq123'
+                        },
+                        {
+                            host: '321.321.12.22',
+                            username: 'server1',
+                            name: 'root',
+                            password: 'qqq123'
+                        },
+                        {
+                            host: '321.321.12.22',
+                            username: 'server1',
+                            name: 'root',
+                            password: 'qqq123'
+                        },
+                        {
+                            host: '321.321.12.22',
+                            username: 'server1',
+                            name: 'root',
+                            password: 'qqq123'
+                        },
+                        {
+                            host: '321.321.12.22',
+                            username: 'server1',
+                            name: 'root',
+                            password: 'qqq123'
+                        },
+                        {
+                            host: '321.321.12.22',
+                            username: 'server1',
+                            name: 'root',
+                            password: 'qqq123'
+                        },
+                        {
+                            host: '321.321.12.22',
+                            username: 'server1',
+                            name: 'root',
+                            password: 'qqq123'
+                        },
+                        {
+                            host: '321.321.12.22',
+                            username: 'server1',
+                            name: 'root',
+                            password: 'qqq123'
+                        },{
+                            host: '321.321.12.22',
+                            username: 'server1',
+                            name: 'root',
+                            password: 'qqq123'
+                        },
+                        {
+                            host: '321.321.12.22',
+                            username: 'server1',
+                            name: 'root',
+                            password: 'qqq123'
+                        },
+                        {
+                            host: '321.321.12.22',
+                            username: 'server1',
+                            name: 'root',
+                            password: 'qqq123'
+                        }
+                    ]
                 }
             }
         ]
+         */
+        const dataSource2 = groupList.toJS()
 
         const rowSelection = { // 单选, 全选
             onChange: (selectedRowKeys, selectedRows) => {
@@ -211,7 +436,7 @@ class AddGroup extends Component {
                         <Breadcrumb.Item>添加组</Breadcrumb.Item>
                     </Breadcrumb>
                     <div style={{ textAlign: 'right', marginBottom: '15px' }}>
-                        <Button type="primary" onClick={this.handleAddGroup} className="bottom2">添加组</Button>
+                        <Button type="primary" onClick={this.handleAddGroup} className="bottom2">创建组</Button>
                     </div>
                     <div className="content">
                         <div className='content_wrap'>
@@ -230,7 +455,7 @@ class AddGroup extends Component {
                                     }
                                 />
                             </div>
-                            <div className='table_box'>
+                            <div className='table_box' style={{borderLeft: 'none'}}>
                                 <Table
                                     columns={columns2}
                                     dataSource={dataSource2}
@@ -273,7 +498,7 @@ class AddGroup extends Component {
                                     <div>
                                         <Form.Item label="name">
                                             {getFieldDecorator('name', {
-                                                initialValue: ''
+                                                initialValue: this.state.editName
                                             })(<Input ref={input => this.nameInput = input} placeholder="组名" />)}
                                         </Form.Item>
                                         <Form.Item>
@@ -294,8 +519,9 @@ class AddGroup extends Component {
 
 // 接收方
 const mapStateToProps = (state) => ({
-    isLoading: state.get('ipssh').get('isLoading'),
-    serverhostlist: state.get('ipssh').get('serverhostlist')
+    isLoading: state.get('addGroup').get('isLoading'),
+    serverhostlist: state.get('addGroup').get('serverhostlist'),
+    groupList: state.get('addGroup').get('groupList')
 })
 
 
@@ -309,6 +535,15 @@ const mapDispatchToProps = (dispatch) => ({
     },
     handleAddGroupName: (options) => { // 处理添加组名
         dispatch(actionCreator.handleAddGroupNameAction(options))
+    },
+    handleDistributionGroupList: (options) => { // 处理分配组数据
+        dispatch(actionCreator.handleDistributionGroupListAction(options))
+    },
+    handleDelSelected: (options) => { // 处理删除选中的组
+        dispatch(actionCreator.handleDelSelectedAction(options))
+    },
+    handleEditGroup: (options) => { // 处理编辑组名
+        dispatch(actionCreator.handleEditGroupAction(options))
     }
 })
 const WrappedDynamicRule = Form.create()(AddGroup);
