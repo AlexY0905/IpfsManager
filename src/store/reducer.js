@@ -2,6 +2,7 @@ import { combineReducers } from 'redux-immutable'
 import { reducer as registerReducer } from 'pages/register/store/index'
 import { reducer as loginReducer } from 'pages/login/store/index'
 import { reducer as homeReducer } from 'pages/home/store/index'
+import { reducer as lotusHelpReducer } from 'pages/lotusHelp/store/index'
 import { reducer as serverManageReducer } from 'pages/serverManage/store/index'
 import { reducer as monitorReducer } from 'pages/monitor/store/index'
 import { reducer as ipsshReducer } from 'pages/ipssh/store/index'
@@ -18,5 +19,6 @@ export default combineReducers({
     monitor: monitorReducer,
     ipssh: ipsshReducer,
     addGroup: addGroupReducer,
-    grouping: groupingReducer
+    grouping: groupingReducer,
+    lotusHelp: lotusHelpReducer
 })

@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Link, Switch, Redirect, } from "react-r
 import Register from 'pages/register/index';
 import Login from 'pages/login/index';
 import Home from 'pages/home/index';
+import LotusHelp from 'pages/lotusHelp/index';
 import ServerManage from 'pages/serverManage/index';
 import Monitor from 'pages/monitor/index';
 import Ipssh from 'pages/ipssh/index';
@@ -41,6 +42,7 @@ function App() {
       <div className="App">
         <Switch>
           <ProtectRoute exact path='/' component={Home} />
+          <ProtectRoute path='/lotushelp' component={LotusHelp} />
           <ProtectRoute path='/serverManage' component={ServerManage} />
           <ProtectRoute path='/Monitor' component={Monitor} />
           <ProtectRoute path='/ipssh' component={Ipssh} />

@@ -31,7 +31,8 @@ class Grouping extends Component {
             upLoadDisable: true,
             downLoadFileAddress: '',
             downLoadBtnDisable: true,
-            ipAddress: []
+            ipAddress: [],
+            delSelectedList: []
         }
         this.pressEnter = this.pressEnter.bind(this)
         this.handlefileAddress = this.handlefileAddress.bind(this)
@@ -44,19 +45,22 @@ class Grouping extends Component {
     componentDidMount() {
         // 调用发送方的数据 显示服务器列表
         // this.props.handleGetServerHostData()
+        // 调用发送方的数据 显示组名列表
+        this.props.handleGetGroupList()
     }
     // -------------------------------------------------批量命令功能---------------------------------------------------
     pressEnter(e) { // 处理命令输入框的回车事件
         // 获取文本框中的值
         // console.log(11111111111, e.target.value)
-        let { selectedRows } = this.state
+        let { delSelectedList } = this.state
         let options = {
-            servers: selectedRows,
+            servers: delSelectedList,
             cmds: e.target.value
         }
         // 清空文本输入框
         // this.textAreaIpt.current.state.value = ''
         // 调用发送方函数, 处理服务器的批量命令
+        console.log(111111111111, options)
         this.props.handleIpSsh(options)
     }
     // -------------------------------------------------文件上传功能-----------------------------------------------------
@@ -78,21 +82,20 @@ class Grouping extends Component {
 
     }
     handleUpLoadBtn() { // 处理上传按钮的点击事件
-        const { fileAddress, ipAddress } = this.state
+        const { fileAddress, delSelectedList } = this.state
         if (fileAddress == '') { // 判断有没有填写上传的地址, 如果没有, 就提示用户信息
             message.error('请填写文件上传的地址')
             return false
-        } else if (ipAddress.length == 0) { // 判断有没有选中ip地址, 如果没有, 就提示用户信息
+        } else if (delSelectedList.length == 0) { // 判断有没有选中ip地址, 如果没有, 就提示用户信息
             message.error('请选中需要上传的ip')
             return false
         } else { // 填写了上传地址和选中了需要上传的ip
             // 调用发送方, 处理文件上传
             let options = {
                 path: fileAddress,
-                ipAddress
+                ipAddress: delSelectedList
             }
             console.log(222222222222, options);
-            // return
             this.props.handleUpLoadFile(options)
         }
     }
@@ -114,18 +117,18 @@ class Grouping extends Component {
         })
     }
     handleDownLoadFile() { // 处理下载文件按钮的点击事件
-        const { downLoadFileAddress, ipAddress } = this.state
+        const { downLoadFileAddress, delSelectedList } = this.state
         if (downLoadFileAddress == '') { // 判断有没有填写下载的地址, 如果没有, 就提示用户信息
             message.error('请填写文件下载的地址')
             return false
-        } else if (ipAddress.length == 0) { // 判断有没有选中ip地址, 如果没有, 就提示用户信息
+        } else if (delSelectedList.length == 0) { // 判断有没有选中ip地址, 如果没有, 就提示用户信息
             message.error('请选中需要下载的ip')
             return false
         } else { // 判断有没有填写下载的地址, 如果有, 就调用发送方函数, 处理文件的下载
             // 调用发送方, 处理文件上传
             let options = {
                 path: downLoadFileAddress,
-                ipAddress
+                ipAddress: delSelectedList
             }
             console.log(222222222222, options);
             // return
@@ -140,29 +143,42 @@ class Grouping extends Component {
     // -------------------------------------------------处理组名全选/单选功能---------------------------------------------------
     onCheckGroup(checkedKeys, info) {
         console.log('onCheck', checkedKeys, info);
+        let delSelectedListData = info.checkedNodes.map((item, index) => {return item.props})
+        delSelectedListData.forEach((item, index) => {
+            if (item['title']) {
+                item.host = item.title
+                delete item.title
+            }
+        })
+        this.setState({
+            delSelectedList: delSelectedListData
+        })
     };
 
 
 
     render() {
-        const { serverhostlist, ipsshtxt } = this.props
+        const { serverhostlist, ipsshtxt, groupList } = this.props
+        const dataSource = groupList.toJS()
         const columns = [
             {
                 title: '组名',
-                dataIndex: 'name',
-                key: 'name',
-                render: (name, record) => (
+                dataIndex: 'Title',
+                key: 'Title',
+                render: (Title, record) => (
                     <div>
                         <Tree
                             checkable
                             onSelect={this.onSelectGroup}
                             onCheck={this.onCheckGroup}
                         >
-                            <TreeNode title={name.title} key="0-0">
+                            <TreeNode title={Title.Name} key="0-0">
                                 {
-                                    name.data.map((item, index) => {
+                                    Title.Servers != null
+                                    &&
+                                    Title.Servers.map((item, index) => {
                                         return (
-                                            <TreeNode title={item} key={index} name={name.username} pass={name.password} />
+                                            <TreeNode title={item.host} key={index} id={item.id} name={item.name} password={item.password} port={item.port} username={item.username}  />
                                         )
                                     })
                                 }
@@ -172,27 +188,6 @@ class Grouping extends Component {
                 )
             }
         ];
-        const dataSource = [
-            {
-                key: '1',
-                name: {
-                    username: 'qqq',
-                    password: '12312',
-                    title: 'AMD',
-                    data: ['123.123.12.1', '123.123.12.1', '123.123.12.1', '123.123.12.1', '123.123.12.1', '123.123.12.1']
-                }
-            },
-            {
-                key: '2',
-                name: {
-                    username: 'rrrrr',
-                    password: '12312',
-                    title: '英特尔',
-                    data: ['321.321.12.1', '321.321.12.1', '321.321.12.1', '321.321.12.1', '321.321.12.1', '321.321.12.1']
-                }
-            }
-        ]
-
 
         /*
         const rowSelection = { // 单选, 全选
@@ -274,15 +269,6 @@ class Grouping extends Component {
                                 <div className='terminal_top' style={{ background: '#000' }}>
                                     <div>
                                         {
-                                            /*
-                                            ipsshtxtArr.map((item, index) => {
-                                                return item.map((v, i) => {
-                                                    return v.Result.map((s, t) => {
-                                                        return <p style={{color: '#fff'}}>{s}</p>
-                                                    })
-                                                })
-                                            })
-                                             */
                                             ipsshtxtArr && ipsshtxtArr
                                         }
                                     </div>
@@ -306,9 +292,10 @@ class Grouping extends Component {
 
 // 接收方
 const mapStateToProps = (state) => ({
-    isLoading: state.get('ipssh').get('isLoading'),
+    isLoading: state.get('grouping').get('isLoading'),
     serverhostlist: state.get('grouping').get('serverhostlist'),
-    ipsshtxt: state.get('ipssh').get('ipsshtxt')
+    ipsshtxt: state.get('grouping').get('ipsshtxt'),
+    groupList: state.get('grouping').get('groupList')
 })
 
 
@@ -325,6 +312,9 @@ const mapDispatchToProps = (dispatch) => ({
     },
     handleUpLoadFile: (options) => { // 处理文件的上传
         dispatch(actionCreator.handleUpLoadFileAction(options))
+    },
+    handleGetGroupList: () => { // 处理获取组名数据列表
+        dispatch(actionCreator.handleGetGroupListAction())
     }
 })
 

@@ -36,6 +36,9 @@ class HomeSider extends Component {
                             <Menu.Item key="1">
                                 <NavLink exact to='/'><Icon type="laptop" /> lotus管理</NavLink>
                             </Menu.Item>
+                            <Menu.Item key="1.1">
+                                <NavLink exact to='/lotushelp'><Icon type="laptop" /> lotusHelp</NavLink>
+                            </Menu.Item>
                         </SubMenu>
 
                         <SubMenu
@@ -57,16 +60,11 @@ class HomeSider extends Component {
                                 <NavLink to='/ipssh'><Icon type="laptop" />批量命令</NavLink>
                             </Menu.Item>
                             <Menu.Item key="5">
-                                <NavLink to='/addgroup'><Icon type="laptop" />添加组</NavLink>
+                                <NavLink to='/addgroup'><Icon type="laptop" />组管理</NavLink>
                             </Menu.Item>
-                            {
-                                /*
-                                <Menu.Item key="6">
-                                    <NavLink to='/grouping'><Icon type="laptop" />分组批量命令</NavLink>
-                                </Menu.Item>
-                                 */
-                            }
-
+                            <Menu.Item key="6">
+                                <NavLink to='/grouping'><Icon type="laptop" />分组批量命令</NavLink>
+                            </Menu.Item>
                         </SubMenu>
                     </Menu>
                 </Sider>

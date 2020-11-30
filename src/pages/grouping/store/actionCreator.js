@@ -98,3 +98,31 @@ export const handleDownFileAction = (options) => {
             })
     }
 }
+
+// 处理添加组页面 获取所有组数据列表
+const handleGetGroupListData = (payload) => ({
+    type: types.GET_GROUPLIST,
+    payload: payload
+})
+// 处理添加组页面 获取所有组数据列表
+export const handleGetGroupListAction = () => {
+    return (dispatch, getState) => {
+        dispatch(getIsLoadingStart())
+        api.getGroupList()
+            .then(result => {
+                console.log(':::::::::::::::', result)
+                if (result.code == 0) {
+                    let data = result.msg == null ? [] : result.msg
+                    dispatch(handleGetGroupListData(data))
+                } else {
+                    message.error("获取数据失败, 请稍后再试 !")
+                }
+            })
+            .catch(err => {
+                message.error('获取数据失败, 请稍后再试 !')
+            })
+            .finally(() => {
+                dispatch(getIsLoadingEnd())
+            })
+    }
+}
