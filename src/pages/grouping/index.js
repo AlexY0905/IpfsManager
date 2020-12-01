@@ -53,6 +53,11 @@ class Grouping extends Component {
         // 获取文本框中的值
         // console.log(11111111111, e.target.value)
         let { delSelectedList } = this.state
+        delSelectedList.forEach((item, index) => {
+            if (item['children']) {
+                delSelectedList.splice(index, 1)
+            }
+        })
         let options = {
             servers: delSelectedList,
             cmds: e.target.value
