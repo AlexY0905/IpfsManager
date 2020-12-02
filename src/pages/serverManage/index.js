@@ -116,13 +116,6 @@ class ServerManage extends Component {
         let addServerPassword = this.passwordInput.state.value
         let addServerHost = this.hostInput.state.value
         let addServerPort = this.portInput.state.value
-        /*
-        console.log(addServerName);
-        console.log(addServerUserName);
-        console.log(addServerPassword);
-        console.log(addServerHost);
-        console.log(addServerPort);
-        */
         if (addServerName == undefined) {
             notification['warning']({
                 message: 'name 不能为空 !'
@@ -199,13 +192,6 @@ class ServerManage extends Component {
         let addServerPassword = this.passwordInput.state.value
         let addServerHost = this.hostInput.state.value
         let addServerPort = this.portInput.state.value
-        /*
-        console.log(addServerName);
-        console.log(addServerUserName);
-        console.log(addServerPassword);
-        console.log(addServerHost);
-        console.log(addServerPort);
-        */
         if (addServerName == undefined) {
             notification['warning']({
                 message: 'name 不能为空 !'
@@ -284,14 +270,8 @@ class ServerManage extends Component {
                 title: '操作',
                 align: 'center',
                 id: 'id',
-                render: (is_valid, record) => (
+                render: (record) => (
                     <span>
-                        {
-                            /*
-                                <Button type="primary" onClick={() => { this.handleSeeShowModal(record) }} className="bottom1">查看</Button>
-                                <Divider type="vertical" />
-                            */
-                        }
                         <Button type="primary" onClick={() => { this.handleEditShowModal(record) }} className="bottom2">编辑</Button>
                         <Divider type="vertical" />
                         <Button type="primary" onClick={() => { this.handleLinkShowModal(record) }} className="bottom2">链接</Button>

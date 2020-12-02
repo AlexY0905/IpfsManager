@@ -228,11 +228,24 @@ class AddGroup extends Component {
                 id: 'id',
                 render: (record) => (
                     <span>
-                        <Button type="primary" onClick={() => { this.handleEditShowModal(record) }} className="bottom2">编辑</Button>
-                        <Divider type="vertical" />
+                        {
+                            record.Title.Name != 'default'
+                            &&
+                            <span>
+                                <Button type="primary" onClick={() => { this.handleEditShowModal(record) }} className="bottom2">编辑</Button>
+                                <Divider type="vertical" />
+                            </span>
+                        }
                         <Button type="primary" onClick={() => { this.handleDistributionGroup(record) }} className="bottom2">分配组</Button>
-                        <Divider type="vertical" />
-                        <Button type="danger" onClick={() => { this.handleDelBtn(record) }} className="bottom2">删除</Button>
+
+                        {
+                            record.Title.Name != 'default'
+                            &&
+                            <span>
+                                <Divider type="vertical" />
+                                <Button type="danger" onClick={() => { this.handleDelBtn(record) }} className="bottom2">删除</Button>
+                            </span>
+                        }
                     </span>
                 )
             }
