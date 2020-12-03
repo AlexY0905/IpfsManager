@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import "./index.css"
 import { actionCreator } from './store'
 import Layout from 'common/layout'
-import { Breadcrumb, Table, Divider, Button, Modal, Input, Form, Tree, message } from 'antd'
+import {Breadcrumb, Table, Divider, Button, Modal, Input, Form, Tree, message, notification} from 'antd'
 const { TreeNode } = Tree;
 const { confirm } = Modal
 
@@ -122,8 +122,8 @@ class AddGroup extends Component {
     }
     // -------------------------------------------------处理删除按钮功能---------------------------------------------------
     handleDelBtn(record) { // 处理删除按钮
-        // console.log('::::::::::::::record', record);
-        let { Id } = record
+        let { Id, Title } = record
+        let name = Title.Name
         const { delSelectedList } = this.state
         // 调用发送方函数 派发action 删除点击当前的机器数据
         let { handleDelSelected } = this.props
@@ -146,13 +146,28 @@ class AddGroup extends Component {
             id: Id,
             ipAddress: []
         }
-        delSelectedList.forEach((item, index) => {
-            if (!item['children']) {
-                options.ipAddress.push(item.title)
-            } else {
-                options.ipAddress = []
+        if (name == 'default') {
+            let delSelectedData = delSelectedList.filter((item, index) => {
+                return !item['children']
+            }).map((item, index) => {
+                return item.title
+            })
+            if (delSelectedData.length == 0) {
+                notification['warning']({
+                    message: '请勾选需要删除的ip !'
+                })
+                return false
             }
-        })
+            options.ipAddress = delSelectedData
+        } else {
+            delSelectedList.forEach((item, index) => {
+                if (!item['children']) {
+                    options.ipAddress.push(item.title)
+                } else {
+                    options.ipAddress = []
+                }
+            })
+        }
         console.log("1111-------", options);
         confirm({
             title: '确定要删除吗?',
@@ -237,15 +252,8 @@ class AddGroup extends Component {
                             </span>
                         }
                         <Button type="primary" onClick={() => { this.handleDistributionGroup(record) }} className="bottom2">分配组</Button>
-
-                        {
-                            record.Title.Name != 'default'
-                            &&
-                            <span>
-                                <Divider type="vertical" />
-                                <Button type="danger" onClick={() => { this.handleDelBtn(record) }} className="bottom2">删除</Button>
-                            </span>
-                        }
+                        <Divider type="vertical" />
+                        <Button type="danger" onClick={() => { this.handleDelBtn(record) }} className="bottom2">删除</Button>
                     </span>
                 )
             }
