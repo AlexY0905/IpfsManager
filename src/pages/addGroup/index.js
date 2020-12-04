@@ -129,19 +129,6 @@ class AddGroup extends Component {
         let { handleDelSelected } = this.props
         console.log('::::::::::::::', Id);
         console.log('::::::::::::::', delSelectedList);
-        // let options = ""
-        /*
-        delSelectedList.forEach((item, index) => {
-            if (item['children']) {
-                options = {id: Id, ipAddress: []}
-                return false
-            } else {
-                options = {id: Id, ipAddress: delSelectedList}
-                return false
-            }
-        })
-        */
-
         let options = {
             id: Id,
             ipAddress: []

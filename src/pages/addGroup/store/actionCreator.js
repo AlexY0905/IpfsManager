@@ -72,7 +72,7 @@ export const handleAddGroupNameAction = (options) => {
                     message.success("创建成功")
                     setTimeout(() => {
                         location.reload()
-                    })
+                    }, 500)
                 }
             })
             .catch(err => {
@@ -94,7 +94,7 @@ export const handleDistributionGroupListAction = (options) => {
                     message.success("分配成功")
                     setTimeout(() => {
                         location.reload()
-                    })
+                    }, 500)
                 }
             })
             .catch(err => {
@@ -116,7 +116,7 @@ export const handleDelSelectedAction = (options) => {
                     message.success('删除成功')
                     setTimeout(() => {
                         location.reload()
-                    })
+                    }, 500)
                 }
             })
             .catch(err => {
@@ -138,7 +138,7 @@ export const handleEditGroupAction = (options) => {
                     message.success('编辑成功')
                     setTimeout(() => {
                         location.reload()
-                    })
+                    }, 500)
                 }
             })
             .catch(err => {
