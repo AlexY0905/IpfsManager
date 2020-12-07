@@ -41,8 +41,8 @@ function App() {
     <Router forceRefresh={true}>
       <div className="App">
         <Switch>
-          <ProtectRoute exact path='/' component={Home} />
-          <ProtectRoute path='/lotushelp' component={LotusHelp} />
+          <ProtectRoute exact path='/' component={LotusHelp} />
+          <ProtectRoute path='/home' component={Home} />
           <ProtectRoute path='/serverManage' component={ServerManage} />
           <ProtectRoute path='/Monitor' component={Monitor} />
           <ProtectRoute path='/ipssh' component={Ipssh} />

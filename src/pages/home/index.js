@@ -29,6 +29,69 @@ class Home extends Component {
 
     // ------------------------------------
     handleServerBtn(type) { // 所有按钮的点击事件
+        let options = {
+            name: ''
+        }
+        switch (type) {
+            case 'list':
+                options.name = 'lotuswalletlist'
+                break
+            case 'query-ask':
+                options.name = 'lotusclientquery-ask'
+                break
+            case 'list-deals':
+                options.name = 'lotusclientlist-deals'
+                break
+            case 'pending':
+                options.name = 'lotusmpoolpending'
+                break
+            case 'fird':
+                options.name = 'lotusmpoolfird'
+                break
+            case 'confis':
+                options.name = 'lotusmpoolconfis'
+                break
+            case 'gas-perf':
+                options.name = 'lotusmpoolgas-perf'
+                break
+            case 'prower':
+                options.name = 'lotusstateprower'
+                break
+            case 'active-sectors':
+                options.name = 'lotusstateactive-sectors'
+                break
+            case 'list-actrs':
+                options.name = 'lotusstatelist-actrs'
+                break
+            case 'list-miners':
+                options.name = 'lotusstatelist-miners'
+                break
+            case 'get-actr':
+                options.name = 'lotusstateget-actr'
+                break
+            case 'miner-info':
+                options.name = 'lotusstateminer-info'
+                break
+            case 'sector':
+                options.name = 'lotusstatesector'
+                break
+            case 'read-state':
+                options.name = 'lotusstateread-state'
+                break
+            case 'getblock':
+                options.name = 'lotuschaingetblock'
+                break
+            case 'getmessage':
+                options.name = 'lotuschaingetmessage'
+                break
+            case 'gas-price':
+                options.name = 'lotuschaingas-price'
+                break
+        }
+
+        // 调用发送方函数, 处理lotus命令
+        this.props.handleLotusOrders(options)
+
         this.setState({
             visible: true,
             modalType: type
@@ -49,6 +112,11 @@ class Home extends Component {
 
 
     render() {
+        let { lotusOrderList } = this.props
+        if (lotusOrderList.toJS().length > 0) {
+            console.log(':::::::::--------', lotusOrderList.toJS())
+        }
+
         return (
             <div>
                 <Layout>
@@ -123,16 +191,15 @@ class Home extends Component {
 // 接收方
 const mapStateToProps = (state) => ({
     // 获取属于home页面 store中的所有数据
-    // minerList: state.get('home').get('minerList')
+    lotusOrderList: state.get('home').get('lotusOrderList')
 })
 // 发送方
 const mapDispatchToProps = (dispatch) => ({
     // （handleGetMinerList）自定义这个函数名 用这个函数名派发action
-    /*
-    handleGetMinerList: () => {
-        dispatch(actionCreator.handleMinerlistAction())
+    handleLotusOrders: (options) => {
+        dispatch(actionCreator.handleLotusOrdersAction(options))
     }
-     */
+
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home)

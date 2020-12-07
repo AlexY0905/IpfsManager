@@ -80,6 +80,11 @@ export const API_CONFIG = {
     editGroupName: [
         '/v4/updategroup',
         'get'
+    ],
+    // lotus命令页面, 命令按钮接口
+    getLotusOrders: [
+        '/v5/lotus',
+        'get'
     ]
 }
 
