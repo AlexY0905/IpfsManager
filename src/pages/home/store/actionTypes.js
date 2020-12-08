@@ -1,4 +1,4 @@
-// 导出矿池用户管理/矿机管理 数据的类型
+// 导出lotus命令页面 数据的类型
 export const GET_LOTUSORDERLIST = 'home@get_lotusorderlist'
 
 

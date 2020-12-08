@@ -19,9 +19,10 @@ export const handleLotusOrdersAction = (options) => {
         dispatch(getIsLoadingStart())
         api.getLotusOrders(options)
             .then((result) => {
-                // console.log('::::::::-------', result)
+                console.log(result);
+                let data = result.msg
                 // 将后台请求过来的成功数据, 派发action, 到store
-                dispatch(handleLotusOrdersData(result))
+                dispatch(handleLotusOrdersData(data))
             })
             .catch((err) => {
                 message.error('获取数据失败,请稍后再试')

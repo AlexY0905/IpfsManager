@@ -10,6 +10,7 @@ import Monitor from 'pages/monitor/index';
 import Ipssh from 'pages/ipssh/index';
 import AddGroup from 'pages/addGroup/index';
 import Grouping from 'pages/grouping/index';
+import LotusMiner from 'pages/lotusMiner/index';
 import { getUsername } from 'util';
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
         <Switch>
           <ProtectRoute exact path='/' component={LotusHelp} />
           <ProtectRoute path='/home' component={Home} />
+          <ProtectRoute path='/lotusminer' component={LotusMiner} />
           <ProtectRoute path='/serverManage' component={ServerManage} />
           <ProtectRoute path='/Monitor' component={Monitor} />
           <ProtectRoute path='/ipssh' component={Ipssh} />

@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Layout from 'common/layout/index.js'
-import { Breadcrumb, Table, Divider, Tag, Button, Modal, Tabs } from 'antd';
+import { Breadcrumb, Table, Divider, Button, Modal, Tabs, Spin } from 'antd';
 import "./index.css"
 import { actionCreator } from './store'
 
@@ -91,11 +91,6 @@ class Home extends Component {
 
         // 调用发送方函数, 处理lotus命令
         this.props.handleLotusOrders(options)
-
-        this.setState({
-            visible: true,
-            modalType: type
-        })
     }
     handleCancel() { // 关闭对话框函数
         this.setState({
@@ -108,13 +103,21 @@ class Home extends Component {
     // -----------------------------------
 
 
-
-
-
     render() {
-        let { lotusOrderList } = this.props
+        let dataSource = [];
+        let columns = [];
+        let { name, lotusOrderList } = this.props
         if (lotusOrderList.toJS().length > 0) {
-            console.log(':::::::::--------', lotusOrderList.toJS())
+            if (name == 'lotuswalletlist') {
+                columns = [
+                    {title: 'Address',dataIndex: 'address',key: 'address'},
+                    {title: 'Balance',dataIndex: 'balance',key: 'balance'},
+                    {title: 'Nonce',dataIndex: 'nonce',key: 'nonce'}
+                ]
+                dataSource = lotusOrderList.toJS()
+                console.log(':::::::::--------', lotusOrderList.toJS())
+            }
+
         }
 
         return (
@@ -172,17 +175,19 @@ class Home extends Component {
                             </TabPane>
                         </Tabs>
                     </div>
-
-                    <Modal
-                        title={this.state.modalType}
-                        visible={this.state.visible}
-                        onCancel={this.handleCancel}
-                        footer={null}
-                    >
-                        <p>随便写点什么...</p>
-                        <p>Some contents...</p>
-                        <p>Some contents...</p>
-                    </Modal>
+                    <Table
+                        columns={columns}
+                        dataSource={dataSource}
+                        bordered={true}
+                        rowKey='id'
+                        loading={
+                            {
+                                spinning: this.props.isLoading,
+                                tip: "加载中..."
+                            }
+                        }
+                        style={{marginTop: '30px'}}
+                    />
                 </Layout>
             </div>
         )
@@ -191,11 +196,12 @@ class Home extends Component {
 // 接收方
 const mapStateToProps = (state) => ({
     // 获取属于home页面 store中的所有数据
+    isLoading: state.get('home').get('isLoading'),
+    name: state.get('home').get('name'),
     lotusOrderList: state.get('home').get('lotusOrderList')
 })
 // 发送方
 const mapDispatchToProps = (dispatch) => ({
-    // （handleGetMinerList）自定义这个函数名 用这个函数名派发action
     handleLotusOrders: (options) => {
         dispatch(actionCreator.handleLotusOrdersAction(options))
     }

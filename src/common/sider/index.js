@@ -39,6 +39,9 @@ class HomeSider extends Component {
                             <Menu.Item key="1.1">
                                 <NavLink exact to='/home'><Icon type="laptop" /> lotus命令</NavLink>
                             </Menu.Item>
+                            <Menu.Item key="1.2">
+                                <NavLink exact to='/lotusminer'><Icon type="laptop" /> lotus-miner</NavLink>
+                            </Menu.Item>
                         </SubMenu>
 
                         <SubMenu
