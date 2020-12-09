@@ -10,19 +10,20 @@ const getIsLoadingStart = () => ({
 const getIsLoadingEnd = () => ({
     type: types.ISLOADING_END
 })
-const handleLotusOrdersData = (payload) => ({
-    type: types.GET_LOTUSORDERLIST,
+const handleLotusMinerData = (payload) => ({
+    type: types.GET_LOTUSMINERLIST,
     payload: payload
 })
-export const handleLotusOrdersAction = (options) => {
+export const handleLotusMinerAction = (options) => {
     return (dispatch, getState) => {
         dispatch(getIsLoadingStart())
-        api.getLotusOrders(options)
+        api.getLotusMiner(options)
             .then((result) => {
-                console.log(result);
-                let data = result.msg
+                console.log("----------", result);
+                // return
+                // let data = result.msg
                 // 将后台请求过来的成功数据, 派发action, 到store
-                dispatch(handleLotusOrdersData(data))
+                dispatch(handleLotusMinerData(result))
             })
             .catch((err) => {
                 message.error('获取数据失败,请稍后再试')

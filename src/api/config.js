@@ -85,6 +85,11 @@ export const API_CONFIG = {
     getLotusOrders: [
         '/v5/lotus',
         'get'
+    ],
+    // lotusMiner页面 按钮接口
+    getLotusMiner: [
+        '/v5/lotus',
+        'get'
     ]
 }
 
