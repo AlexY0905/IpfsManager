@@ -8,7 +8,6 @@ import { actionCreator } from './store'
 
 const { TabPane } = Tabs;
 
-
 class Home extends Component {
     constructor(props) {
         super(props)
@@ -89,9 +88,10 @@ class Home extends Component {
         }
 
         // 调用发送方函数, 处理lotus命令
-        setInterval(() => {
-            this.props.handleLotusOrders(options)
-        }, 660000)
+        // this.props.handleLotusOrders(options)
+        // setInterval(() => { // 十分钟刷新一次数据
+        //     this.props.handleLotusOrders(options)
+        // }, 660000)
 
         this.setState({
             modalType: type
@@ -271,7 +271,7 @@ class Home extends Component {
                     {title: 'OrderNumber',dataIndex: 'OrderNumber',key: 'OrderNumber'}
                 ]
                 dataSource = [
-                    {OrderNumber: 'asdafeadsfqwegdsfgsf'}
+                    {OrderNumber: 'hyfrdzhteshftrhyhtrj'}
                 ]
             }
         }

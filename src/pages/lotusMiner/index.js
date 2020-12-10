@@ -52,11 +52,11 @@ class LotusMiner extends Component {
                 break
         }
 
-        // 调用发送方函数, 处理lotus命令
-        // setInterval(() => {//十分钟刷新一次数据 
+        // 调用发送方函数, 处理lotus命令   //测试真实数据的时候打开
+        // this.props.handleLotusMiner(options)
+        // setInterval(() => {//十一分钟刷新一次数据 
         //     this.props.handleLotusMiner(options)
         // }, 660000)
-        this.props.handleLotusMiner(options)
         this.setState({
             modalType: type
         })
@@ -88,7 +88,7 @@ class LotusMiner extends Component {
                     { title: 'Price', dataIndex: 'price', key: 'price' },
                     { title: 'Duration', dataIndex: 'duration', key: 'duration' }
                 ]
-                dataSource = lotusminerlist.toJS()
+                // dataSource = lotusminerlist.toJS()
             } else if (name == 'lotusminerstoragedealsgetask') {
                 // console.log('hhhhhhh', name);
                 columns = [
@@ -121,6 +121,52 @@ class LotusMiner extends Component {
                 ]
                 dataSource = [//假数据
                     { proposalCid: 'sfa', dealId: '001', state: 'adf', client: 'adf', size: '228', price: '666', duration: 'adf' }
+                ]
+            } else if (modalType == 'list-cids') {
+                columns = [
+                    { title: 'Cid', dataIndex: 'cid', key: 'cid' }
+                ]
+                dataSource = [//假数据
+                    { cid: 'dfsdfsfsdf' }
+                ]
+            } else if (modalType == 'cid-info') {
+                columns = [
+                    { title: 'PieceCid', dataIndex: 'pieceCid', key: 'pieceCid' },
+                    { title: 'offset', dataIndex: 'offset', key: 'offset' },
+                    { title: 'Size', dataIndex: 'size', key: 'size' }
+                ]
+                dataSource = [//假数据
+                    { pieceCid: '0001', offset: 'right', size: '512' },
+                    { pieceCid: '0002', offset: 'right', size: '365' },
+                    { pieceCid: '0003', offset: 'left', size: '543' },
+                    { pieceCid: '0004', offset: 'left', size: '789' },
+                    { pieceCid: '0005', offset: 'left', size: '654' },
+                    { pieceCid: '0006', offset: 'left', size: '765' },
+                    { pieceCid: '0007', offset: 'left', size: '998' },
+                    { pieceCid: '0008', offset: 'right', size: '456' }
+                ]
+            } else if (modalType == 'status') {
+                columns = [
+                    { title: 'ISGarbageSector', dataIndex: 'isgarbagesector', key: 'isgarbagesector' },
+                    { title: 'Status', dataIndex: 'status', key: 'status' },
+                    { title: 'CIDcommD', dataIndex: 'cidcommd', key: 'cidcommd' },
+                    { title: 'CIDcommR', dataIndex: 'cidcommr', key: 'cidcommr' },
+                    { title: 'Ticket', dataIndex: 'ticket', key: 'ticket' },
+                    { title: 'TicketH', dataIndex: 'ticketh', key: 'ticketh' },
+                    { title: 'Seed', dataIndex: 'seed', key: 'seed' },
+                    { title: 'SeedH', dataIndex: 'seedh', key: 'seedh' },
+                    { title: 'Precommit', dataIndex: 'precommit', key: 'precommit' },
+                    { title: 'Commit', dataIndex: 'commit', key: 'commit' },
+                    { title: 'Proof', dataIndex: 'proof', key: 'proof' },
+                    { title: 'Deals', dataIndex: 'deals', key: 'deals' },
+                    { title: 'Retries', dataIndex: 'retries', key: 'retries' }
+                ]
+                dataSource = [//假数据
+                    { isgarbagesector: 'adad', status: 'adfd', cidcommd: 'adff', cidcommr: 'agg', ticket: 'adfd', ticketh: 'gdsd', seed: 'adfd', seedh: 'fgfdg', precommit: 'fdgfd', commit: 'dgfs', proof: 'hfgfg', deals: 'gfd', retries: 'gfdsf' },
+                    { isgarbagesector: 'adad', status: 'adfd', cidcommd: 'adff', cidcommr: 'agg', ticket: 'adfd', ticketh: 'gdsd', seed: 'adfd', seedh: 'fgfdg', precommit: 'fdgfd', commit: 'dgfs', proof: 'hfgfg', deals: 'gfd', retries: 'gfdsf' },
+                    { isgarbagesector: 'adad', status: 'adfd', cidcommd: 'adff', cidcommr: 'agg', ticket: 'adfd', ticketh: 'gdsd', seed: 'adfd', seedh: 'fgfdg', precommit: 'fdgfd', commit: 'dgfs', proof: 'hfgfg', deals: 'gfd', retries: 'gfdsf' },
+                    { isgarbagesector: 'adad', status: 'adfd', cidcommd: 'adff', cidcommr: 'agg', ticket: 'adfd', ticketh: 'gdsd', seed: 'adfd', seedh: 'fgfdg', precommit: 'fdgfd', commit: 'dgfs', proof: 'hfgfg', deals: 'gfd', retries: 'gfdsf' },
+                    { isgarbagesector: 'adad', status: 'adfd', cidcommd: 'adff', cidcommr: 'agg', ticket: 'adfd', ticketh: 'gdsd', seed: 'adfd', seedh: 'fgfdg', precommit: 'fdgfd', commit: 'dgfs', proof: 'hfgfg', deals: 'gfd', retries: 'gfdsf' }
                 ]
             }
 
