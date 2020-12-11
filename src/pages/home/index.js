@@ -2,11 +2,15 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Layout from 'common/layout/index.js'
-import { Breadcrumb, Table, Divider, Button, Modal, Tabs, Spin } from 'antd';
+import { Breadcrumb, Table, Divider, Button, Modal, Tabs, Input, notification } from 'antd';
 import "./index.css"
 import { actionCreator } from './store'
+import { Chart, Geom, Axis, Tooltip, Legend } from "bizcharts";
 
 const { TabPane } = Tabs;
+const { Search } = Input;
+
+
 
 class Home extends Component {
     constructor(props) {
@@ -14,12 +18,14 @@ class Home extends Component {
         this.state = {
             data: '',
             visible: false,
-            modalType: ''
+            modalType: '',
+            modalOrder: ''
         }
 
         this.handleServerBtn = this.handleServerBtn.bind(this)
         this.handleCancel = this.handleCancel.bind(this)
         this.handleCallback = this.handleCallback.bind(this)
+        this.handleSearchBtn = this.handleSearchBtn.bind(this)
     }
     componentDidMount() {
 
@@ -56,16 +62,17 @@ class Home extends Component {
                 options.name = 'lotusstatepower'
                 break
             case 'active-sectors':
-                options.name = 'lotusstateactive-sectors'
+                options.name = 'lotusstateactivesectors'
                 break
             case 'list-actors':
-                options.name = 'lotusstatelist-actors'
+                options.name = 'lotusstatelistactors'
+                this.setState({modalOrder: 'lotusstatelistactors'})
                 break
             case 'list-miners':
                 options.name = 'lotusstatelist-miners'
                 break
-            case 'get-actr':
-                options.name = 'lotusstateget-actr'
+            case 'get-actor':
+                options.name = 'lotusstateget-actor'
                 break
             case 'miner-info':
                 options.name = 'lotusstateminer-info'
@@ -88,10 +95,10 @@ class Home extends Component {
         }
 
         // 调用发送方函数, 处理lotus命令
-        // this.props.handleLotusOrders(options)
-        // setInterval(() => { // 十分钟刷新一次数据
-        //     this.props.handleLotusOrders(options)
-        // }, 660000)
+        this.props.handleLotusOrders(options)
+        setInterval(() => { // 十分钟刷新一次数据
+            this.props.handleLotusOrders(options)
+        }, 660000)
 
         this.setState({
             modalType: type
@@ -105,13 +112,36 @@ class Home extends Component {
     handleCallback(e) { // 切换tab函数
         console.log(e);
     }
+    handleSearchBtn(val) { // 处理搜索
+        console.log(':::::::------', val)
+        const { modalOrder } = this.state
+        if (val == '') {
+            notification['warning']({
+                message: '搜索框不能为空 !'
+            })
+            return false
+        }
+        let options = {
+            name: modalOrder,
+            info: val
+        }
+
+        if (modalOrder == 'lotusstatelistactors') {
+            console.log('options---------', options)
+            // 调用发送方函数, 处理搜索
+            this.props.handleSearch(options)
+        }
+
+
+    }
     // -----------------------------------
 
 
     render() {
         let dataSource = [];
         let columns = [];
-        let { name, lotusOrderList } = this.props
+        let { name, type, lotusOrderList } = this.props
+        console.log('type--------', type)
         let { modalType } = this.state
         if (lotusOrderList.toJS().length > 0) {
             if (name == 'lotuswalletlist') {
@@ -152,6 +182,12 @@ class Home extends Component {
                     {title: 'Power',dataIndex: 'Power',key: 'Power'}
                 ]
                 dataSource = lotusOrderList.toJS()
+            } else if (name == 'lotusstateactivesectors') {
+                columns = [
+                    { title: 'SectorNumber', dataIndex: 'sector_number', key: 'sectornumber' },
+                    { title: 'SealedCID', dataIndex: 'sealed_cid', key: 'sealedcid' }
+                ]
+                dataSource = lotusOrderList.toJS()
             } else if (name == 'lotusmpoolpending') {
                 columns = [
                     {title: 'Message-Version',dataIndex: 'Message-Version',key: 'Message-Version'},
@@ -185,9 +221,19 @@ class Home extends Component {
                     {title: 'Message',dataIndex: 'Message',key: 'Message'}
                 ]
                 dataSource = lotusOrderList.toJS()
-            } else if (name == 'lotusstatelist-actors') {
+            } else if (name == 'lotusstatelistactors' && !type) {
                 columns = [
                     {title: 'Address',dataIndex: 'address',key: 'address'}
+                ]
+                dataSource = lotusOrderList.toJS()
+            } else if (name == 'lotusstatelistactors' && type) {
+                console.log(':::::-------', '走进来了')
+                columns = [
+                    {title: 'Address',dataIndex: 'Address',key: 'Address'},
+                    {title: 'Balance',dataIndex: 'Balance',key: 'Balance'},
+                    {title: 'Nonce',dataIndex: 'Nonce',key: 'Nonce'},
+                    {title: 'Code',dataIndex: 'Code',key: 'Code'},
+                    {title: 'Head',dataIndex: 'Head',key: 'Head'}
                 ]
                 dataSource = lotusOrderList.toJS()
             } else if (name == 'lotusstateactive-sectors') {
@@ -198,6 +244,7 @@ class Home extends Component {
                 console.log('::::::::--------', lotusOrderList.toJS())
             }
         }
+
         if (lotusOrderList.toJS().length == 0 && modalType != '') {
             if (modalType == 'gas-perf') {
                 columns = [
@@ -276,6 +323,80 @@ class Home extends Component {
             }
         }
 
+        const data = [
+            {
+                month: "2015-01-01",
+                acc: 84.0,
+                type: '有效算力'
+            },
+            {
+                month: "2015-02-01",
+                acc: 14.9,
+                type: '有效算力'
+            },
+            {
+                month: "2015-03-01",
+                acc: 17.0,
+                type: '有效算力'
+            },
+            {
+                month: "2015-04-01",
+                acc: 20.2,
+                type: '有效算力'
+            },
+            {
+                month: "2015-05-01",
+                acc: 55.6,
+                type: '有效算力'
+            },
+            {
+                month: "2015-06-01",
+                acc: 56.7,
+                type: '有效算力'
+            },
+            {
+                month: "2015-07-01",
+                acc: 30.6,
+                type: '有效算力'
+            },
+            {
+                month: "2015-08-01",
+                acc: 63.2,
+                type: '有效算力'
+            },
+            {
+                month: "2015-09-01",
+                acc: -24.6,
+                type: '有效算力'
+            },
+            {
+                month: "2015-10-01",
+                acc: 14.0,
+                type: '有效算力'
+            },
+            {
+                month: "2015-11-01",
+                acc: 9.4,
+                type: '有效算力'
+            },
+            {
+                month: "2015-12-01",
+                acc: 6.3,
+                type: '有效算力'
+            }
+        ];
+        const cols = {
+            month: {
+                nice: true,
+                alias: "月份"
+            },
+            acc: {
+                nice: true,
+                alias: "积累量"
+            }
+        };
+        const colors = ["#6394f9", "#62daaa"];
+
         return (
             <div>
                 <Layout>
@@ -313,8 +434,12 @@ class Home extends Component {
                                 <Divider type="vertical" />
                                 <Button type="primary" onClick={() => this.handleServerBtn("list-miners")}>list-miners</Button>
                                 <Divider type="vertical" />
-                                <Button type="primary" onClick={() => this.handleServerBtn("get-actr")}>get-actr</Button>
-                                <Divider type="vertical" />
+                                {
+                                    /*
+                                    <Button type="primary" onClick={() => this.handleServerBtn("get-actor")}>get-actor</Button>
+                                    <Divider type="vertical" />
+                                    */
+                                }
                                 <Button type="primary" onClick={() => this.handleServerBtn("miner-info")}>miner-info</Button>
                                 <Divider type="vertical" />
                                 <Button type="primary" onClick={() => this.handleServerBtn("sector")}>sector</Button>
@@ -331,19 +456,63 @@ class Home extends Component {
                             </TabPane>
                         </Tabs>
                     </div>
-                    <Table
-                        columns={columns}
-                        dataSource={dataSource}
-                        bordered={true}
-                        rowKey='id'
-                        loading={
-                            {
-                                spinning: this.props.isLoading,
-                                tip: "加载中..."
+                    <div className="search_wrap">
+                        <Search
+                            style={{ width: 200 }}
+                            placeholder="input search text"
+                            onSearch={this.handleSearchBtn}
+                        />
+                    </div>
+                    <div style={{marginBottom: '30px'}}>
+                        <Table
+                            columns={columns}
+                            dataSource={dataSource}
+                            bordered={true}
+                            rowKey='id'
+                            loading={
+                                {
+                                    spinning: this.props.isLoading,
+                                    tip: "加载中..."
+                                }
                             }
-                        }
-                        style={{marginTop: '30px'}}
-                    />
+                            style={{marginTop: '30px'}}
+                        />
+                    </div>
+                    {
+                        <div style={{width: '100%'}}>
+                            <Chart height={400} data={data} scale={cols} forceFit padding={[ 20, 100, 20, 30]}>
+                                <Axis
+                                    name="month"
+                                    title={null}
+                                    tickLine={null}
+                                    line={{
+                                        stroke: "#E6E6E6"
+                                    }}
+                                />
+                                <Axis
+                                    name="acc"
+                                    line={false}
+                                    tickLine={null}
+                                    grid={null}
+                                    title={null}
+                                />
+                                <Tooltip />
+                                <Legend name="type" />
+                                <Geom
+                                    type="line"
+                                    position="month*acc"
+                                    size={1}
+                                    color="l (270) 0:rgba(255, 146, 255, 1) .5:rgba(100, 268, 255, 1) 1:rgba(215, 0, 255, 1)"
+                                    shape="smooth"
+                                    style={{
+                                        shadowColor: "l (270) 0:rgba(21, 146, 255, 0)",
+                                        shadowBlur: 60,
+                                        shadowOffsetY: 6
+                                    }}
+                                />
+                            </Chart>
+                        </div>
+                    }
                 </Layout>
             </div>
         )
@@ -354,12 +523,16 @@ const mapStateToProps = (state) => ({
     // 获取属于home页面 store中的所有数据
     isLoading: state.get('home').get('isLoading'),
     name: state.get('home').get('name'),
+    type: state.get('home').get('type'),
     lotusOrderList: state.get('home').get('lotusOrderList')
 })
 // 发送方
 const mapDispatchToProps = (dispatch) => ({
     handleLotusOrders: (options) => {
         dispatch(actionCreator.handleLotusOrdersAction(options))
+    },
+    handleSearch: (options) => {
+        dispatch(actionCreator.handleSearchAction(options))
     }
 
 })

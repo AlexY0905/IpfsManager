@@ -51,8 +51,15 @@ class Grouping extends Component {
     // -------------------------------------------------批量命令功能---------------------------------------------------
     pressEnter(e) { // 处理命令输入框的回车事件
         // 获取文本框中的值
-        // console.log(11111111111, e.target.value)
+        console.log(11111111111, e.target.value)
         let { delSelectedList } = this.state
+        if (e.target.value == '') {
+            message.error('指令不能为空 !')
+            return false
+        } else if (delSelectedList.length == 0) {
+            message.error('请选择需要的 ip')
+            return false
+        }
         delSelectedList.forEach((item, index) => {
             if (item['children']) {
                 delSelectedList.splice(index, 1)
@@ -228,7 +235,7 @@ class Grouping extends Component {
                 } else if (v == 'file is existed') {
                     ipsshtxtArr.push(<h3 style={{ color: 'red' }}>{v}</h3>)
                 } else {
-                    ipsshtxtArr.push(<p style={{ color: "#fff" }}>{v}</p >)
+                    ipsshtxtArr.push(<p style={{ color: "#fff" }}>{v}</p>)
                 }
             })
         })
@@ -274,7 +281,7 @@ class Grouping extends Component {
                                 <div className='terminal_top' style={{ background: '#000' }}>
                                     <div>
                                         {
-                                            ipsshtxtArr && ipsshtxtArr
+                                            ipsshtxtArr.length > 0 && ipsshtxtArr
                                         }
                                     </div>
                                 </div>

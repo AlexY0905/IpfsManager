@@ -90,6 +90,11 @@ export const API_CONFIG = {
     getLotusMiner: [
         '/v5/lotus',
         'get'
+    ],
+    // lotusMiner页面 搜索接口
+    getSearchData: [
+        '/v5/lotusinfo',
+        'get'
     ]
 }
 

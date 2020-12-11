@@ -24,7 +24,25 @@ export const handleLotusOrdersAction = (options) => {
                 dispatch(handleLotusOrdersData(result))
             })
             .catch((err) => {
-                message.error('获取数据失败,请稍后再试')
+                message.error('获取数据失败, 请稍后再试 !')
+            })
+            .finally(() => {
+                dispatch(getIsLoadingEnd())
+            })
+    }
+}
+// 处理搜索
+export const handleSearchAction = (options) => {
+    return (dispatch, getState) => {
+        dispatch(getIsLoadingStart())
+        api.getSearchData(options)
+            .then((result) => {
+                console.log('result---------', result)
+                // 将后台请求过来的成功数据, 派发action, 到store
+                dispatch(handleLotusOrdersData(result))
+            })
+            .catch((err) => {
+                message.error('获取数据失败, 请稍后再试 !')
             })
             .finally(() => {
                 dispatch(getIsLoadingEnd())
