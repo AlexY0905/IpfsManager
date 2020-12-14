@@ -19,7 +19,9 @@ class Home extends Component {
             data: '',
             visible: false,
             modalType: '',
-            modalOrder: ''
+            modalOrder: '',
+            isShowSearch: false,
+            isSearchShow: false
         }
 
         this.handleServerBtn = this.handleServerBtn.bind(this)
@@ -39,58 +41,75 @@ class Home extends Component {
         switch (type) {
             case 'list':
                 options.name = 'lotuswalletlist'
+                this.setState({isShowSearch: false})
                 break
             case 'query-ask':
                 options.name = 'lotusclientquery-ask'
+                this.setState({isShowSearch: false})
                 break
             case 'list-deals':
                 options.name = 'lotusclientlist-deals'
+                this.setState({isShowSearch: false})
                 break
             case 'pending':
                 options.name = 'lotusmpoolpending'
+                this.setState({isShowSearch: false})
                 break
-            case 'fird':
-                options.name = 'lotusmpoolfird'
+            case 'find':
+                options.name = 'lotusmpoolfind'
+                this.setState({isShowSearch: false})
                 break
             case 'config':
                 options.name = 'lotusmpoolconfig'
+                this.setState({isShowSearch: false})
                 break
             case 'gas-perf':
                 options.name = 'lotusmpoolgas-perf'
+                this.setState({isShowSearch: false})
                 break
             case 'power':
                 options.name = 'lotusstatepower'
+                this.setState({isShowSearch: false})
                 break
             case 'active-sectors':
                 options.name = 'lotusstateactivesectors'
+                this.setState({isShowSearch: false})
                 break
             case 'list-actors':
                 options.name = 'lotusstatelistactors'
-                this.setState({modalOrder: 'lotusstatelistactors'})
+                this.setState({modalOrder: 'lotusstatelistactors', isShowSearch: true})
                 break
             case 'list-miners':
-                options.name = 'lotusstatelist-miners'
+                options.name = 'lotusstatelistminers'
+                this.setState({modalOrder: 'lotusstatelistminers', isShowSearch: true})
                 break
             case 'get-actor':
                 options.name = 'lotusstateget-actor'
+                this.setState({isShowSearch: false})
                 break
             case 'miner-info':
                 options.name = 'lotusstateminer-info'
+                this.setState({isShowSearch: false})
                 break
             case 'sector':
                 options.name = 'lotusstatesector'
+                this.setState({isShowSearch: false})
                 break
             case 'read-state':
                 options.name = 'lotusstateread-state'
+                this.setState({isShowSearch: false})
                 break
             case 'getblock':
                 options.name = 'lotuschaingetblock'
+                this.setState({isShowSearch: false})
                 break
             case 'getmessage':
                 options.name = 'lotuschaingetmessage'
+                this.setState({isShowSearch: false})
                 break
             case 'gas-price':
                 options.name = 'lotuschaingas-price'
+                this.setState({isShowSearch: false})
                 break
         }
 
@@ -110,10 +129,9 @@ class Home extends Component {
         })
     }
     handleCallback(e) { // 切换tab函数
-        console.log(e);
+        this.setState({isShowSearch: false})
     }
     handleSearchBtn(val) { // 处理搜索
-        console.log(':::::::------', val)
         const { modalOrder } = this.state
         if (val == '') {
             notification['warning']({
@@ -125,12 +143,17 @@ class Home extends Component {
             name: modalOrder,
             info: val
         }
-
+        /*
         if (modalOrder == 'lotusstatelistactors') {
             console.log('options---------', options)
             // 调用发送方函数, 处理搜索
             this.props.handleSearch(options)
         }
+        */
+
+        console.log('options---------', options)
+        // 调用发送方函数, 处理搜索
+        this.props.handleSearch(options)
 
 
     }
@@ -141,7 +164,6 @@ class Home extends Component {
         let dataSource = [];
         let columns = [];
         let { name, type, lotusOrderList } = this.props
-        console.log('type--------', type)
         let { modalType } = this.state
         if (lotusOrderList.toJS().length > 0) {
             if (name == 'lotuswalletlist') {
@@ -227,13 +249,31 @@ class Home extends Component {
                 ]
                 dataSource = lotusOrderList.toJS()
             } else if (name == 'lotusstatelistactors' && type) {
-                console.log(':::::-------', '走进来了')
                 columns = [
                     {title: 'Address',dataIndex: 'Address',key: 'Address'},
                     {title: 'Balance',dataIndex: 'Balance',key: 'Balance'},
                     {title: 'Nonce',dataIndex: 'Nonce',key: 'Nonce'},
                     {title: 'Code',dataIndex: 'Code',key: 'Code'},
                     {title: 'Head',dataIndex: 'Head',key: 'Head'}
+                ]
+                dataSource = lotusOrderList.toJS()
+            } else if (name == 'lotusstatelistminers' && !type) {
+                columns = [
+                    {title: 'Address', dataIndex: 'address', key: 'address'}
+                ]
+                dataSource = lotusOrderList.toJS()
+            } else if (name == 'lotusstatelistminers' && type) {
+                columns = [
+                    {title: 'ActualPower', dataIndex: 'ActualPower', key: 'ActualPower'},
+                    {title: 'AvailableBalance', dataIndex: 'AvailableBalance', key: 'AvailableBalance'},
+                    {title: 'BytePower', dataIndex: 'BytePower', key: 'BytePower'},
+                    {title: 'ConsensusFaultEnd', dataIndex: 'ConsensusFaultEnd', key: 'ConsensusFaultEnd'},
+                    {title: 'Control', dataIndex: 'Control', key: 'Control'},
+                    {title: 'Multiaddrs', dataIndex: 'Multiaddrs', key: 'Multiaddrs'},
+                    {title: 'Owner', dataIndex: 'Owner', key: 'Owner'},
+                    {title: 'PeerId', dataIndex: 'PeerId', key: 'PeerId'},
+                    {title: 'SectorSize', dataIndex: 'SectorSize', key: 'SectorSize'},
+                    {title: 'Worker', dataIndex: 'Worker', key: 'Worker'}
                 ]
                 dataSource = lotusOrderList.toJS()
             } else if (name == 'lotusstateactive-sectors') {
@@ -243,8 +283,11 @@ class Home extends Component {
                 dataSource = lotusOrderList.toJS()
                 console.log('::::::::--------', lotusOrderList.toJS())
             }
+        } else {
+            columns = []
+            dataSource = []
         }
-
+        /*
         if (lotusOrderList.toJS().length == 0 && modalType != '') {
             if (modalType == 'gas-perf') {
                 columns = [
@@ -322,6 +365,7 @@ class Home extends Component {
                 ]
             }
         }
+        */
 
         const data = [
             {
@@ -418,7 +462,7 @@ class Home extends Component {
                             <TabPane tab="lotus mpool" key="3">
                                 <Button type="primary" onClick={() => this.handleServerBtn("pending")}>pending</Button>
                                 <Divider type="vertical" />
-                                <Button type="primary" onClick={() => this.handleServerBtn("fird")}>fird</Button>
+                                <Button type="primary" onClick={() => this.handleServerBtn("find")}>find</Button>
                                 <Divider type="vertical" />
                                 <Button type="primary" onClick={() => this.handleServerBtn("config")}>config</Button>
                                 <Divider type="vertical" />
@@ -438,10 +482,10 @@ class Home extends Component {
                                     /*
                                     <Button type="primary" onClick={() => this.handleServerBtn("get-actor")}>get-actor</Button>
                                     <Divider type="vertical" />
+                                    <Button type="primary" onClick={() => this.handleServerBtn("miner-info")}>miner-info</Button>
+                                    <Divider type="vertical" />
                                     */
                                 }
-                                <Button type="primary" onClick={() => this.handleServerBtn("miner-info")}>miner-info</Button>
-                                <Divider type="vertical" />
                                 <Button type="primary" onClick={() => this.handleServerBtn("sector")}>sector</Button>
                                 <Divider type="vertical" />
                                 <Button type="primary" onClick={() => this.handleServerBtn("read-state")}>read-state</Button>
@@ -456,13 +500,18 @@ class Home extends Component {
                             </TabPane>
                         </Tabs>
                     </div>
-                    <div className="search_wrap">
-                        <Search
-                            style={{ width: 200 }}
-                            placeholder="input search text"
-                            onSearch={this.handleSearchBtn}
-                        />
-                    </div>
+                    {
+                        this.state.isShowSearch && (
+                            <div className="search_wrap">
+                                <Search
+                                    style={{ width: 200 }}
+                                    placeholder="input search text"
+                                    onSearch={this.handleSearchBtn}
+                                />
+                            </div>
+                        )
+                    }
+
                     <div style={{marginBottom: '30px'}}>
                         <Table
                             columns={columns}

@@ -20,8 +20,13 @@ export const handleLotusOrdersAction = (options) => {
         api.getLotusOrders(options)
             .then((result) => {
                 console.log('::::::::-------', result)
-                // 将后台请求过来的成功数据, 派发action, 到store
-                dispatch(handleLotusOrdersData(result))
+                if (result.code == 1) {
+                    message.error('没有数据, 请稍后再试 !')
+                    return false
+                } else {
+                    // 将后台请求过来的成功数据, 派发action, 到store
+                    dispatch(handleLotusOrdersData(result))
+                }
             })
             .catch((err) => {
                 message.error('获取数据失败, 请稍后再试 !')
@@ -38,8 +43,18 @@ export const handleSearchAction = (options) => {
         api.getSearchData(options)
             .then((result) => {
                 console.log('result---------', result)
-                // 将后台请求过来的成功数据, 派发action, 到store
-                dispatch(handleLotusOrdersData(result))
+                if (result.code == 1) {
+                    message.error('暂无数据, 请稍后再试 !')
+                    let options = {
+                        name: '',
+                        msg: []
+                    }
+                    dispatch(handleLotusOrdersData(options))
+                    return false
+                } else {
+                    // 将后台请求过来的成功数据, 派发action, 到store
+                    dispatch(handleLotusOrdersData(result))
+                }
             })
             .catch((err) => {
                 message.error('获取数据失败, 请稍后再试 !')
