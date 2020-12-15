@@ -42,7 +42,7 @@ export const handleSearchAction = (options) => {
         dispatch(getIsLoadingStart())
         api.getSearchData(options)
             .then((result) => {
-                console.log('result---------', result)
+                // console.log('result---------', result)
                 if (result.code == 1) {
                     message.error('暂无数据, 请稍后再试 !')
                     let options = {
