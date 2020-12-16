@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Layout from 'common/layout/index.js'
-import { Breadcrumb, Table, Divider, Button, Modal, Tabs, Input, notification } from 'antd';
+import { Breadcrumb, Table, Divider, Button, Modal, Tabs, Input, notification, message } from 'antd';
 import "./index.css"
 import { actionCreator } from './store'
 import { Chart, Geom, Axis, Tooltip, Legend } from "bizcharts";
@@ -109,17 +109,16 @@ class HomeList extends Component {
                 this.setState({modalOrder: 'lotusstatereadstate', isShowSearch: true, isShowSectorBtn: false})
                 break
             case 'getblock':
-                console.log('12312------')
                 options.name = 'lotuschaingetblock'
                 this.setState({modalOrder: 'lotuschaingetblock', isShowSearch: true, isShowSectorBtn: false})
                 break
             case 'getmessage':
                 options.name = 'lotuschaingetmessage'
-                this.setState({isShowSearch: false, isShowSectorBtn: false})
+                this.setState({modalOrder: 'lotuschaingetmessage', isShowSearch: true, isShowSectorBtn: false})
                 break
             case 'gas-price':
                 options.name = 'lotuschaingasprice'
-                this.setState({isShowSearch: false, isShowSectorBtn: false})
+                this.setState({modalOrder: 'lotuschaingasprice', isShowSearch: true, isShowSectorBtn: false})
                 break
         }
 
@@ -139,7 +138,7 @@ class HomeList extends Component {
         })
     }
     handleCallback(e) { // 切换tab函数
-        this.setState({isShowSearch: false, isShowSectorBtn: false})
+        // this.setState({isShowSearch: false, isShowSectorBtn: false})
     }
     handleSearchBtn(val) { // 处理搜索
         const { modalOrder } = this.state
@@ -156,7 +155,7 @@ class HomeList extends Component {
         }
 
         if (modalOrder == 'lotuschaingetblock') {
-            this.props.history.push({ pathname: "/home/homeSearch", state: { cid: val } });
+            this.props.history.push({ pathname: "/home/homeSearch", state: { info: val, name: modalOrder } });
         } else {
             console.log('options---------', options)
             // 调用发送方函数, 处理搜索
@@ -188,9 +187,6 @@ class HomeList extends Component {
             return false
         } else {
             // 调用发送方函数, 处理搜索sector
-            console.log('sectorAddress----------', sectorAddress)
-            console.log('sectorNumber----------', sectorNumber)
-            console.log('modalOrder----------', modalOrder)
             let options = {
                 name: modalOrder,
                 info: sectorAddress,
@@ -319,8 +315,7 @@ class HomeList extends Component {
                 dataSource = lotusOrderList.toJS()
             } else if (name == 'lotusstatelistminers' && !type) {
                 columns = [
-                    {title: 'Address', dataIndex: 'address', key: 'address'},
-                    {title: 'LockedFunds', dataIndex: 'LockedFunds', key: 'LockedFunds', width: '100px'}
+                    {title: 'Address', dataIndex: 'address', key: 'address'}
                 ]
                 dataSource = lotusOrderList.toJS()
             } else if (name == 'lotusstatelistminers' && type) {
@@ -357,6 +352,22 @@ class HomeList extends Component {
             } else if (name == 'lotuschaingetblock') {
                 columns = [
                     {title: 'BlockCid',dataIndex: 'block_cid',key: 'block_cid'}
+                ]
+                dataSource = lotusOrderList.toJS()
+            } else if (name == 'lotuschaingetmessage') {
+                columns = [
+                    {title: 'MessageCid',dataIndex: 'MessageCid',key: 'MessageCid'}
+                ]
+                dataSource = lotusOrderList.toJS()
+            } else if (name == 'lotuschaingasprice' && !type) {
+                columns = [
+                    {title: 'Address',dataIndex: 'address',key: 'address'}
+                ]
+                dataSource = lotusOrderList.toJS()
+            } else if (name == 'lotuschaingasprice' && type) {
+                columns = [
+                    {title: 'BlockName',dataIndex: 'BlockName',key: 'BlockName'},
+                    {title: 'ChainGasPrice',dataIndex: 'ChainGasPrice',key: 'ChainGasPrice'}
                 ]
                 dataSource = lotusOrderList.toJS()
             }
