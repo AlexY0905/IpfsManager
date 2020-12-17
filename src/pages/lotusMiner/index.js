@@ -54,7 +54,7 @@ class LotusMiner extends Component {
 
         // 调用发送方函数, 处理lotus命令   //测试真实数据的时候打开
         // this.props.handleLotusMiner(options)
-        // setInterval(() => {//十一分钟刷新一次数据 
+        // setInterval(() => {//十一分钟刷新一次数据
         //     this.props.handleLotusMiner(options)
         // }, 660000)
         this.setState({

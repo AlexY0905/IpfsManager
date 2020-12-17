@@ -24,7 +24,9 @@ class HomeList extends Component {
             isSearchShow: false,
             isShowSectorBtn: false,
             sectorAddress: '',
-            sectorNumber: ''
+            sectorNumber: '',
+            searchVal: '',
+            isShowFindBtn: false
         }
 
         this.handleServerBtn = this.handleServerBtn.bind(this)
@@ -34,6 +36,8 @@ class HomeList extends Component {
         this.handleSubmitSearch = this.handleSubmitSearch.bind(this)
         this.addressChange = this.addressChange.bind(this)
         this.numberChange = this.numberChange.bind(this)
+        this.handleSearchFindBtn = this.handleSearchFindBtn.bind(this)
+        this.handleFindBtnChange = this.handleFindBtnChange.bind(this)
     }
     componentDidMount () {
 
@@ -46,7 +50,6 @@ class HomeList extends Component {
         let options = {
             name: ''
         }
-
         switch (type) {
             case 'list':
                 options.name = 'lotuswalletlist'
@@ -66,7 +69,7 @@ class HomeList extends Component {
                 break
             case 'find':
                 options.name = 'lotusmpoolfind'
-                this.setState({isShowSearch: false, isShowSectorBtn: false})
+                this.setState({modalOrder: 'lotusmpoolfind', isShowSearch: true, isShowSectorBtn: false, isShowFindBtn: true})
                 break
             case 'config':
                 options.name = 'lotusmpoolconfig'
@@ -139,21 +142,29 @@ class HomeList extends Component {
     }
     handleCallback(e) { // 切换tab函数
         // this.setState({isShowSearch: false, isShowSectorBtn: false})
+        this.setState({isShowFindBtn: false})
     }
     handleSearchBtn(val) { // 处理搜索
         const { modalOrder } = this.state
+        if (modalOrder == 'lotusmpoolfind') {
+            notification['warning']({
+                message: '请点击搜索框旁的搜索按钮进行搜索'
+            })
+            return false
+        }
+        this.setState({searchVal: val})
+        let options = {
+            name: modalOrder,
+            info: val,
+            num: '',
+            type: ''
+        }
         if (val == '') {
             notification['warning']({
                 message: '搜索框不能为空 !'
             })
             return false
         }
-        let options = {
-            name: modalOrder,
-            info: val,
-            num: ''
-        }
-
         if (modalOrder == 'lotuschaingetblock') {
             this.props.history.push({ pathname: "/home/homeSearch", state: { info: val, name: modalOrder } });
         } else {
@@ -161,7 +172,26 @@ class HomeList extends Component {
             // 调用发送方函数, 处理搜索
             this.props.handleSearch(options)
         }
-
+    }
+    handleSearchFindBtn (type) {
+        const { searchVal, modalOrder } = this.state
+        if (searchVal == '') {
+            notification['warning']({
+                message: '搜索框不能为空 !'
+            })
+            return false
+        }
+        let options = {
+            name: modalOrder,
+            info: searchVal,
+            num: '',
+            type: type
+        }
+        // 调用发送方函数, 处理搜索find按钮
+        this.props.handleSearch(options)
+    }
+    handleFindBtnChange (e) {
+        this.setState({searchVal: e.target.value})
     }
     addressChange (val) {
         this.setState({
@@ -190,7 +220,8 @@ class HomeList extends Component {
             let options = {
                 name: modalOrder,
                 info: sectorAddress,
-                num: sectorNumber
+                num: sectorNumber,
+                type: ''
             }
             this.props.handleSearch(options)
         }
@@ -204,7 +235,7 @@ class HomeList extends Component {
     render() {
         let dataSource = [];
         let columns = [];
-        let { name, type, lotusOrderList } = this.props
+        let { name, type, findType, lotusOrderList } = this.props
         let { modalType } = this.state
         if (lotusOrderList.toJS().length > 0) {
             if (name == 'lotuswalletlist') {
@@ -233,18 +264,45 @@ class HomeList extends Component {
                 dataSource = lotusOrderList.toJS()
             } else if (name == 'lotusmpoolpending') {
                 columns = [
-                    {title: 'Message-Version',dataIndex: 'Message-Version',key: 'Message-Version'},
-                    {title: 'Message-To',dataIndex: 'Message-To',key: 'Message-To'},
-                    {title: 'Message-From',dataIndex: 'Message-From',key: 'Message-From'},
-                    {title: 'Message-Nonce',dataIndex: 'Message-Nonce',key: 'Message-Nonce'},
-                    {title: 'Message-Value',dataIndex: 'Message-Value',key: 'Message-Value'},
-                    {title: 'Message-GasLimit',dataIndex: 'Message-GasLimit',key: 'Message-GasLimit'},
-                    {title: 'Message-GasFeeCap',dataIndex: 'Message-GasFeeCap',key: 'Message-GasFeeCap'},
-                    {title: 'Message-GasPremium',dataIndex: 'Message-GasPremium',key: 'Message-GasPremium'},
-                    {title: 'Message-Method',dataIndex: 'Message-Method',key: 'Message-Method'},
-                    {title: 'Message-Params',dataIndex: 'Message-Params',key: 'Message-Params'},
-                    {title: 'Signature-Type',dataIndex: 'Signature-Type',key: 'Signature-Type'},
-                    {title: 'Signature-Data',dataIndex: 'Signature-Data',key: 'Signature-Data'}
+                    {title: 'Id',dataIndex: 'id',key: 'id',width: '100px'},
+                    {title: 'CId',dataIndex: 'Cid',key: 'Cid',width: '100px'},
+                    {title: 'Version',dataIndex: 'version',key: 'version',width: '100px'},
+                    {title: 'ToAddress',dataIndex: 'to_address',key: 'to_address',width: '100px'},
+                    {title: 'FromAddress',dataIndex: 'from_address',key: 'from_address',width: '100px'},
+                    {title: 'Nonce',dataIndex: 'nonce',key: 'nonce',width: '100px'},
+                    {title: 'Value',dataIndex: 'value',key: 'value',width: '100px'},
+                    {title: 'GasLimit',dataIndex: 'gas_limit',key: 'gas_limit',width: '100px'},
+                    {title: 'GasFeeCap',dataIndex: 'gas_fee_cap',key: 'gas_fee_cap',width: '100px'},
+                    {title: 'GasPremium',dataIndex: 'gas_premium',key: 'gas_premium',width: '100px'},
+                    {title: 'Method',dataIndex: 'method',key: 'method',width: '100px'},
+                    {title: 'Params',dataIndex: 'params',key: 'params',width: '100px'},
+                    {title: 'Type',dataIndex: 'type',key: 'type',width: '100px'},
+                    {title: 'Data',dataIndex: 'data',key: 'data',width: '100px'}
+                ]
+                dataSource = lotusOrderList.toJS()
+            } else if (name == 'lotusmpoolfind' && !type) {
+                columns = [
+                    {title: 'From',dataIndex: 'From',key: 'From'},
+                    {title: 'Method',dataIndex: 'Method',key: 'Method'},
+                    {title: 'To',dataIndex: 'To',key: 'To'}
+                ]
+                dataSource = lotusOrderList.toJS()
+            } else if (name == 'lotusmpoolfind' && type) {
+                columns = [
+                    {title: 'Id',dataIndex: 'id',key: 'id',width: '100px'},
+                    {title: 'CId',dataIndex: 'Cid',key: 'Cid',width: '100px'},
+                    {title: 'Version',dataIndex: 'version',key: 'version',width: '100px'},
+                    {title: 'ToAddress',dataIndex: 'to_address',key: 'to_address',width: '100px'},
+                    {title: 'FromAddress',dataIndex: 'from_address',key: 'from_address',width: '100px'},
+                    {title: 'Nonce',dataIndex: 'nonce',key: 'nonce',width: '100px'},
+                    {title: 'Value',dataIndex: 'value',key: 'value',width: '100px'},
+                    {title: 'GasLimit',dataIndex: 'gas_limit',key: 'gas_limit',width: '100px'},
+                    {title: 'GasFeeCap',dataIndex: 'gas_fee_cap',key: 'gas_fee_cap',width: '100px'},
+                    {title: 'GasPremium',dataIndex: 'gas_premium',key: 'gas_premium',width: '100px'},
+                    {title: 'Method',dataIndex: 'method',key: 'method',width: '100px'},
+                    {title: 'Params',dataIndex: 'params',key: 'params',width: '100px'},
+                    {title: 'Type',dataIndex: 'type',key: 'type',width: '100px'},
+                    {title: 'Data',dataIndex: 'data',key: 'data',width: '100px'}
                 ]
                 dataSource = lotusOrderList.toJS()
             } else if (name == 'lotusmpoolconfig') {
@@ -259,10 +317,10 @@ class HomeList extends Component {
                 dataSource = lotusOrderList.toJS()
             } else if (name == 'lotusmpoolgasperf') {
                 columns = [
-                    {title: 'Address',dataIndex: 'Address',key: 'Address'},
-                    {title: 'Height',dataIndex: 'Height',key: 'Height'},
-                    {title: 'orderNumber',dataIndex: 'orderNumber',key: 'orderNumber'},
-                    {title: 'Number',dataIndex: 'Number',key: 'Number'}
+                    {title: 'MessageFrom',dataIndex: 'MessageFrom',key: 'MessageFrom'},
+                    {title: 'MessageNonce',dataIndex: 'MessageNonce',key: 'MessageNonce'},
+                    {title: 'GasReward',dataIndex: 'GasReward',key: 'GasReward'},
+                    {title: 'GasPerf',dataIndex: 'GasPerf',key: 'GasPerf'}
                 ]
                 dataSource = lotusOrderList.toJS()
             } else if (name == 'lotusstatepower') {
@@ -334,19 +392,19 @@ class HomeList extends Component {
                 dataSource = lotusOrderList.toJS()
             } else if (name == 'lotusstatesector') {
                 columns = [
-                    {title: 'SectorNumber',dataIndex: 'SectorNumber',key: 'SectorNumber'},
-                    {title: 'SealProof',dataIndex: 'SealProof',key: 'SealProof'},
-                    {title: 'SealedCID',dataIndex: 'SealedCID',key: 'SealedCID',width: '200px'},
-                    {title: 'DealIDs',dataIndex: 'DealIDs',key: 'DealIDs'},
-                    {title: 'Activation',dataIndex: 'Activation',key: 'Activation'},
-                    {title: 'Expiration',dataIndex: 'Expiration',key: 'Expiration'},
-                    {title: 'DealWeight',dataIndex: 'DealWeight',key: 'DealWeight'},
-                    {title: 'VerifiedDealWeight',dataIndex: 'VerifiedDealWeight',key: 'VerifiedDealWeight'},
-                    {title: 'InitialPledge',dataIndex: 'InitialPledge',key: 'InitialPledge'},
-                    {title: 'ExpectedDayReward',dataIndex: 'ExpectedDayReward',key: 'ExpectedDayReward'},
-                    {title: 'ExpectedStoragePledge',dataIndex: 'ExpectedStoragePledge',key: 'ExpectedStoragePledge'},
-                    {title: 'Deadline',dataIndex: 'Deadline',key: 'Deadline'},
-                    {title: 'Partition',dataIndex: 'Partition',key: 'Partition'}
+                    {title: 'SectorNumber',dataIndex: 'SectorNumber',key: 'SectorNumber',width: '100px'},
+                    {title: 'SealProof',dataIndex: 'SealProof',key: 'SealProof',width: '100px'},
+                    {title: 'SealedCID',dataIndex: 'SealedCID',key: 'SealedCID',width: '100px'},
+                    {title: 'DealIDs',dataIndex: 'DealIDs',key: 'DealIDs',width: '100px'},
+                    {title: 'Activation',dataIndex: 'Activation',key: 'Activation',width: '100px'},
+                    {title: 'Expiration',dataIndex: 'Expiration',key: 'Expiration',width: '100px'},
+                    {title: 'DealWeight',dataIndex: 'DealWeight',key: 'DealWeight',width: '100px'},
+                    {title: 'VerifiedDealWeight',dataIndex: 'VerifiedDealWeight',key: 'VerifiedDealWeight',width: '100px'},
+                    {title: 'InitialPledge',dataIndex: 'InitialPledge',key: 'InitialPledge',width: '100px'},
+                    {title: 'ExpectedDayReward',dataIndex: 'ExpectedDayReward',key: 'ExpectedDayReward',width: '100px'},
+                    {title: 'ExpectedStoragePledge',dataIndex: 'ExpectedStoragePledge',key: 'ExpectedStoragePledge',width: '100px'},
+                    {title: 'Deadline',dataIndex: 'Deadline',key: 'Deadline',width: '100px'},
+                    {title: 'Partition',dataIndex: 'Partition',key: 'Partition',width: '100px'}
                 ]
                 dataSource = lotusOrderList.toJS()
             } else if (name == 'lotuschaingetblock') {
@@ -375,85 +433,6 @@ class HomeList extends Component {
             columns = []
             dataSource = []
         }
-        /*
-        if (lotusOrderList.toJS().length == 0 && modalType != '') {
-            if (modalType == 'gas-perf') {
-                columns = [
-                    {title: 'Address',dataIndex: 'Address',key: 'Address'},
-                    {title: 'Height',dataIndex: 'Height',key: 'Height'},
-                    {title: 'orderNumber',dataIndex: 'orderNumber',key: 'orderNumber'},
-                    {title: 'Number',dataIndex: 'Number',key: 'Number'}
-                ]
-                dataSource = [
-                    {Address: 'asdafeadsfqwegdsfgsf',Height: '123134',orderNumber: '1342412',Number: 'sgsdffwee'},
-                    {Address: 'asdafeadsfqwegdsfgsf',Height: '123134',orderNumber: '1342412',Number: 'sgsdffwee'},
-                    {Address: 'asdafeadsfqwegdsfgsf',Height: '123134',orderNumber: '1342412',Number: 'sgsdffwee'}
-                ]
-            } else if (modalType == 'power') {
-                columns = [
-                    {title: 'Power',dataIndex: 'Power',key: 'Power'}
-                ]
-                dataSource = [
-                    {Power: 'asdafeadsfqwegdsfgsf'}
-                ]
-            } else if (modalType == 'pending') {
-                columns = [
-                    {title: 'Message-Version',dataIndex: 'MessageVersion',key: 'MessageVersion'},
-                    {title: 'Message-To',dataIndex: 'MessageTo',key: 'MessageTo'},
-                    {title: 'Message-From',dataIndex: 'MessageFrom',key: 'MessageFrom'},
-                    {title: 'Message-Nonce',dataIndex: 'MessageNonce',key: 'MessageNonce'},
-                    {title: 'Message-Value',dataIndex: 'MessageValue',key: 'MessageValue'},
-                    {title: 'Message-GasLimit',dataIndex: 'MessageGasLimit',key: 'MessageGasLimit'},
-                    {title: 'Message-GasFeeCap',dataIndex: 'MessageGasFeeCap',key: 'MessageGasFeeCap'},
-                    {title: 'Message-GasPremium',dataIndex: 'MessageGasPremium',key: 'MessageGasPremium'},
-                    {title: 'Message-Method',dataIndex: 'MessageMethod',key: 'MessageMethod'},
-                    {title: 'Message-Params',dataIndex: 'MessageParams',key: 'MessageParams'},
-                    {title: 'Signature-Type',dataIndex: 'SignatureType',key: 'SignatureType'},
-                    {title: 'Signature-Data',dataIndex: 'SignatureData',key: 'SignatureData'}
-                ]
-                dataSource = [
-                    {MessageVersion: 'asdafeadsfqwegdsfgsf',MessageTo: '123134',MessageFrom: '1342412',MessageNonce: 'sgsdffwee',MessageValue: 'qareaf',MessageGasLimit: 'afdsfsdgfds',MessageGasFeeCap: 'aSgdhgthr',MessageGasPremium: 'agdehtrfh',MessageMethod: 'dhrshszh',MessageParams: 'azdfergtrhyt',SignatureType: 'zadgfewsgreh',SignatureData: 'afrgterhsdfw'},
-                    {MessageVersion: 'asdafeadsfqwegdsfgsf',MessageTo: '123134',MessageFrom: '1342412',MessageNonce: 'sgsdffwee',MessageValue: 'qareaf',MessageGasLimit: 'afdsfsdgfds',MessageGasFeeCap: 'aSgdhgthr',MessageGasPremium: 'agdehtrfh',MessageMethod: 'dhrshszh',MessageParams: 'azdfergtrhyt',SignatureType: 'zadgfewsgreh',SignatureData: 'afrgterhsdfw'},
-                    {MessageVersion: 'asdafeadsfqwegdsfgsf',MessageTo: '123134',MessageFrom: '1342412',MessageNonce: 'sgsdffwee',MessageValue: 'qareaf',MessageGasLimit: 'afdsfsdgfds',MessageGasFeeCap: 'aSgdhgthr',MessageGasPremium: 'agdehtrfh',MessageMethod: 'dhrshszh',MessageParams: 'azdfergtrhyt',SignatureType: 'zadgfewsgreh',SignatureData: 'afrgterhsdfw'}
-                ]
-            } else if (modalType == 'list-deals') {
-                columns = [
-                    {title: 'Created',dataIndex: 'Created',key: 'Created'},
-                    {title: 'DealCid',dataIndex: 'DealCid',key: 'DealCid'},
-                    {title: 'DealId',dataIndex: 'DealId',key: 'DealId'},
-                    {title: 'Provider',dataIndex: 'Provider',key: 'Provider'},
-                    {title: 'State',dataIndex: 'State',key: 'State'},
-                    {title: 'OnChain',dataIndex: 'OnChain',key: 'OnChain'},
-                    {title: 'Slashed',dataIndex: 'Slashed',key: 'Slashed'},
-                    {title: 'PieceCID',dataIndex: 'PieceCID',key: 'PieceCID'},
-                    {title: 'Size',dataIndex: 'Size',key: 'Size'},
-                    {title: 'Price',dataIndex: 'Price',key: 'Price'},
-                    {title: 'Duration',dataIndex: 'Duration',key: 'Duration'},
-                    {title: 'Verified',dataIndex: 'Verified',key: 'Verified'},
-                    {title: 'Message',dataIndex: 'Message',key: 'Message'}
-                ]
-                dataSource = [
-                    {Created: 'asdafeadsfqwegdsfgsf',DealCid: '123134',DealId: '1342412',Provider: 'sgsdffwee',State: 'qareaf',OnChain: 'afdsfsdgfds',Slashed: 'aSgdhgthr',PieceCID: 'agdehtrfh',Size: 'dhrshszh',Price: 'azdfergtrhyt',Duration: 'zadgfewsgreh',Verified: 'afrgterhsdfw',Message: 'afrewgrht'},
-                    {Created: 'asdafeadsfqwegdsfgsf',DealCid: '123134',DealId: '1342412',Provider: 'sgsdffwee',State: 'qareaf',OnChain: 'afdsfsdgfds',Slashed: 'aSgdhgthr',PieceCID: 'agdehtrfh',Size: 'dhrshszh',Price: 'azdfergtrhyt',Duration: 'zadgfewsgreh',Verified: 'afrgterhsdfw',Message: 'afrewgrht'},
-                    {Created: 'asdafeadsfqwegdsfgsf',DealCid: '123134',DealId: '1342412',Provider: 'sgsdffwee',State: 'qareaf',OnChain: 'afdsfsdgfds',Slashed: 'aSgdhgthr',PieceCID: 'agdehtrfh',Size: 'dhrshszh',Price: 'azdfergtrhyt',Duration: 'zadgfewsgreh',Verified: 'afrgterhsdfw',Message: 'afrewgrht'}
-                ]
-            } else if (modalType == 'list-actors') {
-                columns = [
-                    {title: 'Address',dataIndex: 'address',key: 'address'}
-                ]
-                dataSource = [
-                    {address: 'asdafeadsfqwegdsfgsf'}
-                ]
-            } else if (modalType == 'active-sectors') {
-                columns = [
-                    {title: 'OrderNumber',dataIndex: 'OrderNumber',key: 'OrderNumber'}
-                ]
-                dataSource = [
-                    {OrderNumber: 'hyfrdzhteshftrhyhtrj'}
-                ]
-            }
-        }
-        */
 
         const data = [
             {
@@ -534,7 +513,6 @@ class HomeList extends Component {
                 <Layout>
                     <Breadcrumb style={{ margin: '16px 0', textAlign: 'left', fontSize: '20px' }}>
                         <Breadcrumb.Item>lotus命令</Breadcrumb.Item>
-
                     </Breadcrumb>
                     <div>
                         <Tabs defaultActiveKey="1" onChange={this.handleCallback}>
@@ -591,12 +569,26 @@ class HomeList extends Component {
                     {
                         this.state.isShowSearch && (
                             <div className="search_wrap">
-                                <div>
-                                    <Search
-                                        style={{ width: 200 }}
-                                        placeholder="input search text"
-                                        onSearch={this.handleSearchBtn}
-                                    />
+                                <div style={{display: 'flex'}}>
+                                    <div style={{marginRight: '20px'}}>
+                                        <Search
+                                            style={{ width: 200 }}
+                                            placeholder="input search text"
+                                            onChange={this.handleFindBtnChange}
+                                            onSearch={this.handleSearchBtn}
+                                        />
+                                    </div>
+                                    {
+                                        this.state.isShowFindBtn && (
+                                            <div>
+                                                <Button type="primary" onClick={() => this.handleSearchFindBtn("From")}>搜索 From</Button>
+                                                <Divider type="vertical" />
+                                                <Button type="primary" onClick={() => this.handleSearchFindBtn("Method")}>搜索 Method</Button>
+                                                <Divider type="vertical" />
+                                                <Button type="primary" onClick={() => this.handleSearchFindBtn("To")}>搜索 To</Button>
+                                            </div>
+                                        )
+                                    }
                                 </div>
                                 {
                                     this.state.isShowSectorBtn && (
@@ -609,7 +601,7 @@ class HomeList extends Component {
                         )
                     }
 
-                    <div style={{marginBottom: '30px'}}>
+                    <div className="content" style={{marginBottom: '30px', width: '100%'}}>
                         <Table
                             columns={columns}
                             dataSource={dataSource}
@@ -679,6 +671,7 @@ const mapStateToProps = (state) => ({
     isLoading: state.get('home').get('isLoading'),
     name: state.get('home').get('name'),
     type: state.get('home').get('type'),
+    findType: state.get('home').get('findType'),
     lotusOrderList: state.get('home').get('lotusOrderList')
 })
 // 发送方

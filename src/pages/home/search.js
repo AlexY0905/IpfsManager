@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Layout from 'common/layout/index.js'
-import { Breadcrumb, Card, BackTop } from 'antd';
+import { Breadcrumb, Card, BackTop, Spin } from 'antd';
 import "./index.css"
 import { actionCreator } from './store'
 
@@ -30,7 +30,7 @@ class HomeSearch extends Component {
     }
 
     render() {
-        let {lotusBlockSearchData} = this.props
+        let {lotusBlockSearchData, isLoading} = this.props
         let searchData = ''
         if (lotusBlockSearchData != '') {
             console.log(111111112222222222, lotusBlockSearchData)
@@ -42,16 +42,21 @@ class HomeSearch extends Component {
                     <Breadcrumb style={{ margin: '16px 0', textAlign: 'left', fontSize: '20px' }}>
                         <Breadcrumb.Item>lotus命令</Breadcrumb.Item>
                     </Breadcrumb>
-                    <div className="content">
+                    <div className="content" style={{textAlign: 'center'}}>
                         <div>
-                            <Card>
-                                <p style={{wordWrap: 'break-word'}}>
-                                    {
-                                        searchData !== '' && searchData
-                                    }
-                                </p>
-                            </Card>
+                            {
+                                searchData !== '' && (
+                                    <Card>
+                                        <p style={{wordWrap: 'break-word', textAlign: 'left'}}>
+                                            {
+                                                searchData
+                                            }
+                                        </p>
+                                    </Card>
+                                )
+                            }
                         </div>
+                        <Spin spinning={isLoading} tip='加载中 ...' />
                     </div>
                     <BackTop />
                 </Layout>
