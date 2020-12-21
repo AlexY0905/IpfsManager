@@ -11,7 +11,7 @@ const { TabPane } = Tabs;
 const { Search } = Input;
 
 
-
+let timer = null
 class HomeList extends Component {
     constructor(props) {
         super(props)
@@ -47,25 +47,30 @@ class HomeList extends Component {
 
     // ------------------------------------
     handleServerBtn(type) { // 所有按钮的点击事件
+        if (timer != null) {
+            clearInterval(timer)
+        }
         let options = {
             name: ''
         }
         switch (type) {
             case 'list':
                 options.name = 'lotuswalletlist'
-                this.setState({isShowSearch: false, isShowSectorBtn: false})
+                this.setState({isShowSearch: false, isShowSectorBtn: false, isShowFindBtn: false})
                 break
+            /*
             case 'query-ask':
                 options.name = 'lotusclientqueryask'
-                this.setState({isShowSearch: false, isShowSectorBtn: false})
+                this.setState({isShowSearch: false, isShowSectorBtn: false, isShowFindBtn: false})
                 break
+            */
             case 'list-deals':
                 options.name = 'lotusclientlistdeals'
-                this.setState({isShowSearch: false, isShowSectorBtn: false})
-                break
+                this.setState({isShowSearch: false, isShowSectorBtn: false, isShowFindBtn: false})
+                return false
             case 'pending':
                 options.name = 'lotusmpoolpending'
-                this.setState({isShowSearch: false, isShowSectorBtn: false})
+                this.setState({isShowSearch: false, isShowSectorBtn: false, isShowFindBtn: false})
                 break
             case 'find':
                 options.name = 'lotusmpoolfind'
@@ -73,61 +78,61 @@ class HomeList extends Component {
                 break
             case 'config':
                 options.name = 'lotusmpoolconfig'
-                this.setState({isShowSearch: false, isShowSectorBtn: false})
+                this.setState({isShowSearch: false, isShowSectorBtn: false, isShowFindBtn: false})
                 break
             case 'gas-perf':
                 options.name = 'lotusmpoolgasperf'
-                this.setState({isShowSearch: false, isShowSectorBtn: false})
+                this.setState({isShowSearch: false, isShowSectorBtn: false, isShowFindBtn: false})
                 break
             case 'power':
                 options.name = 'lotusstatepower'
-                this.setState({isShowSearch: false, isShowSectorBtn: false})
+                this.setState({isShowSearch: false, isShowSectorBtn: false, isShowFindBtn: false})
                 break
             case 'active-sectors':
                 options.name = 'lotusstateactivesectors'
-                this.setState({isShowSearch: false, isShowSectorBtn: false})
+                this.setState({modalOrder: 'lotusstateactivesectors', isShowSearch: true, isShowSectorBtn: false, isShowFindBtn: false})
                 break
             case 'list-actors':
                 options.name = 'lotusstatelistactors'
-                this.setState({modalOrder: 'lotusstatelistactors', isShowSearch: true, isShowSectorBtn: false})
+                this.setState({modalOrder: 'lotusstatelistactors', isShowSearch: true, isShowSectorBtn: false, isShowFindBtn: false})
                 break
             case 'list-miners':
                 options.name = 'lotusstatelistminers'
-                this.setState({modalOrder: 'lotusstatelistminers', isShowSearch: true, isShowSectorBtn: true})
+                this.setState({modalOrder: 'lotusstatelistminers', isShowSearch: true, isShowSectorBtn: true, isShowFindBtn: false})
                 break
             case 'get-actor':
                 options.name = 'lotusstategetactor'
-                this.setState({isShowSearch: false, isShowSectorBtn: false})
+                this.setState({isShowSearch: false, isShowSectorBtn: false, isShowFindBtn: false})
                 break
             case 'miner-info':
                 options.name = 'lotusstateminerinfo'
-                this.setState({isShowSearch: false, isShowSectorBtn: false})
+                this.setState({isShowSearch: false, isShowSectorBtn: false, isShowFindBtn: false})
                 break
             case 'sector':
                 options.name = 'lotusstatesector'
-                this.setState({modalOrder: 'lotusstatesector', visible: true})
+                this.setState({modalOrder: 'lotusstatesector', visible: true, isShowFindBtn: false})
                 return false
             case 'read-state':
                 options.name = 'lotusstatereadstate'
-                this.setState({modalOrder: 'lotusstatereadstate', isShowSearch: true, isShowSectorBtn: false})
+                this.setState({modalOrder: 'lotusstatereadstate', isShowSearch: true, isShowSectorBtn: false, isShowFindBtn: false})
                 break
             case 'getblock':
                 options.name = 'lotuschaingetblock'
-                this.setState({modalOrder: 'lotuschaingetblock', isShowSearch: true, isShowSectorBtn: false})
+                this.setState({modalOrder: 'lotuschaingetblock', isShowSearch: true, isShowSectorBtn: false, isShowFindBtn: false})
                 break
             case 'getmessage':
                 options.name = 'lotuschaingetmessage'
-                this.setState({modalOrder: 'lotuschaingetmessage', isShowSearch: true, isShowSectorBtn: false})
+                this.setState({modalOrder: 'lotuschaingetmessage', isShowSearch: true, isShowSectorBtn: false, isShowFindBtn: false})
                 break
             case 'gas-price':
                 options.name = 'lotuschaingasprice'
-                this.setState({modalOrder: 'lotuschaingasprice', isShowSearch: true, isShowSectorBtn: false})
+                this.setState({modalOrder: 'lotuschaingasprice', isShowSearch: true, isShowSectorBtn: false, isShowFindBtn: false})
                 break
         }
 
         // 调用发送方函数, 处理lotus命令
         this.props.handleLotusOrders(options)
-        setInterval(() => { // 十分钟刷新一次数据
+        timer = setInterval(() => { // 十分钟刷新一次数据
             this.props.handleLotusOrders(options)
         }, 660000)
 
@@ -142,7 +147,6 @@ class HomeList extends Component {
     }
     handleCallback(e) { // 切换tab函数
         // this.setState({isShowSearch: false, isShowSectorBtn: false})
-        this.setState({isShowFindBtn: false})
     }
     handleSearchBtn(val) { // 处理搜索
         const { modalOrder } = this.state
@@ -164,8 +168,7 @@ class HomeList extends Component {
                 message: '搜索框不能为空 !'
             })
             return false
-        }
-        if (modalOrder == 'lotuschaingetblock') {
+        } else if (modalOrder == 'lotuschaingetblock') {
             this.props.history.push({ pathname: "/home/homeSearch", state: { info: val, name: modalOrder } });
         } else {
             console.log('options---------', options)
@@ -247,7 +250,6 @@ class HomeList extends Component {
                 dataSource = lotusOrderList.toJS()
             } else if (name == 'lotusclientlistdeals') {
                 columns = [
-                    {title: 'Created',dataIndex: 'Created',key: 'Created'},
                     {title: 'DealCid',dataIndex: 'DealCid',key: 'DealCid'},
                     {title: 'DealId',dataIndex: 'DealId',key: 'DealId'},
                     {title: 'Provider',dataIndex: 'Provider',key: 'Provider'},
@@ -258,8 +260,7 @@ class HomeList extends Component {
                     {title: 'Size',dataIndex: 'Size',key: 'Size'},
                     {title: 'Price',dataIndex: 'Price',key: 'Price'},
                     {title: 'Duration',dataIndex: 'Duration',key: 'Duration'},
-                    {title: 'Verified',dataIndex: 'Verified',key: 'Verified'},
-                    {title: 'Message',dataIndex: 'Message',key: 'Message'}
+                    {title: 'Verified',dataIndex: 'Verified',key: 'Verified'}
                 ]
                 dataSource = lotusOrderList.toJS()
             } else if (name == 'lotusmpoolpending') {
@@ -328,10 +329,15 @@ class HomeList extends Component {
                     {title: 'totalPowerQuality', dataIndex: 'total_power_quality', key: 'total_power_quality'}
                 ]
                 dataSource = lotusOrderList.toJS()
-            } else if (name == 'lotusstateactivesectors') {
+            } else if (name == 'lotusstateactivesectors' && !type) {
                 columns = [
-                    { title: 'SectorNumber', dataIndex: 'sector_number', key: 'sectornumber' },
-                    { title: 'SealedCID', dataIndex: 'sealed_cid', key: 'sealedcid' }
+                    { title: 'Address', dataIndex: 'address', key: 'address' }
+                ]
+                dataSource = lotusOrderList.toJS()
+            } else if (name == 'lotusstateactivesectors' && type) {
+                columns = [
+                    { title: 'SealedCid', dataIndex: 'sealed_cid', key: 'sealed_cid' },
+                    { title: 'SectorNumber', dataIndex: 'sector_number', key: 'sector_number' }
                 ]
                 dataSource = lotusOrderList.toJS()
             } else if (name == 'lotusstatelistactors' && !type) {
@@ -412,9 +418,27 @@ class HomeList extends Component {
                     {title: 'BlockCid',dataIndex: 'block_cid',key: 'block_cid'}
                 ]
                 dataSource = lotusOrderList.toJS()
-            } else if (name == 'lotuschaingetmessage') {
+            } else if (name == 'lotuschaingetmessage' && !type) {
                 columns = [
                     {title: 'MessageCid',dataIndex: 'MessageCid',key: 'MessageCid'}
+                ]
+                dataSource = lotusOrderList.toJS()
+            } else if (name == 'lotuschaingetmessage' && type) {
+                columns = [
+                    {title: 'Cid',dataIndex: 'cid',key: 'cid'},
+                    {title: 'Data',dataIndex: 'data',key: 'data'},
+                    {title: 'FromAddress',dataIndex: 'from_address',key: 'from_address'},
+                    {title: 'GasFeeCap',dataIndex: 'gas_fee_cap',key: 'gas_fee_cap'},
+                    {title: 'GasLimit',dataIndex: 'gas_limit',key: 'gas_limit'},
+                    {title: 'GasPremium',dataIndex: 'gas_premium',key: 'gas_premium'},
+                    {title: 'Id',dataIndex: 'id',key: 'id'},
+                    {title: 'Method',dataIndex: 'method',key: 'method'},
+                    {title: 'Nonce',dataIndex: 'nonce',key: 'nonce'},
+                    {title: 'Params',dataIndex: 'params',key: 'params'},
+                    {title: 'ToAddress',dataIndex: 'to_address',key: 'to_address'},
+                    {title: 'Type',dataIndex: 'type',key: 'type'},
+                    {title: 'Value',dataIndex: 'value',key: 'value'},
+                    {title: 'Version',dataIndex: 'version',key: 'version'}
                 ]
                 dataSource = lotusOrderList.toJS()
             } else if (name == 'lotuschaingasprice' && !type) {
@@ -682,7 +706,6 @@ const mapDispatchToProps = (dispatch) => ({
     handleSearch: (options) => {
         dispatch(actionCreator.handleSearchAction(options))
     }
-
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeList)

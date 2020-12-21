@@ -3,3 +3,7 @@
     display: flex;
     justify-content: space-between;
 }
+.goback {
+    text-align: right;
+    height    : 50px;
+}

@@ -1,8 +1,9 @@
 // lotus命令页面
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'
 import Layout from 'common/layout/index.js'
-import { Breadcrumb, Card, BackTop, Spin } from 'antd';
+import { Breadcrumb, Card, BackTop, Spin, Button } from 'antd';
 import "./index.css"
 import { actionCreator } from './store'
 
@@ -42,6 +43,11 @@ class HomeSearch extends Component {
                     <Breadcrumb style={{ margin: '16px 0', textAlign: 'left', fontSize: '20px' }}>
                         <Breadcrumb.Item>lotus命令</Breadcrumb.Item>
                     </Breadcrumb>
+                    <div className="goback">
+                        <Link to='/home'>
+                            <Button type="primary">返回</Button>
+                        </Link>
+                    </div>
                     <div className="content" style={{textAlign: 'center'}}>
                         <div>
                             {

@@ -39,10 +39,10 @@ class LotusMiner extends Component {
                 options.name = 'lotusminerstoragedealsgetask'//改成后台给的name 
                 break
             case 'list-cids':
-                options.name = 'pieceslist-cids'
+                options.name = 'pieceslistcids'
                 break
             case 'cid-info':
-                options.name = 'piecescid-info'
+                options.name = 'piecescidinfo'
                 break
             case 'sectorslist':
                 options.name = 'sectorslist'
@@ -52,11 +52,11 @@ class LotusMiner extends Component {
                 break
         }
 
-        // 调用发送方函数, 处理lotus命令   //测试真实数据的时候打开
-        // this.props.handleLotusMiner(options)
-        // setInterval(() => {//十一分钟刷新一次数据
-        //     this.props.handleLotusMiner(options)
-        // }, 660000)
+        // 调用发送方函数, 处理lotus命令   // 测试真实数据的时候打开
+        this.props.handleLotusMiner(options)
+        setInterval(() => { // 十一分钟刷新一次数据
+            this.props.handleLotusMiner(options)
+        }, 660000)
         this.setState({
             modalType: type
         })
@@ -78,7 +78,7 @@ class LotusMiner extends Component {
         let { name, lotusminerlist } = this.props
         let { modalType } = this.state//从state中取出
         if (lotusminerlist.toJS().length > 0) {
-            if (name == 'storage-dealslist') {
+            if (name == 'storagedealslist') {
                 columns = [
                     { title: 'ProposalCid', dataIndex: 'proposalCid', key: 'proposalCid' },
                     { title: 'DealId', dataIndex: 'dealId', key: 'dealId' },
@@ -88,9 +88,8 @@ class LotusMiner extends Component {
                     { title: 'Price', dataIndex: 'price', key: 'price' },
                     { title: 'Duration', dataIndex: 'duration', key: 'duration' }
                 ]
-                // dataSource = lotusminerlist.toJS()
+                dataSource = lotusminerlist.toJS()
             } else if (name == 'lotusminerstoragedealsgetask') {
-                // console.log('hhhhhhh', name);
                 columns = [
                     { title: 'Expiry', dataIndex: 'expiry', key: 'expiry' },
                     { title: 'MaxpieceSize', dataIndex: 'max_piece_size', key: 'max_piece_size' },
@@ -102,12 +101,20 @@ class LotusMiner extends Component {
                     { title: 'Verified', dataIndex: 'verified_price', key: 'verified_price' }
                 ]
                 dataSource = lotusminerlist.toJS()
+            } else if (name == 'pieceslistcids') {
+                console.log(':::::::::--------', lotusminerlist.toJS())
+                return
+                columns = [
+
+                ]
+                dataSource = lotusminerlist.toJS()
             }
-
-
-            console.log(':::::::::--------', lotusminerlist.toJS())
+        } else {
+            columns = []
+            dataSource = []
         }
         // ---------------------------------------------------------------------------------------------
+        /*
         if (lotusminerlist.toJS().length == 0 && modalType != '') {//有真数据的话 要删除
             if (modalType == 'list') {
                 columns = [
@@ -171,6 +178,7 @@ class LotusMiner extends Component {
             }
 
         }
+        */
         // --------------------------------------------------------------------------------------------
 
 
