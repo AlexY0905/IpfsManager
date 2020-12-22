@@ -4,6 +4,7 @@ import { fromJS } from 'immutable';
 const defaultState = fromJS({
     // 默认值里定义的属性名就是请求后台返回过来的数据里面的属性名
     name: '',
+    type: false,
     lotusminerlist: [],
     isLoading: false
 })
@@ -19,7 +20,8 @@ export default (state = defaultState, action) => {
         return state.merge({
             // action参数, 就是actionCreator.js中, 请求数据成功之后的.then函数中派发的action
             lotusminerlist: fromJS(action.payload.msg), // 将数据数组转换成immutable类型
-            name: action.payload.name
+            name: action.payload.name,
+            type: action.payload.type
         })
     }
     // 处理结束loading状态

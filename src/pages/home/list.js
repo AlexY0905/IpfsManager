@@ -425,20 +425,18 @@ class HomeList extends Component {
                 dataSource = lotusOrderList.toJS()
             } else if (name == 'lotuschaingetmessage' && type) {
                 columns = [
-                    {title: 'Cid',dataIndex: 'cid',key: 'cid'},
-                    {title: 'Data',dataIndex: 'data',key: 'data'},
-                    {title: 'FromAddress',dataIndex: 'from_address',key: 'from_address'},
-                    {title: 'GasFeeCap',dataIndex: 'gas_fee_cap',key: 'gas_fee_cap'},
-                    {title: 'GasLimit',dataIndex: 'gas_limit',key: 'gas_limit'},
-                    {title: 'GasPremium',dataIndex: 'gas_premium',key: 'gas_premium'},
-                    {title: 'Id',dataIndex: 'id',key: 'id'},
-                    {title: 'Method',dataIndex: 'method',key: 'method'},
-                    {title: 'Nonce',dataIndex: 'nonce',key: 'nonce'},
-                    {title: 'Params',dataIndex: 'params',key: 'params'},
-                    {title: 'ToAddress',dataIndex: 'to_address',key: 'to_address'},
-                    {title: 'Type',dataIndex: 'type',key: 'type'},
-                    {title: 'Value',dataIndex: 'value',key: 'value'},
-                    {title: 'Version',dataIndex: 'version',key: 'version'}
+                    {title: 'Cid',dataIndex: 'cid',key: 'cid',width: '100px'},
+                    {title: 'FromAddress',dataIndex: 'from_address',key: 'from_address',width: '100px'},
+                    {title: 'GasFeeCap',dataIndex: 'gas_fee_cap',key: 'gas_fee_cap',width: '100px'},
+                    {title: 'GasLimit',dataIndex: 'gas_limit',key: 'gas_limit',width: '100px'},
+                    {title: 'GasPremium',dataIndex: 'gas_premium',key: 'gas_premium',width: '100px'},
+                    {title: 'Id',dataIndex: 'id',key: 'id',width: '100px'},
+                    {title: 'Method',dataIndex: 'method',key: 'method',width: '100px'},
+                    {title: 'Nonce',dataIndex: 'nonce',key: 'nonce',width: '100px'},
+                    {title: 'Params',dataIndex: 'params',key: 'params',width: '300px'},
+                    {title: 'ToAddress',dataIndex: 'to_address',key: 'to_address',width: '100px'},
+                    {title: 'Value',dataIndex: 'value',key: 'value',width: '100px'},
+                    {title: 'Version',dataIndex: 'version',key: 'version',width: '100px'}
                 ]
                 dataSource = lotusOrderList.toJS()
             } else if (name == 'lotuschaingasprice' && !type) {
@@ -578,7 +576,6 @@ class HomeList extends Component {
                                     <Divider type="vertical" />
                                     */
                                 }
-
                             </TabPane>
 
                             <TabPane tab="lotus chain" key="5">
@@ -624,7 +621,6 @@ class HomeList extends Component {
                             </div>
                         )
                     }
-
                     <div className="content" style={{marginBottom: '30px', width: '100%'}}>
                         <Table
                             columns={columns}

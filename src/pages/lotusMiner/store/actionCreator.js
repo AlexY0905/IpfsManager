@@ -33,3 +33,31 @@ export const handleLotusMinerAction = (options) => {
             })
     }
 }
+// 处理搜索
+export const handleSearchAction = (options) => {
+    return (dispatch, getState) => {
+        dispatch(getIsLoadingStart())
+        api.getSearchData(options)
+            .then((result) => {
+                // console.log('result---------', result)
+                if (result.code == 1) {
+                    message.error('暂无数据, 请稍后再试 !')
+                    let options = {
+                        name: '',
+                        msg: []
+                    }
+                    dispatch(handleLotusMinerData(options))
+                    return false
+                } else {
+                    // 将后台请求过来的成功数据, 派发action, 到store
+                    dispatch(handleLotusMinerData(result))
+                }
+            })
+            .catch((err) => {
+                message.error('获取数据失败, 请稍后再试 !')
+            })
+            .finally(() => {
+                dispatch(getIsLoadingEnd())
+            })
+    }
+}
