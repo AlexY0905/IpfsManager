@@ -9,7 +9,7 @@ import { actionCreator } from './store'
 const { TabPane } = Tabs;
 const { Search } = Input;
 
-
+let timer = null
 class LotusMiner extends Component {
     constructor(props) {
         super(props)
@@ -32,12 +32,15 @@ class LotusMiner extends Component {
 
     // ------------------------------------
     handleServerBtn(type) { // 所有按钮的点击事件
+        if (timer != null) {
+            clearInterval(timer)
+        }
         let options = {
             name: ''
         }
         switch (type) {
             case 'list':
-                options.name = 'storage-dealslist'
+                options.name = 'lotusminerstoragedealslist'
                 this.setState({isShowSearch: false})
                 break
             case 'get-ask':
@@ -53,10 +56,12 @@ class LotusMiner extends Component {
                 options.name = 'lotusminerpiecescidinfo'
                 this.setState({modalOrder: 'lotusminerpiecescidinfo', isShowSearch: true})
                 break
+            /*
             case 'sectorslist':
-                options.name = 'sectorslist'
+                options.name = 'lotusminersectorslist'
                 this.setState({isShowSearch: false})
                 break
+            */
             case 'status':
                 options.name = 'lotusminersectorsstatus'
                 this.setState({modalOrder: 'lotusminersectorsstatus', isShowSearch: true})
@@ -65,7 +70,7 @@ class LotusMiner extends Component {
 
         // 调用发送方函数, 处理lotus命令
         this.props.handleLotusMiner(options)
-        setInterval(() => { // 十一分钟刷新一次数据
+        timer = setInterval(() => { // 十一分钟刷新一次数据
             this.props.handleLotusMiner(options)
         }, 660000)
         this.setState({
@@ -106,7 +111,7 @@ class LotusMiner extends Component {
         let { lotusminerlist, name, type  } = this.props
         let { modalType } = this.state//从state中取出
         if (lotusminerlist.toJS().length > 0) {
-            if (name == 'storagedealslist') {
+            if (name == 'lotusminerstoragedealslist') {
                 columns = [
                     { title: 'ProposalCid', dataIndex: 'proposalCid', key: 'proposalCid' },
                     { title: 'DealId', dataIndex: 'dealId', key: 'dealId' },
@@ -136,16 +141,37 @@ class LotusMiner extends Component {
                 dataSource = lotusminerlist.toJS()
             } else if (name == 'lotusminerpiecescidinfo' && type) {
                 columns = [
-                    { title: 'Cid', dataIndex: 'cid', key: 'cid'},
+                    { title: 'Cid', dataIndex: 'cid', key: 'cid' },
                     { title: 'PieceCid', dataIndex: 'pieces_cid', key: 'pieces_cid' },
                     { title: 'RelOffset', dataIndex: 'rel_offset', key: 'rel_offset' },
                     { title: 'BlockSize', dataIndex: 'block_size', key: 'block_size' }
                 ]
                 dataSource = lotusminerlist.toJS()
-            } else if (name == 'lotusminersectorsstatus' && !type) {
+            }
+            /*
+            else if (name == 'lotusminersectorslist') {
                 columns = [
-                    { title: '', dataIndex: '', key: '' }
-                ]  
+                    { title: 'Id', dataIndex: 'id', key: 'id' },
+                    { title: 'Active', dataIndex: 'active', key: 'active' },
+                    { title: 'Deals', dataIndex: 'deals', key: 'deals' },
+                    { title: 'Expiration', dataIndex: 'expiration', key: 'expiration' },
+                    { title: 'OnChain', dataIndex: 'on_chain', key: 'on_chain' },
+                    { title: 'SectorId', dataIndex: 'sector_id', key: 'sector_id' },
+                    { title: 'State', dataIndex: 'state', key: 'state' }
+                ]
+                dataSource = lotusminerlist.toJS()
+            }
+            */
+            else if (name == 'lotusminersectorsstatus' && !type) {
+                columns = [
+                    { title: 'Id', dataIndex: 'id', key: 'id' },
+                    { title: 'Active', dataIndex: 'active', key: 'active' },
+                    { title: 'Deals', dataIndex: 'deals', key: 'deals' },
+                    { title: 'Expiration', dataIndex: 'expiration', key: 'expiration' },
+                    { title: 'OnChain', dataIndex: 'on_chain', key: 'on_chain' },
+                    { title: 'SectorId', dataIndex: 'sector_id', key: 'sector_id' },
+                    { title: 'State', dataIndex: 'state', key: 'state' }
+                ]
                 dataSource = lotusminerlist.toJS()
             } else if (name == 'lotusminersectorsstatus' && type) {
                 columns = [
@@ -196,8 +222,12 @@ class LotusMiner extends Component {
                             </TabPane>
 
                             <TabPane tab="sectors" key="3">
-                                <Button type="primary" onClick={() => this.handleServerBtn("sectorslist")}>sectorslist</Button>
-                                <Divider type="vertical" />
+                                {
+                                    /*
+                                    <Button type="primary" onClick={() => this.handleServerBtn("sectorslist")}>sectorslist</Button>
+                                    <Divider type="vertical" />
+                                     */
+                                }
                                 <Button type="primary" onClick={() => this.handleServerBtn("status")}>status</Button>
                             </TabPane>
                         </Tabs>

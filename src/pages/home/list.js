@@ -67,7 +67,7 @@ class HomeList extends Component {
             case 'list-deals':
                 options.name = 'lotusclientlistdeals'
                 this.setState({isShowSearch: false, isShowSectorBtn: false, isShowFindBtn: false})
-                return false
+                break
             case 'pending':
                 options.name = 'lotusmpoolpending'
                 this.setState({isShowSearch: false, isShowSectorBtn: false, isShowFindBtn: false})
@@ -132,7 +132,7 @@ class HomeList extends Component {
 
         // 调用发送方函数, 处理lotus命令
         this.props.handleLotusOrders(options)
-        timer = setInterval(() => { // 十分钟刷新一次数据
+        timer = setInterval(() => { // 十一分钟刷新一次数据
             this.props.handleLotusOrders(options)
         }, 660000)
 
@@ -250,17 +250,18 @@ class HomeList extends Component {
                 dataSource = lotusOrderList.toJS()
             } else if (name == 'lotusclientlistdeals') {
                 columns = [
-                    {title: 'DealCid',dataIndex: 'DealCid',key: 'DealCid'},
-                    {title: 'DealId',dataIndex: 'DealId',key: 'DealId'},
-                    {title: 'Provider',dataIndex: 'Provider',key: 'Provider'},
-                    {title: 'State',dataIndex: 'State',key: 'State'},
-                    {title: 'OnChain',dataIndex: 'OnChain',key: 'OnChain'},
-                    {title: 'Slashed',dataIndex: 'Slashed',key: 'Slashed'},
-                    {title: 'PieceCID',dataIndex: 'PieceCID',key: 'PieceCID'},
-                    {title: 'Size',dataIndex: 'Size',key: 'Size'},
-                    {title: 'Price',dataIndex: 'Price',key: 'Price'},
-                    {title: 'Duration',dataIndex: 'Duration',key: 'Duration'},
-                    {title: 'Verified',dataIndex: 'Verified',key: 'Verified'}
+                    {title: 'CreationTime',dataIndex: 'creation_time',key: 'creation_time', width: '100px'},
+                    {title: 'DealId',dataIndex: 'deal_id',key: 'deal_id', width: '100px'},
+                    {title: 'Duration',dataIndex: 'duration',key: 'duration', width: '100px'},
+                    {title: 'OnChain',dataIndex: 'on_chain',key: 'on_chain', width: '100px'},
+                    {title: 'PieceCid',dataIndex: 'piece_cid',key: 'piece_cid', width: '100px'},
+                    {title: 'Price',dataIndex: 'price',key: 'price', width: '100px'},
+                    {title: 'ProposalCid',dataIndex: 'proposal_cid',key: 'proposal_cid', width: '100px'},
+                    {title: 'Provider',dataIndex: 'provider',key: 'provider', width: '100px'},
+                    {title: 'Size',dataIndex: 'size',key: 'size', width: '100px'},
+                    {title: 'Slashed',dataIndex: 'slashed',key: 'slashed', width: '100px'},
+                    {title: 'State',dataIndex: 'state',key: 'state', width: '100px'},
+                    {title: 'Verified',dataIndex: 'verified',key: 'verified', width: '100px'}
                 ]
                 dataSource = lotusOrderList.toJS()
             } else if (name == 'lotusmpoolpending') {
@@ -433,7 +434,7 @@ class HomeList extends Component {
                     {title: 'Id',dataIndex: 'id',key: 'id',width: '100px'},
                     {title: 'Method',dataIndex: 'method',key: 'method',width: '100px'},
                     {title: 'Nonce',dataIndex: 'nonce',key: 'nonce',width: '100px'},
-                    {title: 'Params',dataIndex: 'params',key: 'params',width: '300px'},
+                    {title: 'Params',dataIndex: 'params',key: 'params',width: '300px'}, // ellipsis: true
                     {title: 'ToAddress',dataIndex: 'to_address',key: 'to_address',width: '100px'},
                     {title: 'Value',dataIndex: 'value',key: 'value',width: '100px'},
                     {title: 'Version',dataIndex: 'version',key: 'version',width: '100px'}

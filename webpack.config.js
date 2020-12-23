@@ -106,7 +106,7 @@ module.exports = {
     ],
     devServer: {
         contentBase: './dist',//内容的目录
-        port: 3001,//指定服务端口
+        port: 3003,//指定服务端口
         proxy: [
             {
                 // 配置跨域代理

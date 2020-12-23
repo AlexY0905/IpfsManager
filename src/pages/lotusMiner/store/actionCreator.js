@@ -20,10 +20,13 @@ export const handleLotusMinerAction = (options) => {
         api.getLotusMiner(options)
             .then((result) => {
                 console.log("----------", result);
-                // return
-                // let data = result.msg
-                // 将后台请求过来的成功数据, 派发action, 到store
-                dispatch(handleLotusMinerData(result))
+                if (result.code == 1) {
+                    message.warning('暂无数据, 请稍后再试 !')
+                    return false
+                } else {
+                    // 将后台请求过来的成功数据, 派发action, 到store
+                    dispatch(handleLotusMinerData(result))
+                }
             })
             .catch((err) => {
                 message.error('获取数据失败,请稍后再试')
@@ -41,7 +44,7 @@ export const handleSearchAction = (options) => {
             .then((result) => {
                 // console.log('result---------', result)
                 if (result.code == 1) {
-                    message.error('暂无数据, 请稍后再试 !')
+                    message.warning('暂无数据, 请稍后再试 !')
                     let options = {
                         name: '',
                         msg: []

@@ -21,7 +21,7 @@ export const handleLotusOrdersAction = (options) => {
             .then((result) => {
                 console.log('::::::::-------', result)
                 if (result.code == 1) {
-                    message.error('没有数据, 请稍后再试 !')
+                    message.warning('暂无数据, 请稍后再试 !')
                     return false
                 } else {
                     // 将后台请求过来的成功数据, 派发action, 到store
@@ -44,7 +44,7 @@ export const handleSearchAction = (options) => {
             .then((result) => {
                 console.log('result---------', result)
                 if (result.code == 1) {
-                    message.error('暂无数据, 请稍后再试 !')
+                    message.warning('暂无数据, 请稍后再试 !')
                     let options = {
                         name: '',
                         msg: []
@@ -76,9 +76,14 @@ export const handleSearchTextAction = (options) => {
         api.getSearchData(options)
             .then((result) => {
                 console.log('result---------', result)
-                let data = result.msg
-                // 将后台请求过来的成功数据, 派发action, 到store
-                dispatch(handleSearchTextData(data))
+                if (result.code == 1) {
+                    message.warning('暂无数据, 请稍后再试 !')
+                    return false
+                } else {
+                    let data = result.msg
+                    // 将后台请求过来的成功数据, 派发action, 到store
+                    dispatch(handleSearchTextData(data))
+                }
             })
             .catch((err) => {
                 message.error('获取数据失败, 请稍后再试 !')
