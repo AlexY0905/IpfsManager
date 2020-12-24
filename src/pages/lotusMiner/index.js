@@ -42,7 +42,7 @@ class LotusMiner extends Component {
             case 'list':
                 options.name = 'lotusminerstoragedealslist'
                 this.setState({isShowSearch: false})
-                break
+                return false
             case 'get-ask':
                 options.name = 'lotusminerstoragedealsgetask'//改成后台给的name
                 this.setState({isShowSearch: false})

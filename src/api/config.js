@@ -43,7 +43,8 @@ export const API_CONFIG = {
     ],
     // 批量命令, 展示服务器ip接口
     getIpSsh: [
-        '/v3/multissh',
+        // '/v3/multissh',
+        '/v7/lotus',
         'post'
     ],
     // 批量命令, 文件上传
@@ -84,6 +85,11 @@ export const API_CONFIG = {
     // lotus命令页面, 命令按钮接口
     getLotusOrders: [
         '/v5/lotus',
+        'get'
+    ],
+    // lotus命令页面, 折线图接口
+    getMinerPower: [
+        '/v6/minerpower',
         'get'
     ],
     // lotusMiner页面 按钮接口

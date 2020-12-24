@@ -40,7 +40,8 @@ class HomeList extends Component {
         this.handleFindBtnChange = this.handleFindBtnChange.bind(this)
     }
     componentDidMount () {
-
+        // 调用发送方函数, 处理折线图数据
+        this.props.handleEchartsData()
     }
 
 
@@ -238,7 +239,8 @@ class HomeList extends Component {
     render() {
         let dataSource = [];
         let columns = [];
-        let { name, type, findType, lotusOrderList } = this.props
+        let echartsData = []
+        let { name, type, findType, lotusOrderList, echartsDataList } = this.props
         let { modalType } = this.state
         if (lotusOrderList.toJS().length > 0) {
             if (name == 'lotuswalletlist') {
@@ -250,7 +252,6 @@ class HomeList extends Component {
                 dataSource = lotusOrderList.toJS()
             } else if (name == 'lotusclientlistdeals') {
                 columns = [
-                    {title: 'CreationTime',dataIndex: 'creation_time',key: 'creation_time', width: '100px'},
                     {title: 'DealId',dataIndex: 'deal_id',key: 'deal_id', width: '100px'},
                     {title: 'Duration',dataIndex: 'duration',key: 'duration', width: '100px'},
                     {title: 'OnChain',dataIndex: 'on_chain',key: 'on_chain', width: '100px'},
@@ -456,80 +457,20 @@ class HomeList extends Component {
             columns = []
             dataSource = []
         }
-
-        const data = [
-            {
-                month: "2015-01-01",
-                acc: 84.0,
-                type: '有效算力'
-            },
-            {
-                month: "2015-02-01",
-                acc: 14.9,
-                type: '有效算力'
-            },
-            {
-                month: "2015-03-01",
-                acc: 17.0,
-                type: '有效算力'
-            },
-            {
-                month: "2015-04-01",
-                acc: 20.2,
-                type: '有效算力'
-            },
-            {
-                month: "2015-05-01",
-                acc: 55.6,
-                type: '有效算力'
-            },
-            {
-                month: "2015-06-01",
-                acc: 56.7,
-                type: '有效算力'
-            },
-            {
-                month: "2015-07-01",
-                acc: 30.6,
-                type: '有效算力'
-            },
-            {
-                month: "2015-08-01",
-                acc: 63.2,
-                type: '有效算力'
-            },
-            {
-                month: "2015-09-01",
-                acc: -24.6,
-                type: '有效算力'
-            },
-            {
-                month: "2015-10-01",
-                acc: 14.0,
-                type: '有效算力'
-            },
-            {
-                month: "2015-11-01",
-                acc: 9.4,
-                type: '有效算力'
-            },
-            {
-                month: "2015-12-01",
-                acc: 6.3,
-                type: '有效算力'
-            }
-        ];
+        if (echartsDataList.toJS().length > 0) {
+            echartsData = echartsDataList.toJS();
+            console.log('echartsDataList------------', echartsDataList.toJS());
+        }
         const cols = {
-            month: {
+            time: {
                 nice: true,
-                alias: "月份"
+                alias: "时间"
             },
-            acc: {
+            miner_power_quality: {
                 nice: true,
-                alias: "积累量"
+                alias: "有效算力"
             }
         };
-        const colors = ["#6394f9", "#62daaa"];
 
         return (
             <div>
@@ -639,27 +580,24 @@ class HomeList extends Component {
                     </div>
                     {
                         <div style={{width: '100%'}}>
-                            <Chart height={400} data={data} scale={cols} forceFit padding={[ 20, 100, 20, 30]}>
+                            <Chart height={400} data={echartsData} scale={cols} forceFit padding={[ 20, 100, 20, 100 ]}>
                                 <Axis
-                                    name="month"
-                                    title={null}
-                                    tickLine={null}
+                                    name="time"
                                     line={{
                                         stroke: "#E6E6E6"
                                     }}
                                 />
                                 <Axis
-                                    name="acc"
-                                    line={false}
-                                    tickLine={null}
-                                    grid={null}
-                                    title={null}
+                                    name="miner_power_quality"
+                                    label={{
+                                        formatter: val => `${val} TiB`
+                                    }}
                                 />
                                 <Tooltip />
-                                <Legend name="type" />
+                                <Legend />
                                 <Geom
                                     type="line"
-                                    position="month*acc"
+                                    position="time*miner_power_quality"
                                     size={1}
                                     color="l (270) 0:rgba(255, 146, 255, 1) .5:rgba(100, 268, 255, 1) 1:rgba(215, 0, 255, 1)"
                                     shape="smooth"
@@ -668,6 +606,13 @@ class HomeList extends Component {
                                         shadowBlur: 60,
                                         shadowOffsetY: 6
                                     }}
+                                    tooltip={['time*miner_power_quality', (time, miner_power_quality) => {
+                                        return {
+                                            name: '有效算力',
+                                            title: time,
+                                            value: miner_power_quality + ' TiB'
+                                        };
+                                    }]}
                                 />
                             </Chart>
                         </div>
@@ -690,6 +635,7 @@ class HomeList extends Component {
 const mapStateToProps = (state) => ({
     // 获取属于home页面 store中的所有数据
     isLoading: state.get('home').get('isLoading'),
+    echartsDataList: state.get('home').get('echartsDataList'),
     name: state.get('home').get('name'),
     type: state.get('home').get('type'),
     findType: state.get('home').get('findType'),
@@ -702,6 +648,9 @@ const mapDispatchToProps = (dispatch) => ({
     },
     handleSearch: (options) => {
         dispatch(actionCreator.handleSearchAction(options))
+    },
+    handleEchartsData: () => {
+        dispatch(actionCreator.handleEchartsDataAction())
     }
 })
 

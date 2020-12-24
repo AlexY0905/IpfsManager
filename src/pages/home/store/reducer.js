@@ -8,7 +8,8 @@ const defaultState = fromJS({
     findType: '',
     lotusOrderList: [],
     isLoading: false,
-    lotusBlockSearchData: ''
+    lotusBlockSearchData: '',
+    echartsDataList: []
 })
 // 以下action是从actionCreator.js里面来到  payload参数想当于result
 // 默认导出一个箭头函数
@@ -23,6 +24,12 @@ export default (state = defaultState, action) => {
     if (action.type == types.ISLOADING_END) {
         return state.merge({
             isLoading: false
+        })
+    }
+    // 处理折线图
+    if (action.type == types.GET_ECHARTSDATA) {
+        return state.merge({
+            echartsDataList: fromJS(action.payload.msg), // 将数据数组转换成immutable
         })
     }
     if (action.type == types.GET_LOTUSORDERLIST) {

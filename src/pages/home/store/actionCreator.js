@@ -10,6 +10,30 @@ const getIsLoadingStart = () => ({
 const getIsLoadingEnd = () => ({
     type: types.ISLOADING_END
 })
+// 处理折线图数据
+const handleEchartsData = (payload) => ({
+    type: types.GET_ECHARTSDATA,
+    payload: payload
+})
+export const handleEchartsDataAction = () => {
+    return (dispatch, getState) => {
+        dispatch(getIsLoadingStart())
+        api.getMinerPower()
+            .then((result) => {
+                console.log('::::::::-------', result)
+                // 将后台请求过来的成功数据, 派发action, 到store
+                dispatch(handleEchartsData(result))
+            })
+            .catch((err) => {
+                message.error('获取数据失败, 请稍后再试 !')
+            })
+            .finally(() => {
+                dispatch(getIsLoadingEnd())
+            })
+    }
+}
+
+
 const handleLotusOrdersData = (payload) => ({
     type: types.GET_LOTUSORDERLIST,
     payload: payload

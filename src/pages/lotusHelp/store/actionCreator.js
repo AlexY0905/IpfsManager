@@ -10,26 +10,22 @@ const getIsLoadingStart = () => ({
 const getIsLoadingEnd = () => ({
     type: types.ISLOADING_END
 })
-const handleMinerlistData = (payload) => ({
-    type: types.GET_MINERLIST,
+// 处理添加组页面 获取所有服务器数据列表
+const handleGetServerHostData = (payload) => ({
+    type: types.GET_SERVERHOSTLIST,
     payload: payload
 })
-export const handleMinerlistAction = () => {
+// 处理添加组页面 获取所有服务器数据列表
+export const handleGetServerHostDataAction = () => {
     return (dispatch, getState) => {
         dispatch(getIsLoadingStart())
-        api.minerList()
-            .then((result) => {
-                console.log(result);
-                if (result.code == 0) {
-                    let data = result.data
-                    // 将后台请求过来的成功数据, 派发action, 到store
-                    dispatch(handleMinerlistData(data))
-                } else {
-                    message.error(result.msg)
-                }
+        api.getAllServer()
+            .then(result => {
+                // console.log(':::::::::::::::', result)
+                dispatch(handleGetServerHostData(result))
             })
-            .catch((err) => {
-                message.error('获取数据失败,请稍后再试')
+            .catch(err => {
+                message.error('获取数据失败, 请稍后再试 !')
             })
             .finally(() => {
                 dispatch(getIsLoadingEnd())
