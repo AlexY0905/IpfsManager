@@ -43,8 +43,8 @@ export const API_CONFIG = {
     ],
     // 批量命令, 展示服务器ip接口
     getIpSsh: [
-        // '/v3/multissh',
-        '/v7/lotus',
+        '/v3/multissh',
+        // '/v7/lotus',
         'post'
     ],
     // 批量命令, 文件上传
