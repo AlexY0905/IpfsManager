@@ -32,8 +32,7 @@ export const handleEchartsDataAction = () => {
             })
     }
 }
-
-
+// 处理按钮执行的lotus命令
 const handleLotusOrdersData = (payload) => ({
     type: types.GET_LOTUSORDERLIST,
     payload: payload

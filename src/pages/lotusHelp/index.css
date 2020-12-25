@@ -1,4 +1,13 @@
-.export {
-    text-align: right;
-    height    : 50px;
+.spin_wrap{
+    width: 100%;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    z-index: 999;
 }
