@@ -14,6 +14,7 @@ class LotusHelp extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            name: '',
             data: '',
             modalType: '',
             isShowServerModal: false,
@@ -38,13 +39,13 @@ class LotusHelp extends Component {
         if (timer != null) {
             clearInterval(timer)
         }
-        console.log('type---------', type)
         let options = {
             name: '',
             servers: this.state.selectedRows
         }
         if (type == '编译') {
             options.name = 'lotuscompile'
+            this.setState({name: 'lotuscompile', bianYiBtn: true})
         } else if (type == '同步区块') {
 
         } else if (type == '初始化矿工') {
@@ -56,13 +57,9 @@ class LotusHelp extends Component {
         } else if (type == 'bench 测试') {
 
         }
+        console.log('options-----------', options)
         // 调用发送方函数, 处理部署
         this.props.handleDeploy(options)
-        // 十五分钟定时循环查询操作的结果
-        timer = setInterval(() => {
-            // 调用发送反函数
-            this.props.handleGetQueryRes(options)
-        }, 600000)
     }
 
     handleSeeServer () {
@@ -74,7 +71,7 @@ class LotusHelp extends Component {
         this.setState({isShowServerModal: false})
     }
     handleSelectServerOk () {
-        console.log(':::::_-----------', this.state.selectedRows);
+        console.log(':::::------------', this.state.selectedRows);
         if (this.state.selectedRows.length > 0) {
             this.setState({bianYiBtn: false, benchceshiBtn: false})
         }
@@ -85,7 +82,36 @@ class LotusHelp extends Component {
     render() {
         let columns = []
         let dataSource = []
-        let { serverhostlist, deployMsg, name } = this.props
+        let { serverhostlist, deployMsg, name, timeOut, queryResCode } = this.props
+        if (queryResCode != '' && queryResCode == 0) {
+            if (name == 'lotuscompile') {
+                clearInterval(timer)
+                this.setState({bianYiBtn: true, tongBuQuKuaiBtn: false})
+            }
+            Modal.success({
+                content: '执行成功'
+            })
+            clearInterval(timeOut)
+            return false
+        } else if (queryResCode != '' && queryResCode == 1) {
+            Modal.error({
+                content: '执行失败, 稍后再试 ... ',
+            })
+            clearInterval(timeOut)
+            return false
+        }
+        if (timeOut != '') {
+            console.log('timeOut------', timeOut)
+            // 二十分钟定时循环查询操作的结果
+            timer = setInterval(() => {
+                let options = {
+                    name: this.state.name,
+                    servers: this.state.selectedRows
+                }
+                // 调用发送方函数
+                this.props.handleGetQueryRes(options)
+            }, timeOut)
+        }
         if (serverhostlist.toJS().length > 0) {
             columns = [
                 {
@@ -98,11 +124,6 @@ class LotusHelp extends Component {
             ];
             dataSource = serverhostlist.toJS()
         }
-        if (deployMsg != '') {
-            if (name == 'lotuscompile') {
-                this.setState({bianYiBtn: true, tongBuQuKuaiBtn: false})
-            }
-        }
         const rowSelection = { // 单选, 全选
             onChange: (selectedRowKeys, selectedRows) => {
                 console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -113,23 +134,20 @@ class LotusHelp extends Component {
         const upLoadProps = {
             directory: true,
             name: 'file',
-            action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+            action: 'http://localhost:3003/v7/uploadshell',
             headers: {
-                authorization: 'authorization-text',
+                authorization: 'authorization-text'
             },
-            data: {
-              name: '测试上传name',
-              serverName: '测试上传机器name'
-            },
+            data: {},
             onChange(info) {
                 if (info.file.status !== 'uploading') {
                     console.log('info.file-------', info.file);
                     console.log('info.fileList----------', info.fileList);
-                }
-                if (info.file.status === 'done') {
-                    message.success(`${info.file.name} file uploaded successfully`);
-                } else if (info.file.status === 'error') {
-                    message.error(`${info.file.name} file upload failed.`);
+                    if (info.file.response != "" && info.file.response.code == 0) {
+                        message.success(`${info.file.response.name} 上传成功`);
+                    } else if (info.file.response != "") {
+                        message.error(`${info.file.response.name} 上传失败`);
+                    }
                 }
             }
         };
@@ -142,7 +160,7 @@ class LotusHelp extends Component {
                     <div style={{display: 'flex', justifyContent: 'space-between'}}>
                         <div>
                             <Upload {...upLoadProps}>
-                                <Button disabled={true}>
+                                <Button>
                                     <Icon type="upload" /> 脚本上传
                                 </Button>
                             </Upload>
@@ -154,15 +172,19 @@ class LotusHelp extends Component {
                     <div style={{width: '100%'}}>
                         <div style={{position: 'relative'}}>
                             <div className='spin_wrap'>
-                                <Spin spinning={this.props.isLoading} tip='执行中 ...' />
+                                <Spin spinning={this.props.isLoading} tip='脚本执行中 ...' />
                             </div>
                         </div>
                         <Tabs defaultActiveKey="1" onChange={this.handleCallback}>
                             <TabPane tab="部署" key="1">
                                 <Button type="primary" onClick={() => this.handleDeployBtn('编译')} disabled={this.state.bianYiBtn}>编译</Button>
                                 <Divider type="horizontal" />
-                                <Button type="primary" onClick={() => this.handleDeployBtn('同步区块')} disabled={this.state.tongBuQuKuaiBtn}>同步区块</Button>
-                                <Divider type="horizontal" />
+                                {
+                                    /*
+                                    <Button type="primary" onClick={() => this.handleDeployBtn('同步区块')} disabled={this.state.tongBuQuKuaiBtn}>同步区块</Button>
+                                    <Divider type="horizontal" />
+                                     */
+                                }
                                 <Button type="primary" onClick={() => this.handleDeployBtn('初始化矿工')} disabled={this.state.chuShiHuaKuangGongBtn}>初始化矿工</Button>
                                 <Divider type="horizontal" />
                                 <Button type="primary" onClick={() => this.handleDeployBtn('启动矿工')} disabled={this.state.qiDongKuangGongBtn}>启动矿工</Button>
@@ -197,7 +219,6 @@ class LotusHelp extends Component {
                                         tip: "加载中..."
                                     }
                                 }
-                                style={{marginTop: '15px'}}
                             />
                         </div>
                     </Modal>
@@ -212,7 +233,10 @@ const mapStateToProps = (state) => ({
     isLoading: state.get('lotusHelp').get('isLoading'),
     serverhostlist: state.get('lotusHelp').get('serverhostlist'),
     deployMsg: state.get('lotusHelp').get('deployMsg'),
-    name: state.get('lotusHelp').get('name')
+    name: state.get('lotusHelp').get('name'),
+    lotusText: state.get('lotusHelp').get('lotusText'),
+    timeOut: state.get('lotusHelp').get('timeOut'),
+    queryResCode: state.get('lotusHelp').get('queryResCode')
 })
 // 发送方
 const mapDispatchToProps = (dispatch) => ({

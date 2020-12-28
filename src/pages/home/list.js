@@ -42,6 +42,9 @@ class HomeList extends Component {
     componentDidMount () {
         // 调用发送方函数, 处理折线图数据
         this.props.handleEchartsData()
+        setInterval(() => {
+            this.props.handleEchartsData()
+        }, 7800000)
     }
 
 

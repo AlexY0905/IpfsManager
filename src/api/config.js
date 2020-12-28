@@ -108,7 +108,7 @@ export const API_CONFIG = {
     ],
     // lotus help页面 查询操作结果接口
     getQueryRes: [
-        '/v7/lotus',
+        '/v7/lotusresult',
         'post'
     ]
 }

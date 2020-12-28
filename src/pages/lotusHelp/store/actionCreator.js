@@ -1,6 +1,6 @@
 import * as types from './actionTypes.js'
 import api from 'api/index'
-import { message } from 'antd'
+import { message, Modal } from 'antd'
 
 // 处理loading状态开始
 const getIsLoadingStart = () => ({
@@ -44,8 +44,10 @@ export const handleDeployAction = (options) => {
         api.getDeploy(options)
             .then(result => {
                 console.log(':::::::::::::::', result)
-                return false
-                dispatch(handleDeploy(result))
+                if (result.code == 0) {
+                    let timeOut = 1200000
+                    dispatch(handleDeploy(timeOut))
+                }
             })
             .catch(err => {
                 message.error('操作失败, 请稍后再试 !')
@@ -67,8 +69,14 @@ export const handleGetQueryResAction = (options) => {
         api.getQueryRes(options)
             .then(result => {
                 console.log('result----------', result)
-                return false
-                dispatch(handleGetQueryResData(result))
+                let options = {
+                    result,
+                    timeOut: ''
+                }
+                if (result.code == 2) { // 正在执行中
+                    options.timeOut = 60000
+                }
+                dispatch(handleGetQueryResData(options))
             })
             .catch(err => {
                 message.error('查询结果失败, 请稍后再试 !')
