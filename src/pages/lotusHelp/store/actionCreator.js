@@ -1,6 +1,6 @@
 import * as types from './actionTypes.js'
 import api from 'api/index'
-import { message, Modal } from 'antd'
+import { message, Modal, notification } from 'antd'
 
 // 处理loading状态开始
 const getIsLoadingStart = () => ({
@@ -45,9 +45,24 @@ export const handleDeployAction = (options) => {
             .then(result => {
                 console.log(':::::::::::::::', result)
                 if (result.code == 0) {
+                    /*
                     let timeOut = 1200000
                     dispatch(handleDeploy(timeOut))
+                     */
+                    result.msg.forEach((item, index) => {
+                        if (item.Result) {
+                            notification['success']({
+                                message: `${item.Host} 执行成功`
+                            })
+                        } else {
+                            notification['error']({
+                                message: `${item.Host} 执行失败, 稍后再试`,
+                                duration: null
+                            })
+                        }
+                    })
                 }
+
             })
             .catch(err => {
                 message.error('操作失败, 请稍后再试 !')
@@ -69,6 +84,7 @@ export const handleGetQueryResAction = (options) => {
         api.getQueryRes(options)
             .then(result => {
                 console.log('result----------', result)
+                /*
                 let options = {
                     result,
                     timeOut: ''
@@ -77,6 +93,23 @@ export const handleGetQueryResAction = (options) => {
                     options.timeOut = 60000
                 }
                 dispatch(handleGetQueryResData(options))
+                */
+                if (result.code == 0) { // 执行成功
+                    Modal.success({
+                        content: '执行成功'
+                    })
+                    return false
+                } else if (result.code == 1) { // 执行失败
+                    Modal.error({
+                        content: '执行失败, 稍后再试 ... '
+                    })
+                    return false
+                } else if (result.code == 2) { // 正在执行中
+                    Modal.warning({
+                        content: '正在执行中, 稍后再看 ... '
+                    })
+                    return false
+                }
             })
             .catch(err => {
                 message.error('查询结果失败, 请稍后再试 !')

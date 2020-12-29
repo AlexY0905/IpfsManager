@@ -14,7 +14,8 @@ import {
     Form,
     Icon,
     message,
-    Tree
+    Tree,
+    Upload
 } from 'antd'
 const { TextArea } = Input;
 const { TreeNode } = Tree;
@@ -200,7 +201,6 @@ class Grouping extends Component {
                 )
             }
         ];
-
         /*
         const rowSelection = { // 单选, 全选
             onChange: (selectedRowKeys, selectedRows) => {
@@ -225,8 +225,6 @@ class Grouping extends Component {
             }
         };
         */
-
-
         let ipsshtxtArr = []
         ipsshtxt.toJS().map((item, index) => {
             return item.Result.map((v, i) => {
@@ -239,7 +237,29 @@ class Grouping extends Component {
                 }
             })
         })
-
+        let _this = this
+        const upLoadProps = {
+            directory: true,
+            name: 'file',
+            action: 'http://localhost:3003/v3/localupload',
+            headers: {
+                authorization: 'authorization-text'
+            },
+            data: {},
+            onChange(info) {
+                if (info.file.status !== 'uploading') {
+                    console.log('info.file-------', info.file);
+                    console.log('info.fileList----------', info.fileList);
+                    if (info.file.response != "" && info.file.response.code == 0) {
+                        message.success(`${info.file.response.name} 上传成功`);
+                        // 调用发送方函数
+                        // _this.props.handleUpLoadCallBack()
+                    } else if (info.file.response != "") {
+                        message.error(`${info.file.response.name} 上传失败`);
+                    }
+                }
+            }
+        };
 
         return (
             <div className="News">
@@ -253,6 +273,13 @@ class Grouping extends Component {
                             <Button onClick={this.handleUpLoadBtn} disabled={this.state.upLoadDisable}>
                                 <Icon type="upload" /> 点击上传
                             </Button>
+                        </div>
+                        <div className="localUpLoad_wrap">
+                            <Upload {...upLoadProps}>
+                                <Button>
+                                    <Icon type="upload" /> 本地文件上传
+                                </Button>
+                            </Upload>
                         </div>
                         <div className="down_wrap">
                             <Input style={{ width: '300px', marginRight: '10px' }} placeholder="输入下载的地址" onChange={this.handleDownLoadfileAddress} />
@@ -327,6 +354,9 @@ const mapDispatchToProps = (dispatch) => ({
     },
     handleGetGroupList: () => { // 处理获取组名数据列表
         dispatch(actionCreator.handleGetGroupListAction())
+    },
+    handleUpLoadCallBack: () => {
+        dispatch(actionCreator.handleUpLoadCallBackAction())
     }
 })
 

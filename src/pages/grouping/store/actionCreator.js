@@ -126,3 +126,33 @@ export const handleGetGroupListAction = () => {
             })
     }
 }
+// 处理部署页面 文件上传的回调
+export const handleUpLoadCallBackAction = () => {
+    return (dispatch, getState) => {
+        dispatch(getIsLoadingStart())
+        api.getUpLoadCallBack()
+            .then(result => {
+                console.log('result----------', result)
+                if (result.code == 1) {
+                    message.error(`${result.name} 文件重命名失败 !`)
+                    return false
+                }
+                /*
+                let options = {
+                    result,
+                    timeOut: ''
+                }
+                if (result.code == 2) { // 正在执行中
+                    options.timeOut = 60000
+                }
+                dispatch(handleGetQueryResData(options))
+                */
+            })
+            .catch(err => {
+                message.error('操作失败, 请稍后再试 !')
+            })
+            .finally(() => {
+                dispatch(getIsLoadingEnd())
+            })
+    }
+}

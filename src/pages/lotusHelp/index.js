@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Layout from 'common/layout/index.js'
-import {Breadcrumb, Table, Divider, Tabs, Button, Modal, Spin, Upload, Icon, message} from 'antd';
+import {Breadcrumb, Table, Divider, Tabs, Button, Modal, Spin, Upload, Icon, message, notification} from 'antd';
 import "./index.css"
 import { actionCreator } from './store'
 
@@ -30,6 +30,7 @@ class LotusHelp extends Component {
         this.handleSeeServer = this.handleSeeServer.bind(this)
         this.handleSelectServerCancel = this.handleSelectServerCancel.bind(this)
         this.handleSelectServerOk = this.handleSelectServerOk.bind(this)
+        this.handleDeployRes = this.handleDeployRes.bind(this)
     }
     componentDidMount() {
         // 调用发送方的数据 显示服务器列表
@@ -77,16 +78,25 @@ class LotusHelp extends Component {
         }
         this.setState({isShowServerModal: false})
     }
+    handleDeployRes () {
+        let options = {
+            name: this.state.name,
+            servers: this.state.selectedRows
+        }
+        // 调用发送方函数
+        this.props.handleGetQueryRes(options)
+    }
 
 
     render() {
         let columns = []
         let dataSource = []
         let { serverhostlist, deployMsg, name, timeOut, queryResCode } = this.props
+        /*
         if (queryResCode != '' && queryResCode == 0) {
             if (name == 'lotuscompile') {
                 clearInterval(timer)
-                this.setState({bianYiBtn: true, tongBuQuKuaiBtn: false})
+                this.setState({bianYiBtn: true, chuShiHuaKuangGongBtn: false})
             }
             Modal.success({
                 content: '执行成功'
@@ -112,6 +122,8 @@ class LotusHelp extends Component {
                 this.props.handleGetQueryRes(options)
             }, timeOut)
         }
+        */
+
         if (serverhostlist.toJS().length > 0) {
             columns = [
                 {
@@ -167,6 +179,8 @@ class LotusHelp extends Component {
                         </div>
                         <div>
                             <Button type="primary" onClick={() => this.handleSeeServer()}>选择机器</Button>
+                            <Divider type="vertical" />
+                            <Button onClick={() => this.handleDeployRes()}>查看执行结果</Button>
                         </div>
                     </div>
                     <div style={{width: '100%'}}>
