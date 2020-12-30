@@ -146,7 +146,7 @@ class LotusHelp extends Component {
         const upLoadProps = {
             directory: true,
             name: 'file',
-            action: 'http://localhost:3003/v7/uploadshell',
+            action: '/v7/uploadshell',
             headers: {
                 authorization: 'authorization-text'
             },

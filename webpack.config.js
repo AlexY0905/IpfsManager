@@ -110,7 +110,7 @@ module.exports = {
         proxy: [
             {
                 // 配置跨域代理
-                // changeOrigin: true,
+                changeOrigin: true,
                 context: [ // 例: 以 '/pool' 开头的请求接口, 都是以target指定的地址去代理请求数据
                     '/manager',
                     '/purchase'
@@ -119,7 +119,7 @@ module.exports = {
             },
             {
                 // 配置跨域代理
-                // changeOrigin: true,
+                changeOrigin: true,
                 context: [ // 例: 以 '/v1' 开头的请求接口, 都是以target指定的地址去代理请求数据
                     '/v1',
                     '/v2',

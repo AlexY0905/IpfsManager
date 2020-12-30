@@ -237,11 +237,10 @@ class Grouping extends Component {
                 }
             })
         })
-        let _this = this
         const upLoadProps = {
             directory: true,
             name: 'file',
-            action: 'http://localhost:3003/v3/localupload',
+            action: '/v3/localupload',
             headers: {
                 authorization: 'authorization-text'
             },
@@ -252,8 +251,6 @@ class Grouping extends Component {
                     console.log('info.fileList----------', info.fileList);
                     if (info.file.response != "" && info.file.response.code == 0) {
                         message.success(`${info.file.response.name} 上传成功`);
-                        // 调用发送方函数
-                        // _this.props.handleUpLoadCallBack()
                     } else if (info.file.response != "") {
                         message.error(`${info.file.response.name} 上传失败`);
                     }
