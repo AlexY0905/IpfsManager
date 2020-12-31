@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Layout from 'common/layout/index.js'
-import {Breadcrumb, Table, Divider, Button, Modal, Tabs, Input, notification} from 'antd';
+import {Breadcrumb, Table, Divider, Button, Modal, Tabs, Input, notification, List} from 'antd';
 import "./index.css"
 import { actionCreator } from './store'
 
@@ -26,8 +26,8 @@ class LotusMiner extends Component {
         this.handleSearchBtn = this.handleSearchBtn.bind(this)
     }
     componentDidMount() {
-        // 在生命周期调用发送方的数据
-
+        // 在生命周期调用发送方的数据, 处理minerInfo数据
+        // this.props.handleMinerInfo()
     }
 
     // ------------------------------------
@@ -108,8 +108,8 @@ class LotusMiner extends Component {
     render() {
         let dataSource = [];
         let columns = [];
-        let { lotusminerlist, name, type  } = this.props
-        let { modalType } = this.state//从state中取出
+        let minerInfoList = []
+        let { lotusminerlist, name, type, lotusMinerInfo } = this.props
         if (lotusminerlist.toJS().length > 0) {
             if (name == 'lotusminerstoragedealslist') {
                 columns = [
@@ -196,6 +196,9 @@ class LotusMiner extends Component {
             columns = []
             dataSource = []
         }
+        if (lotusMinerInfo.toJS().length > 0) {
+            minerInfoList = lotusMinerInfo.toJS()
+        }
 
         return (
             <div>
@@ -263,6 +266,19 @@ class LotusMiner extends Component {
                             style={{ marginTop: '30px' }}
                         />
                     </div>
+                    <div className="minerInfo_wrap">
+                        <List
+                            header={<div>Header</div>}
+                            footer={<div>Footer</div>}
+                            bordered
+                            dataSource={minerInfoList}
+                            renderItem={item => (
+                                <List.Item>
+                                    {item}
+                                </List.Item>
+                            )}
+                        />
+                    </div>
                 </Layout>
             </div>
         )
@@ -274,7 +290,8 @@ const mapStateToProps = (state) => ({
     isLoading: state.get('lotusMiner').get('isLoading'),
     lotusminerlist: state.get('lotusMiner').get('lotusminerlist'),
     name: state.get('lotusMiner').get('name'),
-    type: state.get('lotusMiner').get('type')
+    type: state.get('lotusMiner').get('type'),
+    lotusMinerInfo: state.get('lotusMiner').get('lotusMinerInfo')
 })
 // 发送方
 const mapDispatchToProps = (dispatch) => ({
@@ -283,6 +300,9 @@ const mapDispatchToProps = (dispatch) => ({
     },
     handleSearch: (options) => {
         dispatch(actionCreator.handleSearchAction(options))
+    },
+    handleMinerInfo: () => {
+        dispatch(actionCreator.handleMinerInfoAction())
     }
 
 })

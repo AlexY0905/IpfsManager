@@ -6,7 +6,8 @@ const defaultState = fromJS({
     name: '',
     type: false,
     lotusminerlist: [],
-    isLoading: false
+    isLoading: false,
+    lotusMinerInfo: []
 })
 // 以下action是从actionCreator.js里面来到  payload参数想当于result
 export default (state = defaultState, action) => {
@@ -22,6 +23,11 @@ export default (state = defaultState, action) => {
             lotusminerlist: fromJS(action.payload.msg), // 将数据数组转换成immutable类型
             name: action.payload.name,
             type: action.payload.type
+        })
+    }
+    if (action.type == types.GET_LOTUSMINERINFO) {
+        return state.merge({
+            lotusMinerInfo: fromJS(action.payload.msg) // 将数据数组转换成immutable类型
         })
     }
     // 处理结束loading状态

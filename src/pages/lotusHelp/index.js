@@ -24,6 +24,7 @@ class LotusHelp extends Component {
             chuShiHuaKuangGongBtn: true,
             qiDongKuangGongBtn: true,
             qiDongWorkerBtn: true,
+            benchCompile: true,
             benchceshiBtn: true
         }
         this.handleDeployBtn = this.handleDeployBtn.bind(this)
@@ -50,13 +51,20 @@ class LotusHelp extends Component {
         } else if (type == '同步区块') {
 
         } else if (type == '初始化矿工') {
-
+            options.name = 'minerinit'
+            this.setState({name: 'minerinit', chuShiHuaKuangGongBtn: true})
         } else if (type == '启动矿工') {
-
+            options.name = 'minerrun'
+            this.setState({name: 'minerrun', qiDongKuangGongBtn: true})
         } else if (type == '启动 worker') {
-
+            options.name = 'workerrun'
+            this.setState({name: 'workerrun', qiDongWorkerBtn: true})
+        } else if (type == 'bench 编译') {
+            options.name = 'benchcompile'
+            this.setState({name: 'benchcompile', benchCompile: true})
         } else if (type == 'bench 测试') {
-
+            options.name = 'benchrun'
+            this.setState({name: 'benchrun', benchceshiBtn: true})
         }
         console.log('options-----------', options)
         // 调用发送方函数, 处理部署
@@ -91,38 +99,32 @@ class LotusHelp extends Component {
     render() {
         let columns = []
         let dataSource = []
-        let { serverhostlist, deployMsg, name, timeOut, queryResCode } = this.props
-        /*
-        if (queryResCode != '' && queryResCode == 0) {
-            if (name == 'lotuscompile') {
-                clearInterval(timer)
-                this.setState({bianYiBtn: true, chuShiHuaKuangGongBtn: false})
+        let { serverhostlist, queryResCode, queryResName } = this.props
+        if (queryResCode == 0 && queryResName != '') { // 执行成功 改变按钮状态
+            if (queryResName == 'lotuscompile') {
+                this.setState({chuShiHuaKuangGongBtn: false})
+            } else if (queryResName == 'minerinit') {
+                this.setState({qiDongKuangGongBtn: false})
+            } else if (queryResName == 'minerrun') {
+                this.setState({qiDongWorkerBtn: false})
+            } else if (queryResName == 'benchcompile') {
+                this.setState({benchceshiBtn: false})
             }
-            Modal.success({
-                content: '执行成功'
-            })
-            clearInterval(timeOut)
-            return false
-        } else if (queryResCode != '' && queryResCode == 1) {
-            Modal.error({
-                content: '执行失败, 稍后再试 ... ',
-            })
-            clearInterval(timeOut)
-            return false
+        } else if (queryResCode != 0 && queryResName != '') { // 执行失败 改变按钮状态
+            if (queryResName == 'lotuscompile') {
+                this.setState({bianYiBtn: false})
+            } else if (queryResName == 'minerinit') {
+                this.setState({chuShiHuaKuangGongBtn: false})
+            } else if (queryResName == 'minerrun') {
+                this.setState({qiDongKuangGongBtn: false})
+            } else if (queryResName == 'workerrun') {
+                this.setState({qiDongWorkerBtn: false})
+            } else if (queryResName == 'benchcompile') {
+                this.setState({benchCompile: false})
+            } else if (queryResName == 'benchrun') {
+                this.setState({benchceshiBtn: false})
+            }
         }
-        if (timeOut != '') {
-            console.log('timeOut------', timeOut)
-            // 二十分钟定时循环查询操作的结果
-            timer = setInterval(() => {
-                let options = {
-                    name: this.state.name,
-                    servers: this.state.selectedRows
-                }
-                // 调用发送方函数
-                this.props.handleGetQueryRes(options)
-            }, timeOut)
-        }
-        */
 
         if (serverhostlist.toJS().length > 0) {
             columns = [
@@ -207,6 +209,7 @@ class LotusHelp extends Component {
                             </TabPane>
 
                             <TabPane tab="测试" key="2">
+                                <Button type="primary" onClick={() => this.handleDeployBtn('bench 编译')} disabled={this.state.benchCompile}>bench 编译</Button>
                                 <Button type="primary" onClick={() => this.handleDeployBtn('bench 测试')} disabled={this.state.benchceshiBtn}>bench 测试</Button>
                             </TabPane>
                         </Tabs>
@@ -247,10 +250,9 @@ const mapStateToProps = (state) => ({
     isLoading: state.get('lotusHelp').get('isLoading'),
     serverhostlist: state.get('lotusHelp').get('serverhostlist'),
     deployMsg: state.get('lotusHelp').get('deployMsg'),
-    name: state.get('lotusHelp').get('name'),
-    lotusText: state.get('lotusHelp').get('lotusText'),
-    timeOut: state.get('lotusHelp').get('timeOut'),
-    queryResCode: state.get('lotusHelp').get('queryResCode')
+    queryResName: state.get('lotusHelp').get('queryResName'),
+    queryResCode: state.get('lotusHelp').get('queryResCode'),
+    lotusText: state.get('lotusHelp').get('lotusText')
 })
 // 发送方
 const mapDispatchToProps = (dispatch) => ({

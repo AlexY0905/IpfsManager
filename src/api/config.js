@@ -105,6 +105,11 @@ export const API_CONFIG = {
         '/v5/lotusinfo',
         'get'
     ],
+    // lotusMiner页面 获取minerInfo数据接口
+    getMinerInfoData: [
+        '/v5/lotusinfo',
+        'get'
+    ],
     // lotus help页面 部署接口
     getDeploy: [
         '/v7/lotus',

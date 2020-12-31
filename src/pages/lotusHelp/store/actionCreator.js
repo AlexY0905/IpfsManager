@@ -98,11 +98,13 @@ export const handleGetQueryResAction = (options) => {
                     Modal.success({
                         content: '执行成功'
                     })
+                    dispatch(handleGetQueryResData(result))
                     return false
                 } else if (result.code == 1) { // 执行失败
                     Modal.error({
                         content: '执行失败, 稍后再试 ... '
                     })
+                    dispatch(handleGetQueryResData(result))
                     return false
                 } else if (result.code == 2) { // 正在执行中
                     Modal.warning({

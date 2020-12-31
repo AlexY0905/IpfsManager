@@ -64,3 +64,25 @@ export const handleSearchAction = (options) => {
             })
     }
 }
+// 处理minerInfo数据
+const handleMinerInfoData = (payload) => ({
+    type: types.GET_LOTUSMINERINFO,
+    payload: payload
+})
+export const handleMinerInfoAction = () => {
+    return (dispatch, getState) => {
+        dispatch(getIsLoadingStart())
+        api.getMinerInfoData()
+            .then((result) => {
+                console.log('result---------', result)
+                return
+                dispatch(handleMinerInfoData(result))
+            })
+            .catch((err) => {
+                message.error('获取数据失败, 请稍后再试 !')
+            })
+            .finally(() => {
+                dispatch(getIsLoadingEnd())
+            })
+    }
+}

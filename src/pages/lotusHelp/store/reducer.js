@@ -5,9 +5,8 @@ const defaultState = fromJS({
     // 默认值里定义的属性名就是请求后台返回过来的数据里面的属性名
     serverhostlist: [],
     isLoading: false,
-    timeOut: '',
     deployMsg: '',
-    name: '',
+    queryResName: '',
     queryResCode: ''
 })
 // 以下action是从actionCreator.js里面来到  payload参数想当于result
@@ -40,9 +39,8 @@ export default (state = defaultState, action) => {
     // 处理查询操作的返回结果
     if (action.type == types.GET_QUERYRES) {
         return state.merge({
-            queryResCode: action.payload.result.code,
-            name: action.payload.result.name,
-            timeOut: action.payload.timeOut
+            queryResName: action.payload.name,
+            queryResCode: action.payload.queryResCode
         })
     }
 
