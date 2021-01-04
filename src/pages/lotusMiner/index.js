@@ -45,7 +45,7 @@ class LotusMiner extends Component {
                 return false
             case 'get-ask':
                 options.name = 'lotusminerstoragedealsgetask'//改成后台给的name
-                this.setState({isShowSearch: false})
+                this.setState({modalOrder: 'lotusminerstoragedealsgetask', isShowSearch: true})
                 break
             /*
             case 'list-cids':
@@ -86,13 +86,14 @@ class LotusMiner extends Component {
         // console.log(e);
     }
     handleSearchBtn (val) { // 处理搜索
-        if (val == '') {
+        const { modalOrder } = this.state
+        if (val == '' && modalOrder != 'lotusminerstoragedealsgetask') {
             notification['warning']({
                 message: '搜索框不能为空 !'
             })
             return false
         }
-        const { modalOrder } = this.state
+
         let options = {
             name: modalOrder,
             info: val,
@@ -122,8 +123,14 @@ class LotusMiner extends Component {
                     { title: 'Duration', dataIndex: 'duration', key: 'duration' }
                 ]
                 dataSource = lotusminerlist.toJS()
-            } else if (name == 'lotusminerstoragedealsgetask') {
+            } else if (name == 'lotusminerstoragedealsgetask' && !type) {
                 columns = [
+                    { title: 'Address', dataIndex: 'address', key: 'address'}
+                ]
+                dataSource = lotusminerlist.toJS()
+            } else if (name == 'lotusminerstoragedealsgetask' && type) {
+                columns = [
+                    { title: 'Ask', dataIndex: 'ask', key: 'ask' },
                     { title: 'Expiry', dataIndex: 'expiry', key: 'expiry' },
                     { title: 'MaxpieceSize', dataIndex: 'max_piece_size', key: 'max_piece_size' },
                     { title: 'MinpieceSize', dataIndex: 'min_piece_size', key: 'min_piece_size' },

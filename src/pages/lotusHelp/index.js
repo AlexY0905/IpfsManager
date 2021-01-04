@@ -209,8 +209,9 @@ class LotusHelp extends Component {
                             </TabPane>
 
                             <TabPane tab="测试" key="2">
-                                <Button type="primary" onClick={() => this.handleDeployBtn('bench 编译')} disabled={this.state.benchCompile}>bench 编译</Button>
                                 <Button type="primary" onClick={() => this.handleDeployBtn('bench 测试')} disabled={this.state.benchceshiBtn}>bench 测试</Button>
+                                <Divider type="horizontal" />
+                                <Button type="primary" onClick={() => this.handleDeployBtn('bench 编译')} disabled={this.state.benchCompile}>bench 编译</Button>
                             </TabPane>
                         </Tabs>
                     </div>

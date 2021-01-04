@@ -65,7 +65,7 @@ class HomeList extends Component {
             /*
             case 'query-ask':
                 options.name = 'lotusclientqueryask'
-                this.setState({isShowSearch: false, isShowSectorBtn: false, isShowFindBtn: false})
+                this.setState({modalOrder: 'lotusclientqueryask', isShowSearch: true, isShowSectorBtn: false, isShowFindBtn: false})
                 break
             */
             case 'list-deals':
@@ -488,8 +488,12 @@ class HomeList extends Component {
                             </TabPane>
 
                             <TabPane tab="lotus client" key="2">
-                                {/*<Button type="primary" onClick={() => this.handleServerBtn("query-ask")}>query-ask</Button>*/}
-                                {/*<Divider type="vertical" />*/}
+                                {
+                                    /*
+                                    <Button type="primary" onClick={() => this.handleServerBtn("query-ask")}>query-ask</Button>
+                                    <Divider type="vertical" />
+                                    */
+                                }
                                 <Button type="primary" onClick={() => this.handleServerBtn("list-deals")}>list-deals</Button>
                             </TabPane>
 
