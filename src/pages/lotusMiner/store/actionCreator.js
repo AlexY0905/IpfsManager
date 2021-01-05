@@ -75,8 +75,12 @@ export const handleMinerInfoAction = () => {
         api.getMinerInfoData()
             .then((result) => {
                 console.log('result---------', result)
-                return
-                dispatch(handleMinerInfoData(result))
+                let data = []
+                for (let key in result.msg) {
+                    data.push({[key]: result.msg[key]})
+                }
+                console.log('data--------', data)
+                dispatch(handleMinerInfoData(data))
             })
             .catch((err) => {
                 message.error('获取数据失败, 请稍后再试 !')

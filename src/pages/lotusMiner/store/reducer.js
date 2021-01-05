@@ -27,7 +27,7 @@ export default (state = defaultState, action) => {
     }
     if (action.type == types.GET_LOTUSMINERINFO) {
         return state.merge({
-            lotusMinerInfo: fromJS(action.payload.msg) // 将数据数组转换成immutable类型
+            lotusMinerInfo: fromJS(action.payload) // 将数据数组转换成immutable类型
         })
     }
     // 处理结束loading状态

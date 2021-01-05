@@ -90,11 +90,6 @@ export const API_CONFIG = {
         '/v5/lotus',
         'get'
     ],
-    // lotus命令页面, 折线图接口
-    getMinerPower: [
-        '/v6/minerpower',
-        'get'
-    ],
     // lotusMiner页面 按钮接口
     getLotusMiner: [
         '/v5/lotus',
@@ -105,9 +100,14 @@ export const API_CONFIG = {
         '/v5/lotusinfo',
         'get'
     ],
+    // lotus命令页面, 折线图接口
+    getMinerPower: [
+        '/v6/minerpower',
+        'get'
+    ],
     // lotusMiner页面 获取minerInfo数据接口
     getMinerInfoData: [
-        '/v5/lotusinfo',
+        '/v6/minerinfo',
         'get'
     ],
     // lotus help页面 部署接口

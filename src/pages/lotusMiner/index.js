@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Layout from 'common/layout/index.js'
-import {Breadcrumb, Table, Divider, Button, Modal, Tabs, Input, notification, List} from 'antd';
+import {Breadcrumb, Table, Divider, Button, Modal, Tabs, Input, notification, List, Typography} from 'antd';
 import "./index.css"
 import { actionCreator } from './store'
 
@@ -27,7 +27,7 @@ class LotusMiner extends Component {
     }
     componentDidMount() {
         // 在生命周期调用发送方的数据, 处理minerInfo数据
-        // this.props.handleMinerInfo()
+        this.props.handleMinerInfo()
     }
 
     // ------------------------------------
@@ -104,7 +104,6 @@ class LotusMiner extends Component {
         this.props.handleSearch(options)
     }
     // -----------------------------------
-
 
     render() {
         let dataSource = [];
@@ -275,13 +274,13 @@ class LotusMiner extends Component {
                     </div>
                     <div className="minerInfo_wrap">
                         <List
-                            header={<div>Header</div>}
-                            footer={<div>Footer</div>}
+                            header={<div>MinerInfo</div>}
                             bordered
                             dataSource={minerInfoList}
+                            loading={{spinning: this.props.isLoading, tip: '加载中 ...'}}
                             renderItem={item => (
                                 <List.Item>
-                                    {item}
+                                    <span><Typography.Text mark>{Object.keys(item)}</Typography.Text> : {Object.values(item)}</span>
                                 </List.Item>
                             )}
                         />

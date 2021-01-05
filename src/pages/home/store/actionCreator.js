@@ -20,9 +20,13 @@ export const handleEchartsDataAction = () => {
         dispatch(getIsLoadingStart())
         api.getMinerPower()
             .then((result) => {
-                console.log('::::::::-------', result)
-                // 将后台请求过来的成功数据, 派发action, 到store
-                dispatch(handleEchartsData(result))
+                // console.log('::::::::-------', result)
+                if (result.code == 1) {
+                    message.error('暂无数据, 请稍后再试 !')
+                } else {
+                    // 将后台请求过来的成功数据, 派发action, 到store
+                    dispatch(handleEchartsData(result))
+                }
             })
             .catch((err) => {
                 message.error('获取数据失败, 请稍后再试 !')
