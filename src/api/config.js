@@ -55,7 +55,8 @@ export const API_CONFIG = {
     downloadfile: [
         '/v3/downloadfile',
         'post'
-    ],    // lotus help页面 文件上传的回调接口
+    ],
+    // lotus help页面 文件上传的回调接口
     getUpLoadCallBack: [
         '/v3/checkfile',
         'post'
