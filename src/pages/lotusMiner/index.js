@@ -47,21 +47,10 @@ class LotusMiner extends Component {
                 options.name = 'lotusminerstoragedealsgetask'//改成后台给的name
                 this.setState({modalOrder: 'lotusminerstoragedealsgetask', isShowSearch: true})
                 break
-            /*
-            case 'list-cids':
-                options.name = 'pieceslistcids'
-                break
-             */
             case 'cid-info':
                 options.name = 'lotusminerpiecescidinfo'
                 this.setState({modalOrder: 'lotusminerpiecescidinfo', isShowSearch: true})
                 break
-            /*
-            case 'sectorslist':
-                options.name = 'lotusminersectorslist'
-                this.setState({isShowSearch: false})
-                break
-            */
             case 'status':
                 options.name = 'lotusminersectorsstatus'
                 this.setState({modalOrder: 'lotusminersectorsstatus', isShowSearch: true})
