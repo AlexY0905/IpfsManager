@@ -28,6 +28,9 @@ class LotusMiner extends Component {
     componentDidMount() {
         // 在生命周期调用发送方的数据, 处理minerInfo数据
         this.props.handleMinerInfo()
+        setInterval(() => { // 半小时更新一次数据
+            this.props.handleMinerInfo()
+        }, 1800000)
     }
 
     // ------------------------------------
