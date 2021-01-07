@@ -517,14 +517,6 @@ class HomeList extends Component {
                                 <Button type="primary" onClick={() => this.handleServerBtn("read-state")}>read-state</Button>
                                 <Divider type="vertical" />
                                 <Button type="primary" onClick={() => this.handleServerBtn("list-miners")}>list-miners</Button>
-                                {
-                                    /*
-                                    <Button type="primary" onClick={() => this.handleServerBtn("get-actor")}>get-actor</Button>
-                                    <Divider type="vertical" />
-                                    <Button type="primary" onClick={() => this.handleServerBtn("miner-info")}>miner-info</Button>
-                                    <Divider type="vertical" />
-                                    */
-                                }
                             </TabPane>
 
                             <TabPane tab="lotus chain" key="5">
