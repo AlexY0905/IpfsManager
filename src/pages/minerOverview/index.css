@@ -1,0 +1,81 @@
+.overview_wrap {
+    padding: 10px 20px;
+    display: flex;
+}
+.overview_wrap .overview_left {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    height: 230px;
+    margin-right: 20px;
+    border: 1px solid #e2e8f0;
+}
+.overview_msg {
+    padding-top: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.overview_msg h2 {
+    margin-bottom: 0;
+}
+.overview_msg .account-balance {
+    font-size: 24px;
+    font-weight: 700;
+}
+.overview_msg .charts_msg_num p {
+    font-weight: 700;
+}
+.overview_wrap .overview_right {
+    flex: 1;
+    height: 230px;
+    border: 1px solid #e2e8f0;
+    box-sizing: border-box;
+    padding: 20px 20px;
+}
+.overview_right h2 {
+    margin-bottom: 0;
+}
+.power_wrap .power_num {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.power_num span {
+    font-weight: 700;
+}
+.power_msg_wrap {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.power_msg_left,.power_msg_right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-weight: 700;
+}
+.status_msg_wrap {
+    margin-top: 20px;
+}
+.status_msg_wrap .status_msg_content {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+}
+.statistics_wrap {
+    box-sizing: border-box;
+    padding: 0 20px;
+}
+.statistics_wrap .statistics_title_wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+}
+.statistics_wrap .statistics_msg {
+    width: 100%;
+    height: 200px;
+    border: 1px solid #e2e8f0;
+}

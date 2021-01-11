@@ -42,6 +42,9 @@ class HomeSider extends Component {
                             <Menu.Item key="1.2">
                                 <NavLink exact to='/lotusminer'><Icon type="laptop" /> lotus-miner</NavLink>
                             </Menu.Item>
+                            <Menu.Item key="1.3">
+                                <NavLink exact to='/minerOverview'><Icon type="laptop" /> 矿工概览</NavLink>
+                            </Menu.Item>
                         </SubMenu>
 
                         <SubMenu
