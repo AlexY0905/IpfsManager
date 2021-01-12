@@ -1,4 +1,4 @@
-// 批量命令页面
+// 矿工概览页面
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import "./index.css"
@@ -6,6 +6,7 @@ import { actionCreator } from './store'
 import Layout from 'common/layout'
 import { Breadcrumb, Table, Button, Radio } from 'antd'
 import { Pie } from '@ant-design/charts';
+import { Chart, Geom, Axis, Tooltip, Legend } from "bizcharts";
 
 
 class MinerOverview extends Component {
@@ -13,13 +14,21 @@ class MinerOverview extends Component {
         super(props)
         this.textAreaIpt = React.createRef()
         this.state = {
-
+            accountBalance: '', // 账户余额
+            availableBalance: '', // 可用余额
+            sectorMortgage: '', // 扇区抵押
+            miningLock: '' // 挖矿锁仓
         }
         this.handleRadioChange = this.handleRadioChange.bind(this)
     }
     componentDidMount() {
-        // 调用发送方的数据 显示服务器列表
-        // this.props.handleGetServerHostData()
+        // 调用发送方函数, 处理矿工概览饼形图数据
+        this.props.handleOverviewEchartsData()
+        // 调用发送方函数, 处理有效算力折线图数据
+        this.props.handleEchartsData()
+        setInterval(() => {
+            this.props.handleEchartsData()
+        }, 7800000)
     }
     handleRadioChange (val) {
         console.log('val---------', val.target.value)
@@ -28,25 +37,24 @@ class MinerOverview extends Component {
 
 
     render() {
-        const { serverhostlist, ipsshtxt } = this.props
-        let data = [
-            {
-                type: '可用余额',
-                value: 146.9657
-            },
-            {
-                type: '扇区抵押',
-                value: 3575.7056
-            },
-            {
-                type: '挖矿锁仓',
-                value: 1599.8182
-            }
-        ]
-
+        const { accountBalance, overviewEchartsDataList, powerEchartsDataList } = this.props
+        let overviewEchartsData = []
+        let overviewDataHtml = []
+        if (overviewEchartsDataList.toJS().length > 0) {
+            overviewEchartsData = overviewEchartsDataList.toJS()
+            overviewDataHtml = overviewEchartsData.map((item, index) => {
+                if (item.type == '可用余额') {
+                    return (<p>可用余额: {item.value} FIL</p>)
+                } else if (item.type == '扇区抵押') {
+                    return (<p>扇区抵押: {item.value} FIL</p>)
+                } else if (item.type == '挖矿锁仓') {
+                    return (<p>挖矿锁仓: {item.value} FIL</p>)
+                }
+            })
+        }
         let config = {
             appendPadding: 10,
-            data: data,
+            data: overviewEchartsData,
             angleField: 'value',
             colorField: 'type',
             radius: 1,
@@ -79,6 +87,21 @@ class MinerOverview extends Component {
                 }
             }
         }
+        let powerEchartsData = []
+        if (powerEchartsDataList.toJS().length > 0) {
+            powerEchartsData = powerEchartsDataList.toJS();
+        }
+        const cols = {
+            time: {
+                nice: true,
+                alias: "时间"
+            },
+            miner_power_quality: {
+                nice: true,
+                alias: "有效算力"
+            }
+        }
+
         return (
             <div className="News">
                 <Layout>
@@ -93,11 +116,11 @@ class MinerOverview extends Component {
                                 </div>
                                 <div className="overview_msg">
                                     <h2>账户余额</h2>
-                                    <p className="account-balance">5,322.7003 FIL</p>
+                                    <p className="account-balance">{accountBalance && accountBalance}</p>
                                     <div className="charts_msg_num">
-                                        <p>可用余额: 146.9657 FIL</p>
-                                        <p>扇区抵押: 3,575.7056 FIL</p>
-                                        <p>挖矿锁仓: 1,599.8182 FIL</p>
+                                        {
+                                            overviewDataHtml.length > 0 && overviewDataHtml
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -150,9 +173,61 @@ class MinerOverview extends Component {
                                 </div>
                             </div>
                             <div className="statistics_msg">
-
+                                <div>
+                                    <p>算力增量: 5.56 TiB</p>
+                                    <p>出块数量: 2</p>
+                                    <p>挖矿效率: 0.0745 FIL/TiB</p>
+                                </div>
+                                <div>
+                                    <p>算力增速: 5.56 TiB / 天</p>
+                                    <p>出块份数: 2</p>
+                                    <p>抽查成本: 0.0001 FIL/TiB</p>
+                                </div>
+                                <div>
+                                    <p>矿机当量: 48.35</p>
+                                    <p>出块奖励 (占比): 36.4051 FIL (0.01%)</p>
+                                    <p>幸运值: 55.01%</p>
+                                </div>
                             </div>
                         </div>
+                        <div style={{width: '100%'}}>
+                            <Chart height={400} data={powerEchartsData} scale={cols} forceFit padding={[ 20, 100, 20, 100 ]}>
+                                <Axis
+                                    name="time"
+                                    line={{
+                                        stroke: "#E6E6E6"
+                                    }}
+                                />
+                                <Axis
+                                    name="miner_power_quality"
+                                    label={{
+                                        formatter: val => `${val} TiB`
+                                    }}
+                                />
+                                <Tooltip />
+                                <Legend />
+                                <Geom
+                                    type="line"
+                                    position="time*miner_power_quality"
+                                    size={1}
+                                    color="l (270) 0:rgba(255, 146, 255, 1) .5:rgba(100, 268, 255, 1) 1:rgba(215, 0, 255, 1)"
+                                    shape="smooth"
+                                    style={{
+                                        shadowColor: "l (270) 0:rgba(21, 146, 255, 0)",
+                                        shadowBlur: 60,
+                                        shadowOffsetY: 6
+                                    }}
+                                    tooltip={['time*miner_power_quality', (time, miner_power_quality) => {
+                                        return {
+                                            name: '有效算力',
+                                            title: time,
+                                            value: miner_power_quality + ' TiB'
+                                        };
+                                    }]}
+                                />
+                            </Chart>
+                        </div>
+
                     </div>
                 </Layout>
             </div>
@@ -162,14 +237,20 @@ class MinerOverview extends Component {
 
 // 接收方
 const mapStateToProps = (state) => ({
-    isLoading: state.get('minerOverview').get('isLoading')
+    isLoading: state.get('minerOverview').get('isLoading'),
+    overviewEchartsDataList: state.get('minerOverview').get('overviewEchartsDataList'),
+    accountBalance: state.get('minerOverview').get('accountBalance'),
+    powerEchartsDataList: state.get('minerOverview').get('powerEchartsDataList')
 })
 
 
 // 发送方
 const mapDispatchToProps = (dispatch) => ({
-    handleGetServerHostData: () => { // 处理获取服务器数据列表
-        dispatch(actionCreator.handleGetServerHostDataAction())
+    handleOverviewEchartsData: () => {
+        dispatch(actionCreator.handleOverviewEchartsDataAction())
+    },
+    handleEchartsData: () => {
+        dispatch(actionCreator.handleEchartsDataAction())
     }
 })
 

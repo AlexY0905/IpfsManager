@@ -4,7 +4,9 @@ import { fromJS } from 'immutable';
 
 const defaultState = fromJS({
     isLoading: false,
-    serverhostlist: []
+    overviewEchartsDataList: [],
+    accountBalance: '',
+    powerEchartsDataList: []
 })
 
 export default (state = defaultState, action) => {
@@ -20,12 +22,17 @@ export default (state = defaultState, action) => {
             isLoading: false
         })
     }
-
-    // 处理展示服务器功能
-    if (action.type == types.GET_SERVERHOSTLIST) {
+    // 处理矿工概览饼形图数据
+    if (action.type == types.GET_OVERVIEWCHARTSDATA) {
         return state.merge({
-            // action参数, 就是actionCreator.js中, 请求数据成功之后的.then函数中派发的action
-            serverhostlist: fromJS(action.payload)// 将数据数组转换成immutable
+            accountBalance: action.payload.accountBalance,
+            overviewEchartsDataList: fromJS(action.payload.overviewEchartsData), // 将数据数组转换成immutable
+        })
+    }
+    // 处理有效算力折线图
+    if (action.type == types.GET_POWERECHARTSDATA) {
+        return state.merge({
+            powerEchartsDataList: fromJS(action.payload.msg), // 将数据数组转换成immutable
         })
     }
     return state

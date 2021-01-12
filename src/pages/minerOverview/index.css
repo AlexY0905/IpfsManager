@@ -76,6 +76,23 @@
 }
 .statistics_wrap .statistics_msg {
     width: 100%;
-    height: 200px;
+    box-sizing: border-box;
+    padding: 20px;
     border: 1px solid #e2e8f0;
+}
+.statistics_msg {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.statistics_msg div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.statistics_msg div p {
+    font-weight: 700;
+}
+.statistics_msg div p:last-child {
+    margin-bottom: 0;
 }

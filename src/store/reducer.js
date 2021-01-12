@@ -9,7 +9,7 @@ import { reducer as ipsshReducer } from 'pages/ipssh/store/index'
 import { reducer as addGroupReducer } from 'pages/addGroup/store/index'
 import { reducer as groupingReducer } from 'pages/grouping/store/index'
 import { reducer as lotusMinerReducer } from 'pages/lotusMiner/store/index'
-import { reducer as minerOverviewReducer } from 'pages/lotusMiner/store/index'
+import { reducer as minerOverviewReducer } from 'pages/minerOverview/store/index'
 
 // 顶层store    所以子页面的reducer的文件都需要引入到这个顶层的reducer中
 export default combineReducers({
