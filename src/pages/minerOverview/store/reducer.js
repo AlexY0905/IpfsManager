@@ -6,7 +6,9 @@ const defaultState = fromJS({
     isLoading: false,
     overviewEchartsDataList: [],
     accountBalance: '',
-    powerEchartsDataList: []
+    powerEchartsDataList: [],
+    overviewPowerData: '',
+    miningCountsData: ''
 })
 
 export default (state = defaultState, action) => {
@@ -29,6 +31,19 @@ export default (state = defaultState, action) => {
             overviewEchartsDataList: fromJS(action.payload.overviewEchartsData), // 将数据数组转换成immutable
         })
     }
+    // 处理矿工概览有效算力数据
+    if (action.type == types.GET_OVERVIEWPOWERDATA) {
+        return state.merge({
+            overviewPowerData: action.payload
+        })
+    }
+    // 处理挖矿统计数据
+    if (action.type == types.GET_MININGCOUNTS) {
+        return state.merge({
+            miningCountsData: action.payload
+        })
+    }
+
     // 处理有效算力折线图
     if (action.type == types.GET_POWERECHARTSDATA) {
         return state.merge({

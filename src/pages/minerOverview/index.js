@@ -4,40 +4,75 @@ import { connect } from 'react-redux'
 import "./index.css"
 import { actionCreator } from './store'
 import Layout from 'common/layout'
-import { Breadcrumb, Table, Button, Radio } from 'antd'
+import { Breadcrumb, Spin, Radio } from 'antd'
 import { Pie } from '@ant-design/charts';
 import { Chart, Geom, Axis, Tooltip, Legend } from "bizcharts";
 
-
+let overviewIsOne = true
+let miningIsOne = true
 class MinerOverview extends Component {
     constructor(props) {
         super(props)
         this.textAreaIpt = React.createRef()
         this.state = {
-            accountBalance: '', // 账户余额
-            availableBalance: '', // 可用余额
-            sectorMortgage: '', // 扇区抵押
-            miningLock: '' // 挖矿锁仓
+            avialiablePower: '',
+            blocksMined: '',
+            powerRank: '',
+            powerRate: '',
+            realityPower: '',
+            storageSize: '',
+            totalRewards: '',
+            storage: {
+                active: '',
+                faulty: '',
+                live: '',
+                recovering: ''
+            },
+            powerIncrease: '', // 算力增量
+            powerIncreaseRate: '', // 算力增速
+            equivalentMiners: '', // 矿机当量
+            blocksMineds: '', // 出块数量
+            weightedBlocksMined: '', // 出块份数
+            totalReward: '', // 出块奖励
+            rewardPer: '', // 挖矿效率
+            windowedPoStFeePer: '', // 抽查成本
+            lunckValue: '' // 幸运值
         }
         this.handleRadioChange = this.handleRadioChange.bind(this)
     }
     componentDidMount() {
         // 调用发送方函数, 处理矿工概览饼形图数据
-        this.props.handleOverviewEchartsData()
+        let options = {name: 'minerdetail'}
+        this.props.handleOverviewEchartsData(options)
+        // 调用发送方函数, 处理挖矿数据
+        let miningOptions = {name: 'powerchanges', time: ''}
+        this.props.handleMiningCounts(miningOptions)
         // 调用发送方函数, 处理有效算力折线图数据
         this.props.handleEchartsData()
         setInterval(() => {
+            this.props.handleOverviewEchartsData(options)
+            this.props.handleMiningCounts(miningOptions)
             this.props.handleEchartsData()
         }, 7800000)
     }
     handleRadioChange (val) {
         console.log('val---------', val.target.value)
+        let options = {
+            name: 'powerchanges',
+            time: val.target.value
+        }
+        console.log('options---------', options);
+        return
+        // 调用发送方函数, 处理各个时间段的数据
+        this.props.handleMiningCounts(options)
     }
 
 
 
     render() {
-        const { accountBalance, overviewEchartsDataList, powerEchartsDataList } = this.props
+        const { accountBalance, overviewEchartsDataList, overviewPowerData, miningCountsData, powerEchartsDataList } = this.props
+        // ---------------------------------------------- 矿工概览数据 --------------------------------------------
+        // 饼形图数据开始
         let overviewEchartsData = []
         let overviewDataHtml = []
         if (overviewEchartsDataList.toJS().length > 0) {
@@ -73,7 +108,7 @@ class MinerOverview extends Component {
                 }
             },
             style: {
-                width: '200px',
+                width: '220px',
                 height: '200px'
             },
             legend: false,
@@ -87,6 +122,48 @@ class MinerOverview extends Component {
                 }
             }
         }
+        // 饼形图数据结束
+        // 有效算力数据开始
+        if (overviewPowerData != '' && overviewIsOne) {
+            console.log(333333333, overviewPowerData)
+            this.setState({
+                avialiablePower: overviewPowerData.AvialiablePower,
+                blocksMined: overviewPowerData.BlocksMined,
+                powerRank: overviewPowerData.PowerRank,
+                powerRate: overviewPowerData.PowerRate,
+                realityPower: overviewPowerData.RealityPower,
+                storageSize: overviewPowerData.StorageSize,
+                totalRewards: overviewPowerData.TotalRewards,
+                storage: {
+                    active: overviewPowerData.Storage.Active,
+                    faulty: overviewPowerData.Storage.Faulty,
+                    live: overviewPowerData.Storage.Live,
+                    recovering: overviewPowerData.Storage.Recovering
+                }
+            })
+            overviewIsOne = false
+        }
+        // 有效算力数据结束
+        // ---------------------------------------------- 矿工概览数据 --------------------------------------------
+        // ---------------------------------------------- 挖矿统计数据 --------------------------------------------
+        if (miningCountsData != '' && miningIsOne) {
+            console.log('miningCountsData=============', miningCountsData);
+            this.setState({
+                powerIncrease: miningCountsData.PowerIncrease, // 算力增量
+                powerIncreaseRate: miningCountsData.PowerIncreaseRate, // 算力增速
+                equivalentMiners: miningCountsData.EquivalentMiners, // 矿机当量
+                blocksMineds: miningCountsData.BlocksMined, // 出块数量
+                weightedBlocksMined: miningCountsData.WeightedBlocksMined, // 出块份数
+                totalReward: miningCountsData.TotalRewards, // 出块奖励
+                rewardPer: miningCountsData.RewardPer, // 挖矿效率
+                windowedPoStFeePer: miningCountsData.WindowedPoStFeePer, // 抽查成本
+                lunckValue: miningCountsData.LunckValue // 幸运值
+            })
+            miningIsOne = false
+        }
+        // ---------------------------------------------- 挖矿统计数据 --------------------------------------------
+
+        // ---------------------------------------------- 有效算力折线图数据 ----------------------------------------
         let powerEchartsData = []
         if (powerEchartsDataList.toJS().length > 0) {
             powerEchartsData = powerEchartsDataList.toJS();
@@ -101,6 +178,7 @@ class MinerOverview extends Component {
                 alias: "有效算力"
             }
         }
+        // ---------------------------------------------- 有效算力折线图数据 ----------------------------------------
 
         return (
             <div className="News">
@@ -109,6 +187,9 @@ class MinerOverview extends Component {
                         <Breadcrumb.Item style={{paddingLeft: '18px'}}>矿工概览</Breadcrumb.Item>
                     </Breadcrumb>
                     <div className="content">
+                        {
+                            this.props.isLoading && <div className="spin_wrap"><Spin spinning={this.props.isLoading} /></div>
+                        }
                         <div className="overview_wrap">
                             <div className="overview_left">
                                 <div style={{marginRight: '30px'}}>
@@ -128,29 +209,29 @@ class MinerOverview extends Component {
                                 <div className="power_wrap">
                                     <h2>有效算力</h2>
                                     <div className="power_num">
-                                        <span style={{fontSize: '24px'}}>487.97 TiB</span>
-                                        <span>占比: 0.03%</span>
-                                        <span>排名: 417</span>
+                                        <span style={{fontSize: '24px'}}>{this.state.avialiablePower != '' && this.state.avialiablePower}</span>
+                                        <span>占比: {this.state.powerRate != '' && this.state.powerRate}</span>
+                                        <span>排名: {this.state.powerRank != '' && this.state.powerRank}</span>
                                     </div>
                                 </div>
                                 <div className="power_msg_wrap">
                                     <div className="power_msg_left">
-                                        <p>原值算力: 487.97 TiB</p>
-                                        <p style={{marginBottom: '0'}}>累计出块奖励: 2,581.00 FIL</p>
+                                        <p>原值算力: {this.state.realityPower != '' && this.state.realityPower}</p>
+                                        <p style={{marginBottom: '0'}}>累计出块奖励: {this.state.totalRewards != '' && this.state.totalRewards}</p>
                                     </div>
                                     <div className="power_msg_right">
-                                        <p>累计出块份数: 162</p>
-                                        <p style={{marginBottom: '0'}}>扇区大小: 32 GiB</p>
+                                        <p>累计出块份数: {this.state.blocksMined != '' && this.state.blocksMined}</p>
+                                        <p style={{marginBottom: '0'}}>扇区大小: {this.state.storageSize != '' && this.state.storageSize}</p>
                                     </div>
                                 </div>
                                 <div className="status_msg_wrap">
                                     <div className="status_msg_content">
                                         <div>扇区状态:</div>
                                         <div>
-                                            <span>15,622 全部, </span>
-                                            <span style={{color: '#38a169'}}>15,615 有效, </span>
-                                            <span style={{color: '#c53030'}}>0 错误, </span>
-                                            <span style={{color: '#ecc94b'}}>0 恢复中</span>
+                                            <span>{this.state.storage.live != '' && this.state.storage.live} 全部, </span>
+                                            <span style={{color: '#38a169'}}>{this.state.storage.active != '' && this.state.storage.active} 有效, </span>
+                                            <span style={{color: '#c53030'}}>{this.state.storage.faulty != '' ? this.state.storage.faulty : 0} 错误, </span>
+                                            <span style={{color: '#ecc94b'}}>{this.state.storage.recovering != '' ? this.state.storage.recovering : 0} 恢复中</span>
                                         </div>
                                     </div>
                                 </div>
@@ -164,29 +245,29 @@ class MinerOverview extends Component {
                                     </Breadcrumb>
                                 </div>
                                 <div>
-                                    <Radio.Group defaultValue="24h" buttonStyle="solid" onChange={this.handleRadioChange}>
-                                        <Radio.Button value="24h">24h</Radio.Button>
-                                        <Radio.Button value="7天">7天</Radio.Button>
-                                        <Radio.Button value="30天">30天</Radio.Button>
-                                        <Radio.Button value="1年">1年</Radio.Button>
+                                    <Radio.Group defaultValue="24" buttonStyle="solid" onChange={this.handleRadioChange}>
+                                        <Radio.Button value="24">24h</Radio.Button>
+                                        <Radio.Button value="7">7天</Radio.Button>
+                                        <Radio.Button value="30">30天</Radio.Button>
+                                        <Radio.Button value="1">1年</Radio.Button>
                                     </Radio.Group>
                                 </div>
                             </div>
                             <div className="statistics_msg">
                                 <div>
-                                    <p>算力增量: 5.56 TiB</p>
-                                    <p>出块数量: 2</p>
-                                    <p>挖矿效率: 0.0745 FIL/TiB</p>
+                                    <p>算力增量: {this.state.powerIncrease != '' && this.state.powerIncrease}</p>
+                                    <p>出块数量: {this.state.blocksMineds != '' && this.state.blocksMineds}</p>
+                                    <p>挖矿效率: {this.state.rewardPer != '' && this.state.rewardPer}</p>
                                 </div>
                                 <div>
-                                    <p>算力增速: 5.56 TiB / 天</p>
-                                    <p>出块份数: 2</p>
-                                    <p>抽查成本: 0.0001 FIL/TiB</p>
+                                    <p>算力增速: {this.state.powerIncreaseRate != '' && this.state.powerIncreaseRate}</p>
+                                    <p>出块份数: {this.state.weightedBlocksMined != '' && this.state.weightedBlocksMined}</p>
+                                    <p>抽查成本: {this.state.windowedPoStFeePer != '' && this.state.windowedPoStFeePer}</p>
                                 </div>
                                 <div>
-                                    <p>矿机当量: 48.35</p>
-                                    <p>出块奖励 (占比): 36.4051 FIL (0.01%)</p>
-                                    <p>幸运值: 55.01%</p>
+                                    <p>矿机当量: {this.state.equivalentMiners != '' && this.state.equivalentMiners}</p>
+                                    <p>出块奖励 (占比): {this.state.totalReward != '' && this.state.totalReward}</p>
+                                    <p>幸运值: {this.state.lunckValue != '' && this.state.lunckValue}</p>
                                 </div>
                             </div>
                         </div>
@@ -240,17 +321,22 @@ const mapStateToProps = (state) => ({
     isLoading: state.get('minerOverview').get('isLoading'),
     overviewEchartsDataList: state.get('minerOverview').get('overviewEchartsDataList'),
     accountBalance: state.get('minerOverview').get('accountBalance'),
-    powerEchartsDataList: state.get('minerOverview').get('powerEchartsDataList')
+    powerEchartsDataList: state.get('minerOverview').get('powerEchartsDataList'),
+    overviewPowerData: state.get('minerOverview').get('overviewPowerData'),
+    miningCountsData: state.get('minerOverview').get('miningCountsData')
 })
 
 
 // 发送方
 const mapDispatchToProps = (dispatch) => ({
-    handleOverviewEchartsData: () => {
-        dispatch(actionCreator.handleOverviewEchartsDataAction())
+    handleOverviewEchartsData: (options) => {
+        dispatch(actionCreator.handleOverviewEchartsDataAction(options))
     },
     handleEchartsData: () => {
         dispatch(actionCreator.handleEchartsDataAction())
+    },
+    handleMiningCounts: (options) => {
+        dispatch(actionCreator.handleMiningCountsAction(options))
     }
 })
 

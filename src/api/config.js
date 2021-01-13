@@ -121,7 +121,7 @@ export const API_CONFIG = {
         '/v7/lotusresult',
         'post'
     ],
-    // 矿工概览页面 获取概览饼形图数据接口
+    // 矿工概览页面 数据接口
     getOverviewData: [
         '/v6/minersummary',
         'get'

@@ -96,3 +96,10 @@
 .statistics_msg div p:last-child {
     margin-bottom: 0;
 }
+.spin_wrap {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+    padding: 30px 50px;
+    margin: 20px 0;
+}
