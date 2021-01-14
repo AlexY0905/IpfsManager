@@ -442,6 +442,7 @@ class OverviewList extends Component {
                                     </Radio.Group>
                                 </div>
                                 {
+                                    /*  有问题
                                     newListSelectData.toJS().length > 0 && (
                                         <div className="top_right_wrap">
                                             <Select defaultValue="全部" style={{ width: 200 }} onChange={this.handleNewListSelectChange}>
@@ -454,6 +455,7 @@ class OverviewList extends Component {
                                             </Select>
                                         </div>
                                     )
+                                     */
                                 }
                             </div>
                             <div className="newList_bottom_wrap">
