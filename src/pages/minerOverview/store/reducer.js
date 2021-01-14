@@ -8,7 +8,10 @@ const defaultState = fromJS({
     accountBalance: '',
     powerEchartsDataList: [],
     overviewPowerData: '',
-    miningCountsData: ''
+    miningCountsData: '',
+    newListData: [],
+    newListSelectData: [],
+    totalCount: ''
 })
 
 export default (state = defaultState, action) => {
@@ -43,12 +46,20 @@ export default (state = defaultState, action) => {
             miningCountsData: action.payload
         })
     }
-
     // 处理有效算力折线图
     if (action.type == types.GET_POWERECHARTSDATA) {
         return state.merge({
-            powerEchartsDataList: fromJS(action.payload.msg), // 将数据数组转换成immutable
+            powerEchartsDataList: fromJS(action.payload.msg) // 将数据数组转换成immutable
         })
     }
+    // 处理消息列表数据
+    if (action.type == types.GET_NEWLISTDATA) {
+        return state.merge({
+            newListData: action.payload.MinerMessages && fromJS(action.payload.MinerMessages) || action.payload.MinerBlocks && fromJS(action.payload.MinerBlocks) || action.payload.AccountTransfers && fromJS(action.payload.AccountTransfers), // 将数据数组转换成immutable
+            newListSelectData: action.payload.Methods ? fromJS(action.payload.Methods) : fromJS([]), // 将数据数组转换成immutable
+            totalCount: action.payload.TotalCount
+        })
+    }
+
     return state
 }

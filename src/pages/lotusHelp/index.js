@@ -186,11 +186,15 @@ class LotusHelp extends Component {
                         </div>
                     </div>
                     <div style={{width: '100%'}}>
-                        <div style={{position: 'relative'}}>
-                            <div className='spin_wrap'>
-                                <Spin spinning={this.props.isLoading} tip='脚本执行中 ...' />
-                            </div>
-                        </div>
+                        {
+                            this.props.isLoading && (
+                                <div style={{position: 'relative'}}>
+                                    <div className='spin_wrap'>
+                                        <Spin spinning={this.props.isLoading} tip='脚本执行中 ...' />
+                                    </div>
+                                </div>
+                            )
+                        }
                         <Tabs defaultActiveKey="1" onChange={this.handleCallback}>
                             <TabPane tab="部署" key="1">
                                 <Button type="primary" onClick={() => this.handleDeployBtn('编译')} disabled={this.state.bianYiBtn}>编译</Button>

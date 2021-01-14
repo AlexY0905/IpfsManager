@@ -103,3 +103,53 @@
     padding: 30px 50px;
     margin: 20px 0;
 }
+.newList_wrap {
+    margin-top: 100px;
+    box-sizing: border-box;
+    padding: 0 20px;
+}
+.newList_wrap .newList_top_wrap {
+    display: flex;
+    justify-content: space-between;
+}
+.txt_color {
+    color: #1a4fc9;
+}
+.txt_bolder {
+    font-weight: 700;
+}
+.text_title {
+    font-weight: 700;
+    color: #718096;
+}
+.accountOverview_wrap {
+    margin-top: 100px;
+    box-sizing: border-box;
+    padding: 0 20px;
+}
+.accountOverview_wrap .accountMsg_wrap {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #e2e8f0;
+    box-sizing: border-box;
+    padding: 20px;
+}
+.accountOverview_wrap .accountMsg_wrap div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 150px;
+}
+.accountOverview_wrap .accountMsg_wrap div p {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+.accountOverview_wrap .accountMsg_wrap div p:last-child {
+    margin-bottom: 0;
+}
+.accountOverview_wrap .accountMsg_wrap .account_left {
+    margin-right: 20px;
+}
