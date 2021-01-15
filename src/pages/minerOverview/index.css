@@ -98,7 +98,7 @@
 }
 .spin_wrap {
     text-align: center;
-    background: rgba(0, 0, 0, 0.05);
+    /*background: rgba(0, 0, 0, 0.05);*/
     border-radius: 4px;
     padding: 30px 50px;
     margin: 20px 0;
@@ -152,4 +152,31 @@
 }
 .accountOverview_wrap .accountMsg_wrap .account_left {
     margin-right: 20px;
+}
+.cursor_hover {
+    cursor: pointer;
+}
+.cursor_hover:hover {
+    color: #1a4fc9;
+}
+.message_overview_wrap {
+    box-sizing: border-box;
+    padding: 0 20px;
+}
+.message_overview_wrap .messageDetail_content {
+    width: 80%;
+}
+.message_overview_wrap .messageDetail_content p {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+ }
+.message_overview_wrap .messageDetail_content p span:nth-child(1) {
+    flex: 0.5;
+    color: #718096;
+}
+.message_overview_wrap .messageDetail_content p span:last-child {
+    flex: 2.5;
+    text-align: left;
+    color: #000000;
 }

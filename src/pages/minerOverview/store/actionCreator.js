@@ -113,7 +113,28 @@ export const handleEchartsDataAction = () => {
             })
     }
 }
-
+// 处理账户概览数据
+const handleAccountData = (payload) => ({
+    type: types.GET_ACCOUNTDATA,
+    payload: payload
+})
+export const handleAccountDataAction = (options) => {
+    return (dispatch, getState) => {
+        dispatch(getIsLoadingStart())
+        api.getOverviewData(options)
+            .then((result) => {
+                console.log('::::::::-------', result)
+                // 将后台请求过来的成功数据, 派发action, 到store
+                dispatch(handleAccountData(result.msg))
+            })
+            .catch((err) => {
+                message.error('获取数据失败, 请稍后再试 !')
+            })
+            .finally(() => {
+                dispatch(getIsLoadingEnd())
+            })
+    }
+}
 // 处理消息列表数据
 const handleNewListData = (payload) => ({
     type: types.GET_NEWLISTDATA,

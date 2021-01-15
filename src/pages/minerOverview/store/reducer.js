@@ -11,7 +11,8 @@ const defaultState = fromJS({
     miningCountsData: '',
     newListData: [],
     newListSelectData: [],
-    totalCount: ''
+    totalCount: '',
+    accountOverviewData: ''
 })
 
 export default (state = defaultState, action) => {
@@ -50,6 +51,12 @@ export default (state = defaultState, action) => {
     if (action.type == types.GET_POWERECHARTSDATA) {
         return state.merge({
             powerEchartsDataList: fromJS(action.payload.msg) // 将数据数组转换成immutable
+        })
+    }
+    // 处理账户概览数据
+    if (action.type == types.GET_ACCOUNTDATA) {
+        return state.merge({
+            accountOverviewData: action.payload
         })
     }
     // 处理消息列表数据

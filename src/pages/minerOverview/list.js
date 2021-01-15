@@ -58,6 +58,9 @@ class OverviewList extends Component {
         this.props.handleMiningCounts(miningOptions)
         // 调用发送方函数, 处理有效算力折线图数据
         this.props.handleEchartsData()
+        // 调用发送方函数, 处理账户概览数据
+        let accountOptions = {name: 'accoutSummary'}
+        this.props.handleAccountData(accountOptions)
         // 调用发送方函数, 处理消息列表数据
         let newListOptions = {name: 'minermessage', page: 1}
         this.props.handleNewList(newListOptions)
@@ -65,18 +68,17 @@ class OverviewList extends Component {
             this.props.handleOverviewEchartsData(options)
             this.props.handleMiningCounts(miningOptions)
             this.props.handleEchartsData()
+            this.props.handleAccountData(accountOptions)
             this.props.handleNewList(newListOptions)
         }, 7800000)
     }
     // 处理时间单选框改变事件
     handleRadioChange (val) {
-        console.log('val---------', val.target.value)
+        miningIsOne = true
         let options = {
             name: 'powerchanges',
             time: val.target.value
         }
-        console.log('options---------', options);
-        return
         // 调用发送方函数, 处理各个时间段的数据
         this.props.handleMiningCounts(options)
     }
@@ -128,10 +130,17 @@ class OverviewList extends Component {
         this.props.handleNewList(options)
     }
     handleGoPage (val, type) {
+        if (val == 'N/A') return
         if (type == 'messageIdDetailPage') {
-            this.props.history.push({ pathname: "/minerOverview/messageIdDetail", state: { parameter: val } });
+            this.props.history.push({ pathname: "/minerOverview/messageIdDetail", state: { parameter: val } })
         } else if (type == 'heightDetailPage') {
-            this.props.history.push({ pathname: "/minerOverview/heightDetail", state: { parameter: val } });
+            this.props.history.push({ pathname: "/minerOverview/heightDetail", state: { parameter: val } })
+        } else if (type == 'senderDetailPage') {
+            this.props.history.push({ pathname: "/minerOverview/senderDetail", state: { parameter: val } })
+        } else if (type == 'blockDetailPage') {
+            this.props.history.push({ pathname: "/minerOverview/blockDetail", state: { parameter: val } })
+        } else if (type == 'nodeIdPage') {
+            this.props.history.push({ pathname: "/minerOverview/nodeIdDetail", state: { parameter: val } })
         }
     }
 
@@ -146,7 +155,8 @@ class OverviewList extends Component {
             powerEchartsDataList,
             newListData,
             newListSelectData,
-            totalCount
+            totalCount,
+            accountOverviewData
         } = this.props
         // ---------------------------------------------- 矿工概览数据 --------------------------------------------
         // 饼形图数据开始
@@ -221,22 +231,6 @@ class OverviewList extends Component {
         }
         // 有效算力数据结束
         // ---------------------------------------------- 矿工概览数据 --------------------------------------------
-        // ---------------------------------------------- 挖矿统计数据 --------------------------------------------
-        if (miningCountsData != '' && miningIsOne) {
-            this.setState({
-                powerIncrease: miningCountsData.PowerIncrease, // 算力增量
-                powerIncreaseRate: miningCountsData.PowerIncreaseRate, // 算力增速
-                equivalentMiners: miningCountsData.EquivalentMiners, // 矿机当量
-                blocksMineds: miningCountsData.BlocksMined, // 出块数量
-                weightedBlocksMined: miningCountsData.WeightedBlocksMined, // 出块份数
-                totalReward: miningCountsData.TotalRewards, // 出块奖励
-                rewardPer: miningCountsData.RewardPer, // 挖矿效率
-                windowedPoStFeePer: miningCountsData.WindowedPoStFeePer, // 抽查成本
-                lunckValue: miningCountsData.LunckValue // 幸运值
-            })
-            miningIsOne = false
-        }
-        // ---------------------------------------------- 挖矿统计数据 --------------------------------------------
 
         // ---------------------------------------------- 有效算力折线图数据 ----------------------------------------
         let powerEchartsData = []
@@ -260,11 +254,10 @@ class OverviewList extends Component {
         if (newListData.toJS().length > 0) {
             if (this.state.newListType == '' || this.state.newListType == '消息列表') {
                 columns = [
-                    // { title: () => (<span className='text_title'>消息ID</span>), className: 'txt_bolder', dataIndex: 'Cid', key: 'Cid', align: 'center', ellipsis: true, render: (Cid) => (<Link style={{color: '#000000A6'}} to={'/minerOverview/messageIdDetail/' + Cid}>{Cid}</Link>) },
-                    { title: () => (<span className='text_title'>消息ID</span>), className: 'txt_bolder', dataIndex: 'Cid', key: 'Cid', align: 'center', ellipsis: true, render: (Cid) => (<span style={{color: '#000000A6'}} onClick={ () => this.handleGoPage(Cid, 'messageIdDetailPage')}>{Cid}</span>) },
-                    { title: () => (<span className='text_title'>区块高度</span>), className: 'txt_color txt_bolder', dataIndex: 'Height', key: 'Height', align: 'center', ellipsis: true, render: (Height) => (<span style={{color: '#1a4fc9'}} onClick={ () => this.handleGoPage(Height, 'heightDetailPage')}>{Height}</span>) },
+                    { title: () => (<span className='text_title'>消息ID</span>), className: 'txt_bolder', dataIndex: 'Cid', key: 'Cid', align: 'center', ellipsis: true, render: (Cid) => (<span className="cursor_hover" onClick={ () => this.handleGoPage(Cid, 'messageIdDetailPage')}>{Cid}</span>) },
+                    { title: () => (<span className='text_title'>区块高度</span>), className: 'txt_color txt_bolder', dataIndex: 'Height', key: 'Height', align: 'center', ellipsis: true, render: (Height) => (<span className="cursor_hover" style={{color: '#1a4fc9'}} onClick={ () => this.handleGoPage(Height, 'heightDetailPage')}>{Height}</span>) },
                     { title: () => (<span className='text_title'>时间</span>), className: 'txt_bolder', dataIndex: 'TimeCreate', key: 'TimeCreate', align: 'center', ellipsis: true },
-                    { title: () => (<span className='text_title'>发送方</span>), className: 'txt_bolder', dataIndex: 'From', key: 'From', align: 'center', ellipsis: true },
+                    { title: () => (<span className='text_title'>发送方</span>), className: 'txt_bolder', dataIndex: 'From', key: 'From', align: 'center', ellipsis: true, render: (From) => (<span className="cursor_hover" onClick={ () => this.handleGoPage(From, 'senderDetailPage')}>{From}</span>) },
                     { title: () => (<span className='text_title'>接收方</span>), className: 'txt_bolder', dataIndex: 'To', key: 'To', align: 'center', ellipsis: true },
                     { title: () => (<span className='text_title'>方法</span>), className: 'txt_bolder', dataIndex: 'Method', key: 'Method', align: 'center', ellipsis: true },
                     { title: () => (<span className='text_title'>金额</span>), className: 'txt_bolder', dataIndex: 'Balance', key: 'Balance', align: 'center', ellipsis: true },
@@ -273,8 +266,8 @@ class OverviewList extends Component {
                 dataSource = newListData.toJS()
             } else if (this.state.newListType == '区块列表') {
                 columns = [
-                    { title: () => (<span className='text_title'>区块高度</span>), dataIndex: 'Height', className: 'txt_color txt_bolder', key: 'Height', align: 'center', ellipsis: true },
-                    { title: () => (<span className='text_title'>区块ID</span>), className: 'txt_bolder', dataIndex: 'Cid', key: 'Cid', align: 'center', ellipsis: true },
+                    { title: () => (<span className='text_title'>区块高度</span>), dataIndex: 'Height', className: 'txt_color txt_bolder', key: 'Height', align: 'center', ellipsis: true, render: (Height) => (<span className="cursor_hover" style={{color: '#1a4fc9'}} onClick={ () => this.handleGoPage(Height, 'heightDetailPage')}>{Height}</span>)  },
+                    { title: () => (<span className='text_title'>区块ID</span>), className: 'txt_bolder', dataIndex: 'Cid', key: 'Cid', align: 'center', ellipsis: true, render: (Cid) => (<span className="cursor_hover" onClick={ () => this.handleGoPage(Cid, 'blockDetailPage')}>{Cid}</span>) },
                     { title: () => (<span className='text_title'>奖励</span>), className: 'txt_bolder', dataIndex: 'Reward', key: 'Reward', align: 'center', ellipsis: true },
                     { title: () => (<span className='text_title'>时间</span>), className: 'txt_bolder', dataIndex: 'TimeCreate', key: 'TimeCreate', align: 'center', ellipsis: true },
                     { title: () => (<span className='text_title'>消息数</span>), className: 'txt_bolder', dataIndex: 'MessageAccounts', key: 'MessageAccounts', textAlign: 'center', ellipsis: true },
@@ -284,8 +277,8 @@ class OverviewList extends Component {
             } else if (this.state.newListType == '转账列表') {
                 columns = [
                     { title: () => (<span className='text_title'>时间</span>), className: 'txt_bolder', dataIndex: 'TimeCreate', key: 'TimeCreate', align: 'center', ellipsis: true},
-                    { title: () => (<span className='text_title'>消息ID</span>), className: 'txt_bolder', dataIndex: 'MessageId', key: 'MessageId', align: 'center', ellipsis: true },
-                    { title: () => (<span className='text_title'>发送方</span>), className: 'txt_bolder', dataIndex: 'From', key: 'From', align: 'center', ellipsis: true },
+                    { title: () => (<span className='text_title'>消息ID</span>), className: 'txt_bolder', dataIndex: 'MessageId', key: 'MessageId', align: 'center', ellipsis: true, render: (MessageId) => (<span className="cursor_hover" onClick={ () => this.handleGoPage(MessageId, 'messageIdDetailPage')}>{MessageId}</span>) },
+                    { title: () => (<span className='text_title'>发送方</span>), className: 'txt_bolder', dataIndex: 'From', key: 'From', align: 'center', ellipsis: true, render: (From) => (<span className="cursor_hover" onClick={ () => this.handleGoPage(From, 'senderDetailPage')}>{From}</span>) },
                     { title: () => (<span className='text_title'>接收方</span>), className: 'txt_bolder', dataIndex: 'To', key: 'To', align: 'center', ellipsis: true },
                     { title: () => (<span className='text_title'>净收入</span>), className: 'txt_bolder', dataIndex: 'Balance', key: 'Balance', align: 'center', ellipsis: true },
                     { title: () => (<span className='text_title'>类型</span>), className: 'txt_bolder', dataIndex: 'TransferType', key: 'TransferType', align: 'center', ellipsis: true }
@@ -293,8 +286,6 @@ class OverviewList extends Component {
                 dataSource = newListData.toJS()
             }
         }
-
-
         // ---------------------------------------------- 消息列表表格数据 ----------------------------------------
 
         return (
@@ -370,23 +361,27 @@ class OverviewList extends Component {
                                     </Radio.Group>
                                 </div>
                             </div>
-                            <div className="statistics_msg">
-                                <div>
-                                    <p>算力增量: {this.state.powerIncrease != '' && this.state.powerIncrease}</p>
-                                    <p>出块数量: {this.state.blocksMineds != '' && this.state.blocksMineds}</p>
-                                    <p>挖矿效率: {this.state.rewardPer != '' && this.state.rewardPer}</p>
-                                </div>
-                                <div>
-                                    <p>算力增速: {this.state.powerIncreaseRate != '' && this.state.powerIncreaseRate}</p>
-                                    <p>出块份数: {this.state.weightedBlocksMined != '' && this.state.weightedBlocksMined}</p>
-                                    <p>抽查成本: {this.state.windowedPoStFeePer != '' && this.state.windowedPoStFeePer}</p>
-                                </div>
-                                <div>
-                                    <p>矿机当量: {this.state.equivalentMiners != '' && this.state.equivalentMiners}</p>
-                                    <p>出块奖励 (占比): {this.state.totalReward != '' && this.state.totalReward}</p>
-                                    <p>幸运值: {this.state.lunckValue != '' && this.state.lunckValue}</p>
-                                </div>
-                            </div>
+                            {
+                                miningCountsData != '' && (
+                                    <div className="statistics_msg">
+                                        <div>
+                                            <p>算力增量: {miningCountsData.PowerIncrease}</p>
+                                            <p>出块数量: {miningCountsData.BlocksMined}</p>
+                                            <p>挖矿效率: {miningCountsData.RewardPer} FIL/TiB</p>
+                                        </div>
+                                        <div>
+                                            <p>算力增速: {miningCountsData.PowerIncreaseRate}</p>
+                                            <p>出块份数: {miningCountsData.WeightedBlocksMined}</p>
+                                            <p>抽查成本: {miningCountsData.WindowedPoStFeePer}</p>
+                                        </div>
+                                        <div>
+                                            <p>矿机当量: {miningCountsData.EquivalentMiners}</p>
+                                            <p>出块奖励 (占比): {miningCountsData.TotalRewards}</p>
+                                            <p>幸运值: {miningCountsData.LunckValue}</p>
+                                        </div>
+                                    </div>
+                                )
+                            }
                         </div>
                         <div style={{width: '100%', marginTop: '50px'}}>
                             <div>
@@ -431,6 +426,31 @@ class OverviewList extends Component {
                                     />
                                 </Chart>
                             </div>
+                        </div>
+                        <div className="accountOverview_wrap">
+                            <div>
+                                <Breadcrumb style={{ margin: '16px 0', textAlign: 'left', fontSize: '16px' }}>
+                                    <Breadcrumb.Item>账户概览</Breadcrumb.Item>
+                                </Breadcrumb>
+                            </div>
+                            {
+                                accountOverviewData != '' && (
+                                    <div className="accountMsg_wrap">
+                                        <div className="account_left">
+                                            <p><span>地址:</span><span>{accountOverviewData.Address}</span></p>
+                                            <p><span>消息数:</span><span>{accountOverviewData.MessageCount}</span></p>
+                                            <p><span>类型:</span><span>{accountOverviewData.LotusType}</span></p>
+                                            <p><span>创建时间:</span><span>{accountOverviewData.TimeCreate}</span></p>
+                                        </div>
+                                        <div className="account_right">
+                                            <p><span>节点ID:</span><span className="cursor_hover" onClick={() => this.handleGoPage(accountOverviewData.NodeID, 'nodeIdPage')}>{accountOverviewData.NodeID}</span></p>
+                                            <p><span>Owner:</span><span style={{color: '#1a4fc9', cursor: 'pointer'}} onClick={() => this.handleGoPage(accountOverviewData.Owner, 'senderDetailPage')}>{accountOverviewData.Owner}</span></p>
+                                            <p><span>Worker:</span><span style={{color: '#1a4fc9', cursor: 'pointer'}} onClick={() => this.handleGoPage(accountOverviewData.Worker, 'senderDetailPage')}>{accountOverviewData.Worker}</span></p>
+                                            <p><span>地区（公开IP）:</span><span>{accountOverviewData.Location}</span></p>
+                                        </div>
+                                    </div>
+                                )
+                            }
                         </div>
                         <div className="newList_wrap">
                             <div className="newList_top_wrap">
@@ -498,7 +518,8 @@ const mapStateToProps = (state) => ({
     miningCountsData: state.get('minerOverview').get('miningCountsData'),
     newListData: state.get('minerOverview').get('newListData'),
     newListSelectData: state.get('minerOverview').get('newListSelectData'),
-    totalCount: state.get('minerOverview').get('totalCount')
+    totalCount: state.get('minerOverview').get('totalCount'),
+    accountOverviewData: state.get('minerOverview').get('accountOverviewData')
 })
 
 
@@ -515,6 +536,9 @@ const mapDispatchToProps = (dispatch) => ({
     },
     handleNewList: (options) => {
         dispatch(actionCreator.handleNewListAction(options))
+    },
+    handleAccountData: (options) => {
+        dispatch(actionCreator.handleAccountDataAction(options))
     }
 })
 
