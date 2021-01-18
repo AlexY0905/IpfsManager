@@ -122,11 +122,11 @@ class MessageIdDetail extends Component {
                                 <p><span>Nonce</span><span>34820</span></p>
                                 <p><span>Gas Fee Cap</span><span>30.905082856 nanoFIL</span></p>
                                 <p><span>Gas Premium</span><span>147,153 attoFIL</span></p>
-                                <p><span>发送方</span><span>f3wu4i2wt3gbiun7iymuyn2xd2txw7gcgw5ikyjkvavyl5gle2xmi3bksqtqhxclxftlhm2k73bkkprepg6j5qlxftlhm2k73bkkprepg6j5q</span></p>
-                                <p><span>接收方</span><span>f015734</span></p>
-                                <p><span>方法</span><span>SubmitWindowedPoSt</span></p>
-                                <p><span>金额</span><span>0 FIL</span></p>
-                                <p><span>状态</span><span>OK</span></p>
+                                <p><span>Gas 限额</span><span>f3wu4i2wt3gbiun7iymuyn2xd2txw7gcgw5ikyjkvavyl5gle2xmi3bksqtqhxclxftlhm2k73bkkprepg6j5qlxftlhm2k73bkkprepg6j5q</span></p>
+                                <p><span>Gas 使用量</span><span>43,682,740</span></p>
+                                <p><span>Base Fee</span><span>6.00036921 nanoFIL</span></p>
+                                <p><span>参数</span><span>f3wu4i2wt3gbiun7iymuyn2xd2txw7gcgw5ikyjkvavyl5gle2xmi3bksqtqhxclxftlhm2k</span></p>
+                                <p><span>返回值</span><span>(无)</span></p>
                             </div>
                         </div>
                     </div>

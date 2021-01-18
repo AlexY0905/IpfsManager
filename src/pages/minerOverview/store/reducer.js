@@ -12,7 +12,8 @@ const defaultState = fromJS({
     newListData: [],
     newListSelectData: [],
     totalCount: '',
-    accountOverviewData: ''
+    accountOverviewData: '',
+    nodeDetailMsgData: ''
 })
 
 export default (state = defaultState, action) => {
@@ -65,6 +66,12 @@ export default (state = defaultState, action) => {
             newListData: action.payload.MinerMessages && fromJS(action.payload.MinerMessages) || action.payload.MinerBlocks && fromJS(action.payload.MinerBlocks) || action.payload.AccountTransfers && fromJS(action.payload.AccountTransfers), // 将数据数组转换成immutable
             newListSelectData: action.payload.Methods ? fromJS(action.payload.Methods) : fromJS([]), // 将数据数组转换成immutable
             totalCount: action.payload.TotalCount
+        })
+    }
+    // 处理节点id详情
+    if (action.type == types.GET_NODEDETAILDATA) {
+        return state.merge({
+            nodeDetailMsgData: action.payload
         })
     }
 

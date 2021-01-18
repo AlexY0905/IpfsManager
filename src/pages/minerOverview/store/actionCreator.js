@@ -157,3 +157,25 @@ export const handleNewListAction = (options) => {
             })
     }
 }
+// 处理获取节点id详情
+const handleGetNodeDetailData = (payload) => ({
+    type: types.GET_NODEDETAILDATA,
+    payload: payload
+})
+export const handleGetNodeDetailAction = (options) => {
+    return (dispatch, getState) => {
+        dispatch(getIsLoadingStart())
+        api.getOverviewData(options)
+            .then((result) => {
+                console.log('::::::::-------', result)
+                // 将后台请求过来的成功数据, 派发action, 到store
+                dispatch(handleGetNodeDetailData(result.msg))
+            })
+            .catch((err) => {
+                message.error('获取数据失败, 请稍后再试 !')
+            })
+            .finally(() => {
+                dispatch(getIsLoadingEnd())
+            })
+    }
+}

@@ -439,7 +439,7 @@ class OverviewList extends Component {
                                         <div className="account_left">
                                             <p><span>地址:</span><span>{accountOverviewData.Address}</span></p>
                                             <p><span>消息数:</span><span>{accountOverviewData.MessageCount}</span></p>
-                                            <p><span>类型:</span><span>{accountOverviewData.LotusType}</span></p>
+                                            <p><span>类型:</span><span>{accountOverviewData.AccountType}</span></p>
                                             <p><span>创建时间:</span><span>{accountOverviewData.TimeCreate}</span></p>
                                         </div>
                                         <div className="account_right">
