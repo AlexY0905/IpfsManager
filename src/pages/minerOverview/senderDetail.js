@@ -20,6 +20,12 @@ class SenderDetail extends Component {
     }
     componentDidMount() {
         console.log(1111111111111, this.props);
+        // 调用发送方函数, 处理账户概览数据
+        let options = {
+            name: 'minersummaryinfo',
+            address: this.props.location.state.parameter
+        }
+        this.props.handleAccountDetailData(options)
         // 调用发送方函数, 处理有效算力折线图数据
         this.props.handleEchartsData()
         // 调用发送方函数, 处理消息列表数据
@@ -79,7 +85,12 @@ class SenderDetail extends Component {
 
 
     render() {
-        const { powerEchartsDataList, newListData, newListSelectData, totalCount } = this.props
+        const { powerEchartsDataList, newListData, newListSelectData, totalCount, accountDetailData } = this.props
+        // ---------------------------------------------- 账户详情数据 ----------------------------------------
+        if (accountDetailData != '') {
+            console.log('accountDetailData-------------', accountDetailData)
+        }
+        // ---------------------------------------------- 账户详情数据 ----------------------------------------
         // ---------------------------------------------- 有效算力折线图数据 ----------------------------------------
         let powerEchartsData = []
         if (powerEchartsDataList.toJS().length > 0) {
@@ -139,17 +150,21 @@ class SenderDetail extends Component {
                                     <Breadcrumb.Item>账户概览</Breadcrumb.Item>
                                 </Breadcrumb>
                             </div>
-                            <div className="accountOverview_box">
-                                <p><span>地址</span><span>f3wu4i2wt3gbiun7iymuyn2xd2txw7gcgw5ikyjkvavyl5gle2xmi3bksqtqhxclxftlhm2k73bkkprepg6j5q</span></p>
-                                <p><span>ID</span><span>f015715</span></p>
-                                <p><span>类型</span><span>普通账户</span></p>
-                                <p><span>余额</span><span>313.8457448174351 FIL</span></p>
-                                <p><span>消息数</span><span>36640</span></p>
-                                <p><span>创建时间</span><span>2020-08-31 18:48:00</span></p>
-                                <p><span>最新交易</span><span>2021-01-18 14:22:00</span></p>
-                                <p><span>名下矿工</span><span>f015734</span></p>
-                                <p><span>实际工作矿工</span><span>f015734</span></p>
-                            </div>
+                            {
+                                accountDetailData != '' && (
+                                    <div className="accountOverview_box">
+                                        <p><span>地址</span><span>{accountDetailData.Address}</span></p>
+                                        <p><span>ID</span><span>{accountDetailData.ID}</span></p>
+                                        <p><span>类型</span><span>{accountDetailData.AccountType}</span></p>
+                                        <p><span>余额</span><span>{accountDetailData.Balance}</span></p>
+                                        <p><span>消息数</span><span>{accountDetailData.MessageCount}</span></p>
+                                        <p><span>创建时间</span><span>{accountDetailData.TimeCreate}</span></p>
+                                        <p><span>最新交易</span><span>{accountDetailData.TimeLastedTransaction}</span></p>
+                                        <p><span>名下矿工</span><span>{accountDetailData.Miners.length > 0 && accountDetailData.Miners.map((item, index) => (<span>{item}</span>))}</span></p>
+                                        <p><span>实际工作矿工</span><span>{accountDetailData.Workers.length > 0 && accountDetailData.Workers.map((item, index) => (<span>{item}</span>))}</span></p>
+                                    </div>
+                                )
+                            }
                         </div>
                         <div style={{width: '100%', marginTop: '50px'}}>
                             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
@@ -263,7 +278,8 @@ const mapStateToProps = (state) => ({
     powerEchartsDataList: state.get('minerOverview').get('powerEchartsDataList'),
     newListData: state.get('minerOverview').get('newListData'),
     newListSelectData: state.get('minerOverview').get('newListSelectData'),
-    totalCount: state.get('minerOverview').get('totalCount')
+    totalCount: state.get('minerOverview').get('totalCount'),
+    accountDetailData: state.get('minerOverview').get('accountDetailData')
 })
 
 
@@ -274,6 +290,9 @@ const mapDispatchToProps = (dispatch) => ({
     },
     handleNewList: (options) => {
         dispatch(actionCreator.handleNewListAction(options))
+    },
+    handleAccountDetailData: (options) => {
+        dispatch(actionCreator.handleAccountDetailDataAction(options))
     }
 })
 

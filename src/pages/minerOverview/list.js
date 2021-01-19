@@ -254,34 +254,34 @@ class OverviewList extends Component {
         if (newListData.toJS().length > 0) {
             if (this.state.newListType == '' || this.state.newListType == '消息列表') {
                 columns = [
-                    { title: () => (<span className='text_title'>消息ID</span>), className: 'txt_bolder', dataIndex: 'Cid', key: 'Cid', align: 'center', ellipsis: true, render: (Cid) => (<span className="cursor_hover" onClick={ () => this.handleGoPage(Cid, 'messageIdDetailPage')}>{Cid}</span>) },
-                    { title: () => (<span className='text_title'>区块高度</span>), className: 'txt_color txt_bolder', dataIndex: 'Height', key: 'Height', align: 'center', ellipsis: true, render: (Height) => (<span className="cursor_hover" style={{color: '#1a4fc9'}} onClick={ () => this.handleGoPage(Height, 'heightDetailPage')}>{Height}</span>) },
-                    { title: () => (<span className='text_title'>时间</span>), className: 'txt_bolder', dataIndex: 'TimeCreate', key: 'TimeCreate', align: 'center', ellipsis: true },
-                    { title: () => (<span className='text_title'>发送方</span>), className: 'txt_bolder', dataIndex: 'From', key: 'From', align: 'center', ellipsis: true, render: (From) => (<span className="cursor_hover" onClick={ () => this.handleGoPage(From, 'senderDetailPage')}>{From}</span>) },
-                    { title: () => (<span className='text_title'>接收方</span>), className: 'txt_bolder', dataIndex: 'To', key: 'To', align: 'center', ellipsis: true },
-                    { title: () => (<span className='text_title'>方法</span>), className: 'txt_bolder', dataIndex: 'Method', key: 'Method', align: 'center', ellipsis: true },
-                    { title: () => (<span className='text_title'>金额</span>), className: 'txt_bolder', dataIndex: 'Balance', key: 'Balance', align: 'center', ellipsis: true },
-                    { title: () => (<span className='text_title'>状态</span>), className: 'txt_bolder', dataIndex: 'Status', key: 'Status', align: 'center', ellipsis: true }
+                    { title: () => (<span className='text_title'>消息ID</span>), dataIndex: 'Cid', key: 'Cid', align: 'center', ellipsis: true, render: (Cid) => (<span className="cursor_hover" onClick={ () => this.handleGoPage(Cid, 'messageIdDetailPage')}>{Cid}</span>) },
+                    { title: () => (<span className='text_title'>区块高度</span>), dataIndex: 'Height', key: 'Height', align: 'center', ellipsis: true, render: (Height) => (<span className="cursor_hover" style={{color: '#1a4fc9'}} onClick={ () => this.handleGoPage(Height, 'heightDetailPage')}>{Height}</span>) },
+                    { title: () => (<span className='text_title'>时间</span>), dataIndex: 'TimeCreate', key: 'TimeCreate', align: 'center', ellipsis: true },
+                    { title: () => (<span className='text_title'>发送方</span>), dataIndex: 'From', key: 'From', align: 'center', ellipsis: true, render: (From) => (<span className="cursor_hover" onClick={ () => this.handleGoPage(From, 'senderDetailPage')}>{From}</span>) },
+                    { title: () => (<span className='text_title'>接收方</span>), dataIndex: 'To', key: 'To', align: 'center', ellipsis: true },
+                    { title: () => (<span className='text_title'>方法</span>), dataIndex: 'Method', key: 'Method', align: 'center', ellipsis: true },
+                    { title: () => (<span className='text_title'>金额</span>), dataIndex: 'Balance', key: 'Balance', align: 'center', ellipsis: true },
+                    { title: () => (<span className='text_title'>状态</span>), dataIndex: 'Status', key: 'Status', align: 'center', ellipsis: true }
                 ]
                 dataSource = newListData.toJS()
             } else if (this.state.newListType == '区块列表') {
                 columns = [
-                    { title: () => (<span className='text_title'>区块高度</span>), dataIndex: 'Height', className: 'txt_color txt_bolder', key: 'Height', align: 'center', ellipsis: true, render: (Height) => (<span className="cursor_hover" style={{color: '#1a4fc9'}} onClick={ () => this.handleGoPage(Height, 'heightDetailPage')}>{Height}</span>)  },
-                    { title: () => (<span className='text_title'>区块ID</span>), className: 'txt_bolder', dataIndex: 'Cid', key: 'Cid', align: 'center', ellipsis: true, render: (Cid) => (<span className="cursor_hover" onClick={ () => this.handleGoPage(Cid, 'blockDetailPage')}>{Cid}</span>) },
-                    { title: () => (<span className='text_title'>奖励</span>), className: 'txt_bolder', dataIndex: 'Reward', key: 'Reward', align: 'center', ellipsis: true },
-                    { title: () => (<span className='text_title'>时间</span>), className: 'txt_bolder', dataIndex: 'TimeCreate', key: 'TimeCreate', align: 'center', ellipsis: true },
-                    { title: () => (<span className='text_title'>消息数</span>), className: 'txt_bolder', dataIndex: 'MessageAccounts', key: 'MessageAccounts', textAlign: 'center', ellipsis: true },
-                    { title: () => (<span className='text_title'>区块大小</span>), className: 'txt_bolder', dataIndex: 'BlockSize', key: 'BlockSize', align: 'center', ellipsis: true }
+                    { title: () => (<span className='text_title'>区块高度</span>), dataIndex: 'Height', key: 'Height', align: 'center', ellipsis: true, render: (Height) => (<span className="cursor_hover" style={{color: '#1a4fc9'}} onClick={ () => this.handleGoPage(Height, 'heightDetailPage')}>{Height}</span>)  },
+                    { title: () => (<span className='text_title'>区块ID</span>), dataIndex: 'Cid', key: 'Cid', align: 'center', ellipsis: true, render: (Cid) => (<span className="cursor_hover" onClick={ () => this.handleGoPage(Cid, 'blockDetailPage')}>{Cid}</span>) },
+                    { title: () => (<span className='text_title'>奖励</span>), dataIndex: 'Reward', key: 'Reward', align: 'center', ellipsis: true },
+                    { title: () => (<span className='text_title'>时间</span>), dataIndex: 'TimeCreate', key: 'TimeCreate', align: 'center', ellipsis: true },
+                    { title: () => (<span className='text_title'>消息数</span>), dataIndex: 'MessageAccounts', key: 'MessageAccounts', textAlign: 'center', ellipsis: true },
+                    { title: () => (<span className='text_title'>区块大小</span>), dataIndex: 'BlockSize', key: 'BlockSize', align: 'center', ellipsis: true }
                 ]
                 dataSource = newListData.toJS()
             } else if (this.state.newListType == '转账列表') {
                 columns = [
-                    { title: () => (<span className='text_title'>时间</span>), className: 'txt_bolder', dataIndex: 'TimeCreate', key: 'TimeCreate', align: 'center', ellipsis: true},
-                    { title: () => (<span className='text_title'>消息ID</span>), className: 'txt_bolder', dataIndex: 'MessageId', key: 'MessageId', align: 'center', ellipsis: true, render: (MessageId) => (<span className="cursor_hover" onClick={ () => this.handleGoPage(MessageId, 'messageIdDetailPage')}>{MessageId}</span>) },
-                    { title: () => (<span className='text_title'>发送方</span>), className: 'txt_bolder', dataIndex: 'From', key: 'From', align: 'center', ellipsis: true, render: (From) => (<span className="cursor_hover" onClick={ () => this.handleGoPage(From, 'senderDetailPage')}>{From}</span>) },
-                    { title: () => (<span className='text_title'>接收方</span>), className: 'txt_bolder', dataIndex: 'To', key: 'To', align: 'center', ellipsis: true },
-                    { title: () => (<span className='text_title'>净收入</span>), className: 'txt_bolder', dataIndex: 'Balance', key: 'Balance', align: 'center', ellipsis: true },
-                    { title: () => (<span className='text_title'>类型</span>), className: 'txt_bolder', dataIndex: 'TransferType', key: 'TransferType', align: 'center', ellipsis: true }
+                    { title: () => (<span className='text_title'>时间</span>), dataIndex: 'TimeCreate', key: 'TimeCreate', align: 'center', ellipsis: true},
+                    { title: () => (<span className='text_title'>消息ID</span>), dataIndex: 'MessageId', key: 'MessageId', align: 'center', ellipsis: true, render: (MessageId) => (<span className="cursor_hover" onClick={ () => this.handleGoPage(MessageId, 'messageIdDetailPage')}>{MessageId}</span>) },
+                    { title: () => (<span className='text_title'>发送方</span>), dataIndex: 'From', key: 'From', align: 'center', ellipsis: true, render: (From) => (<span className="cursor_hover" onClick={ () => this.handleGoPage(From, 'senderDetailPage')}>{From}</span>) },
+                    { title: () => (<span className='text_title'>接收方</span>), dataIndex: 'To', key: 'To', align: 'center', ellipsis: true },
+                    { title: () => (<span className='text_title'>净收入</span>), dataIndex: 'Balance', key: 'Balance', align: 'center', ellipsis: true },
+                    { title: () => (<span className='text_title'>类型</span>), dataIndex: 'TransferType', key: 'TransferType', align: 'center', ellipsis: true }
                 ]
                 dataSource = newListData.toJS()
             }
@@ -462,7 +462,6 @@ class OverviewList extends Component {
                                     </Radio.Group>
                                 </div>
                                 {
-                                    /*  有问题
                                     newListSelectData.toJS().length > 0 && (
                                         <div className="top_right_wrap">
                                             <Select defaultValue="全部" style={{ width: 200 }} onChange={this.handleNewListSelectChange}>
@@ -475,7 +474,6 @@ class OverviewList extends Component {
                                             </Select>
                                         </div>
                                     )
-                                     */
                                 }
                             </div>
                             <div className="newList_bottom_wrap">

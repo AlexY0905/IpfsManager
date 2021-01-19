@@ -179,3 +179,47 @@ export const handleGetNodeDetailAction = (options) => {
             })
     }
 }
+// 处理获取账户详情数据
+const handleAccountDetailData = (payload) => ({
+    type: types.GET_ACCOUNTDETAILDATA,
+    payload: payload
+})
+export const handleAccountDetailDataAction = (options) => {
+    return (dispatch, getState) => {
+        dispatch(getIsLoadingStart())
+        api.getOverviewData(options)
+            .then((result) => {
+                console.log('::::::::-------', result)
+                // 将后台请求过来的成功数据, 派发action, 到store
+                dispatch(handleAccountDetailData(result.msg))
+            })
+            .catch((err) => {
+                message.error('获取数据失败, 请稍后再试 !')
+            })
+            .finally(() => {
+                dispatch(getIsLoadingEnd())
+            })
+    }
+}
+// 处理获取账户详情数据
+const handleBlockHeightData = (payload) => ({
+    type: types.GET_BLOCKHEIGHTDATA,
+    payload: payload
+})
+export const handleBlockHeightDataAction = (options) => {
+    return (dispatch, getState) => {
+        dispatch(getIsLoadingStart())
+        api.getOverviewData(options)
+            .then((result) => {
+                console.log('::::::::-------', result)
+                // 将后台请求过来的成功数据, 派发action, 到store
+                dispatch(handleBlockHeightData(result.msg))
+            })
+            .catch((err) => {
+                message.error('获取数据失败, 请稍后再试 !')
+            })
+            .finally(() => {
+                dispatch(getIsLoadingEnd())
+            })
+    }
+}

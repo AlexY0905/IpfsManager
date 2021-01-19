@@ -221,7 +221,75 @@
 .accountOverview_box p span:last-child {
     flex: 1.5;
 }
-
+.heightDetail_content p {
+    width: 60%;
+    display: flex;
+    justify-content: space-between;
+}
+.heightDetail_content p span:first-child {
+    flex: 0.5;
+    display: flex;
+    align-items: center;
+    color: #718096;
+}
+.heightDetail_content p span:last-child {
+    flex: 1.5;
+    color: #000;
+}
+.heightItem_wrap ul {
+    padding-left: 0;
+}
+.heightItem_wrap ul li {
+    list-style: none;
+    background: #f0f6fb;
+    box-sizing: border-box;
+    padding: 20px 40px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+.heightItem_wrap ul li p {
+    width: 60%;
+    display: flex;
+    justify-content: space-between;
+}
+.heightItem_wrap ul li p:last-child {
+    margin-bottom: 0;
+}
+.heightItem_wrap ul li p span:first-child {
+    flex: 0.4;
+    display: flex;
+    align-items: center;
+    color: #718096;
+}
+.heightItem_wrap ul li p span:nth-child(2) {
+    flex: 1.5;
+    color: #000;
+}
+.minerTagTxt {
+    border: 1px solid #cdcfd1;
+    border-radius: 30px;
+    box-sizing: border-box;
+    padding: 0 10px;
+    flex: 0;
+    white-space: nowrap;
+    display: flex;
+}
+.blockDetail_wrap .blockDetail_content p {
+    width: 60%;
+    display: flex;
+    justify-content: space-between;
+}
+.blockDetail_content p span:first-child {
+    flex: 0.5;
+    display: flex;
+    align-items: center;
+    color: #718096;
+}
+.blockDetail_content p span:last-child {
+    flex: 1.5;
+    color: #000;
+    overflow-wrap: anywhere;
+}
 
 
 

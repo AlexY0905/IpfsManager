@@ -5,6 +5,7 @@ import "./index.css"
 import { actionCreator } from './store'
 import Layout from 'common/layout'
 import { Breadcrumb } from 'antd'
+import moment from "moment";
 
 class HeightDetail extends Component {
     constructor(props) {
@@ -14,22 +15,70 @@ class HeightDetail extends Component {
         }
     }
     componentDidMount() {
-        // 调用发送方函数, 处理矿工概览饼形图数据
-        // this.props.handleOverviewEchartsData()
-        console.log(1111111111111, this.props);
+        // 调用发送方函数, 处理获取区块高度数据列表
+        // console.log(22222222222, this.props.location.state.parameter);
+        let options = {
+            name: 'minerblockdetail',
+            height: this.props.location.state.parameter
+        }
+        this.props.handleBlockHeightData(options)
     }
 
 
     render() {
+        const { blockHeightDataList } = this.props
+
         return (
             <div className="News">
                 <Layout>
                     <Breadcrumb style={{ margin: '16px 0', textAlign: 'left', fontSize: '16px' }}>
-                        <Breadcrumb.Item style={{paddingLeft: '18px'}}>区块高度</Breadcrumb.Item>
+                        <Breadcrumb.Item>{blockHeightDataList != '' && (<span style={{color: '#000'}}>区块高度 #{blockHeightDataList.Height}</span>)}</Breadcrumb.Item>
                     </Breadcrumb>
-                    <div className="content">
-                        区块高度详情页
-                    </div>
+                    {
+                        blockHeightDataList != '' && (
+                            <div className="content" style={{boxSizing: 'border-box', padding: '0 20px'}}>
+                                <div className="heightDetail_content">
+                                    <p><span>区块时间</span><span>{moment(blockHeightDataList.Timestamp).format('MMMM-Do-YYYY, h:mm:ss')}</span></p>
+                                    <p><span>累计消息数（去重）</span><span>{blockHeightDataList.MessageCount}</span></p>
+                                </div>
+                                <div className="heightDetail_list_wrap">
+                                    <div>
+                                        <Breadcrumb style={{ margin: '16px 0', textAlign: 'left', fontSize: '16px' }}>
+                                            <Breadcrumb.Item>所有区块</Breadcrumb.Item>
+                                        </Breadcrumb>
+                                    </div>
+                                    <div className="heightItem_wrap">
+                                        <ul>
+                                        {
+                                            blockHeightDataList.Blocks.length > 0 && blockHeightDataList.Blocks.map((item, index) => (
+                                                <li>
+                                                    <p><span>区块ID</span><span style={{color: '#1a4fc9'}}>{item.Cid}</span></p>
+                                                    <p>
+                                                        <span>矿工</span>
+                                                        <div style={{flex: '1.5', display: 'flex'}}>
+                                                            <span style={{flex: '0', marginRight: '5px', color: '#1a4fc9'}}>{item.Miner}</span>
+                                                            {
+                                                                item.MinerTag.Signed && (
+                                                                    <span className="minerTagTxt" style={{flex: '0'}}>{item.MinerTag.Name}
+                                                                        <span>
+                                                                            <img src="https://filfox.info/dist/img/signed.16bca8b.svg" style={{width: '12px', marginLeft: '5px'}} />
+                                                                        </span>
+                                                                    </span>
+                                                                )
+                                                            }
+                                                        </div>
+                                                    </p>
+                                                    <p><span>奖励</span><span>{item.Reward}</span></p>
+                                                    <p><span>消息数</span><span>{item.MessageCount}</span></p>
+                                                </li>
+                                            ))
+                                        }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    }
                 </Layout>
             </div>
         )
@@ -38,15 +87,16 @@ class HeightDetail extends Component {
 
 // 接收方
 const mapStateToProps = (state) => ({
-    // isLoading: state.get('minerOverview').get('isLoading')
+    isLoading: state.get('minerOverview').get('isLoading'),
+    blockHeightDataList: state.get('minerOverview').get('blockHeightDataList')
 })
 
 
 // 发送方
 const mapDispatchToProps = (dispatch) => ({
-    // handleOverviewEchartsData: (options) => {
-    //     dispatch(actionCreator.handleOverviewEchartsDataAction(options))
-    // }
+    handleBlockHeightData: (options) => {
+        dispatch(actionCreator.handleBlockHeightDataAction(options))
+    }
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(HeightDetail)

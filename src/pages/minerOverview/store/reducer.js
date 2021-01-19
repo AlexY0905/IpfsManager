@@ -13,7 +13,9 @@ const defaultState = fromJS({
     newListSelectData: [],
     totalCount: '',
     accountOverviewData: '',
-    nodeDetailMsgData: ''
+    nodeDetailMsgData: '',
+    accountDetailData: '',
+    blockHeightDataList: ''
 })
 
 export default (state = defaultState, action) => {
@@ -72,6 +74,18 @@ export default (state = defaultState, action) => {
     if (action.type == types.GET_NODEDETAILDATA) {
         return state.merge({
             nodeDetailMsgData: action.payload
+        })
+    }
+    // 处理获取账户详情数据
+    if (action.type == types.GET_ACCOUNTDETAILDATA) {
+        return state.merge({
+            accountDetailData: action.payload
+        })
+    }
+    // 处理获取区块高度数据列表
+    if (action.type == types.GET_BLOCKHEIGHTDATA) {
+        return state.merge({
+            blockHeightDataList: action.payload
         })
     }
 
