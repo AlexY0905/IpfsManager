@@ -10,7 +10,8 @@ class BlockDetail extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            newListType: ''
+            newListType: '消息列表',
+            newListSelectType: '全部'
         }
         this.handleNewListSelectChange = this.handleNewListSelectChange.bind(this)
         this.handlePaginationChange = this.handlePaginationChange.bind(this)
@@ -21,34 +22,48 @@ class BlockDetail extends Component {
         let newListOptions = {name: 'minermessage', page: 1}
         this.props.handleNewList(newListOptions)
     }
-    // 处理表格分页器
-    handlePaginationChange (page, pageSize) {
-        console.log('page--------', page)
-        let options = {
-            name: '',
-            page
-        }
-        if (this.state.newListSelectType == 'minermessage') {
-            options.name = 'minermessage'
-        } else {
-            options.name = 'minermessagebymethod'
-            options.method = this.state.newListSelectType
-        }
-        // 调用发送方函数, 处理消息列表数据
-        this.props.handleNewList(options)
-    }
     // 处理消息列表下拉框改变事件
     handleNewListSelectChange (val) {
         console.log('val==============', val);
+        /*
         if (val == '全部') {
             this.setState({newListSelectType: 'minermessage'})
         } else {
             this.setState({newListSelectType: val})
         }
+        */
+
+        this.setState({newListSelectType: val, currentPage: 1})
         // 调用发送方函数, 处理消息列表数据
-        let newListOptions = {name: 'minermessagebymethod', page: 1, method: val}
+        let newListOptions = {name: 'minermessage', page: 1, method: val}
         this.props.handleNewList(newListOptions)
     }
+    // 处理表格分页器
+    handlePaginationChange (page, pageSize) {
+        console.log(':::::::::-----123', page)
+        console.log(22222222, this.state.newListType);
+        let options = {
+            name: '',
+            page: page
+        }
+        if (this.state.newListType == '消息列表') {
+            options.name = 'minermessage'
+            options.method = this.state.newListSelectType
+        } else if (this.state.newListType == '转账列表') {
+            options.name = 'minertransfors'
+        }
+        /*
+        if (this.state.newListSelectType == 'minermessage') {
+            options.name = 'minermessage'
+        } else {
+            options.name = 'minermessage'
+            options.method = this.state.newListSelectType
+        }
+        */
+        // 调用发送方函数, 处理消息列表数据
+        this.props.handleNewList(options)
+    }
+
 
 
     render() {

@@ -7,7 +7,7 @@ import MessageIdDetail from "./messageIdDetail"
 import HeightDetail from "./heightDetail"
 import SenderDetail from "./senderDetail"
 import BlockDetail from "./blockDetail"
-import NodeIdDetail from "./nedeIdDetail";
+import NodeIdDetail from "./nodeIdDetail";
 
 export default class MinerOverview extends Component {
     render() {

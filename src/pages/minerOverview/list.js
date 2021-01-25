@@ -39,9 +39,10 @@ class OverviewList extends Component {
             rewardPer: '', // 挖矿效率
             windowedPoStFeePer: '', // 抽查成本
             lunckValue: '', // 幸运值
-            newListType: '',
+            newListType: '消息列表',
             newListSelectData: [],
-            newListSelectType: ''
+            newListSelectType: '全部',
+            currentPage: 1
         }
         this.handleRadioChange = this.handleRadioChange.bind(this)
         this.handleNewListRadioChange = this.handleNewListRadioChange.bind(this)
@@ -85,7 +86,7 @@ class OverviewList extends Component {
     // 处理消息列表单选框改变事件
     handleNewListRadioChange (val) {
         console.log('val++++++++++++', val.target.value)
-        this.setState({newListType: val.target.value})
+        this.setState({newListType: val.target.value, currentPage: 1})
         let options = {
             name: '',
             page: 1
@@ -104,28 +105,43 @@ class OverviewList extends Component {
     // 处理消息列表下拉框改变事件
     handleNewListSelectChange (val) {
         console.log('val==============', val);
+        /*
         if (val == '全部') {
             this.setState({newListSelectType: 'minermessage'})
         } else {
             this.setState({newListSelectType: val})
         }
+         */
+        this.setState({newListSelectType: val, currentPage: 1})
         // 调用发送方函数, 处理消息列表数据
-        let newListOptions = {name: 'minermessagebymethod', page: 1, method: val}
+        let newListOptions = {name: 'minermessage', page: 1, method: val}
         this.props.handleNewList(newListOptions)
     }
     // 处理表格分页器
     handlePaginationChange (page, pageSize) {
-        console.log('page--------', page)
+        console.log(':::::::::-----123', page)
+        console.log(22222222, this.state.newListType);
         let options = {
             name: '',
-            page
+            page: page
         }
+        if (this.state.newListType == '消息列表') {
+            options.name = 'minermessage'
+            options.method = this.state.newListSelectType
+        } else if (this.state.newListType == '区块列表') {
+            options.name = 'minerblocks'
+        } else if (this.state.newListType == '转账列表') {
+            options.name = 'minertransfors'
+        }
+        console.log('options==========', options)
+        /*
         if (this.state.newListSelectType == 'minermessage') {
             options.name = 'minermessage'
         } else {
-            options.name = 'minermessagebymethod'
+            options.name = 'minermessage'
             options.method = this.state.newListSelectType
         }
+        */
         // 调用发送方函数, 处理消息列表数据
         this.props.handleNewList(options)
     }
@@ -491,7 +507,7 @@ class OverviewList extends Component {
                                     style={{ marginTop: '30px' }}
                                     pagination={{
                                         showQuickJumper: true,
-                                        defaultCurrent: 1,
+                                        defaultCurrent: this.state.currentPage,
                                         total: totalCount,
                                         pageSize: 20,
                                         onChange: this.handlePaginationChange
