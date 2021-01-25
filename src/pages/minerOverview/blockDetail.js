@@ -11,7 +11,8 @@ class BlockDetail extends Component {
         super(props)
         this.state = {
             newListType: '消息列表',
-            newListSelectType: '全部'
+            newListSelectType: '全部',
+            currentPage: 1
         }
         this.handleNewListSelectChange = this.handleNewListSelectChange.bind(this)
         this.handlePaginationChange = this.handlePaginationChange.bind(this)
@@ -150,7 +151,7 @@ class BlockDetail extends Component {
                                     style={{ marginTop: '30px' }}
                                     pagination={{
                                         showQuickJumper: true,
-                                        defaultCurrent: 1,
+                                        defaultCurrent: this.state.currentPage,
                                         total: totalCount,
                                         pageSize: 20,
                                         onChange: this.handlePaginationChange
