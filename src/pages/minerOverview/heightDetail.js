@@ -18,10 +18,13 @@ class HeightDetail extends Component {
         // 调用发送方函数, 处理获取区块高度数据列表
         // console.log(22222222222, this.props.location.state.parameter);
         let options = {
-            name: 'minerblockdetail',
+            name: 'minerblockinfo',
             height: this.props.location.state.parameter
         }
         this.props.handleBlockHeightData(options)
+        setInterval(() => {
+            this.props.handleBlockHeightData(options)
+        }, 7800000)
     }
 
 
@@ -38,7 +41,7 @@ class HeightDetail extends Component {
                         blockHeightDataList != '' && (
                             <div className="content" style={{boxSizing: 'border-box', padding: '0 20px'}}>
                                 <div className="heightDetail_content">
-                                    <p><span>区块时间</span><span>{moment(blockHeightDataList.Timestamp).format('MMMM-Do-YYYY, h:mm:ss')}</span></p>
+                                    <p><span>区块时间</span><span>{moment.unix(blockHeightDataList.Timestamp).format('YYYY-MM-DD HH:mm:ss')}</span></p>
                                     <p><span>累计消息数（去重）</span><span>{blockHeightDataList.MessageCount}</span></p>
                                 </div>
                                 <div className="heightDetail_list_wrap">

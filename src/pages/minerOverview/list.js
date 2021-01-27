@@ -105,13 +105,6 @@ class OverviewList extends Component {
     // 处理消息列表下拉框改变事件
     handleNewListSelectChange (val) {
         console.log('val==============', val);
-        /*
-        if (val == '全部') {
-            this.setState({newListSelectType: 'minermessage'})
-        } else {
-            this.setState({newListSelectType: val})
-        }
-         */
         this.setState({newListSelectType: val, currentPage: 1})
         // 调用发送方函数, 处理消息列表数据
         let newListOptions = {name: 'minermessage', page: 1, method: val}
@@ -134,14 +127,6 @@ class OverviewList extends Component {
             options.name = 'minertransfors'
         }
         console.log('options==========', options)
-        /*
-        if (this.state.newListSelectType == 'minermessage') {
-            options.name = 'minermessage'
-        } else {
-            options.name = 'minermessage'
-            options.method = this.state.newListSelectType
-        }
-        */
         // 调用发送方函数, 处理消息列表数据
         this.props.handleNewList(options)
     }
@@ -462,7 +447,8 @@ class OverviewList extends Component {
                                             <p><span>节点ID:</span><span className="cursor_hover" onClick={() => this.handleGoPage(accountOverviewData.NodeID, 'nodeIdPage')}>{accountOverviewData.NodeID}</span></p>
                                             <p><span>Owner:</span><span style={{color: '#1a4fc9', cursor: 'pointer'}} onClick={() => this.handleGoPage(accountOverviewData.Owner, 'senderDetailPage')}>{accountOverviewData.Owner}</span></p>
                                             <p><span>Worker:</span><span style={{color: '#1a4fc9', cursor: 'pointer'}} onClick={() => this.handleGoPage(accountOverviewData.Worker, 'senderDetailPage')}>{accountOverviewData.Worker}</span></p>
-                                            <p><span>地区（公开IP）:</span><span>{accountOverviewData.Location}</span></p>
+                                            {/*<p><span>地区（公开IP）:</span><span>{accountOverviewData.Location}</span></p>*/}
+                                            <p><span>地区（公开IP）:</span><span><span><img style={{width: '20px', verticalAlign: '-3px', marginRight: '5px'}} src={accountOverviewData.Location.Flag} /></span><span>{accountOverviewData.Location.ContinentName}-</span><span>{accountOverviewData.Location.CountryName}-</span><span>{accountOverviewData.Location.RegionName}-</span><span>{accountOverviewData.Location.City}</span><span>{accountOverviewData.Location.Ip}</span></span></p>
                                         </div>
                                     </div>
                                 )
@@ -493,6 +479,9 @@ class OverviewList extends Component {
                                 }
                             </div>
                             <div className="newList_bottom_wrap">
+                                <Breadcrumb style={{ margin: '16px 0', textAlign: 'left', fontSize: '16px' }}>
+                                    <Breadcrumb.Item>共 <span>{totalCount != '' && totalCount}</span> 条信息</Breadcrumb.Item>
+                                </Breadcrumb>
                                 <Table
                                     columns={columns}
                                     dataSource={dataSource}

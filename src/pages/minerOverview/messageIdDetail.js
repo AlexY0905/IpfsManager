@@ -16,9 +16,16 @@ class MessageIdDetail extends Component {
         this.handlePaginationChange = this.handlePaginationChange.bind(this)
     }
     componentDidMount() {
-        // 调用发送方函数, 处理矿工概览饼形图数据
-        // this.props.handleOverviewEchartsData()
-        console.log(1111111111111, this.props);
+        // console.log(1111111111111, this.props.location.state.parameter);
+        // 调用发送方函数, 处理消息id详情数据
+        let options = {
+            name: 'minermessageinfo',
+            address: this.props.location.state.parameter
+        }
+        this.props.handleMsgIdDetailData(options)
+        setInterval(() => {
+            this.props.handleMsgIdDetailData(options)
+        }, 7800000)
     }
     handleGoPage (val, type) {
         if (val == 'N/A') return
@@ -46,16 +53,24 @@ class MessageIdDetail extends Component {
 
 
     render() {
+        const { msgIdDetailMsgData, msgIdDetailAccountData, msgIdDetailOthersData  } = this.props
         let columns = [
-            { title: () => (<span className='text_title'>发送方</span>), className: 'txt_bolder', dataIndex: 'From', key: 'From', align: 'center', ellipsis: true, render: (From) => (<span className="cursor_hover" onClick={ () => this.handleGoPage(From, 'senderDetailPage')}>{From}</span>) },
-            { title: () => (<span className='text_title'>接收方</span>), className: 'txt_bolder', dataIndex: 'To', key: 'To', align: 'center', ellipsis: true },
-            { title: () => (<span className='text_title'>金额</span>), className: 'txt_bolder', dataIndex: 'Balance', key: 'Balance', align: 'center', ellipsis: true },
-            { title: () => (<span className='text_title'>类型</span>), className: 'txt_bolder', dataIndex: 'TransferType', key: 'TransferType', align: 'center', ellipsis: true }
+            { title: () => (<span className='text_title'>发送方</span>), dataIndex: 'FromAddress', key: 'FromAddress', align: 'center', ellipsis: true, render: (FromAddress) => (<span className="cursor_hover" onClick={ () => this.handleGoPage(FromAddress, 'senderDetailPage')}>{FromAddress}</span>) },
+            { title: () => (<span className='text_title'>接收方</span>), dataIndex: 'ToAddress', key: 'ToAddress', align: 'center', ellipsis: true,  render: (ToAddress, record) => (<span>{ToAddress}{record.ToTags != null && record.ToTags.signed && (<span style={{padding: '5px', border: '1px solid #e2e8f0', borderRadius: '30px', marginLeft: '10px'}}><span>{record.ToTags.name}<span><img
+                    src="https://filfox.info/dist/img/signed.16bca8b.svg" style={{width: '12px', marginLeft: '5px'}} /></span></span></span>)}</span>) },
+            { title: () => (<span className='text_title'>金额</span>), dataIndex: 'Balance', key: 'Balance', align: 'center', ellipsis: true },
+            { title: () => (<span className='text_title'>类型</span>), dataIndex: 'Types', key: 'Types', align: 'center', ellipsis: true }
         ]
-        let dataSource = [
-            {key: '1', From: 'bafy2bzacebhljgx7vgsbsruqvvl6w7epdmiem3uhlbst5oekmay44c7dyx32w', To: 'f02626', Balance: '0.000023807248904805 FIL', TransferType: '矿工手续费'},
-            {key: '2', From: 'bafy2bzacebhljgx7vgsbsruqvvl6w7epdmiem3uhlbst5oekmay44c7dyx32w', To: 'f02626', Balance: '0.000023807248904805 FIL', TransferType: '矿工手续费'}
-        ]
+        let dataSource = []
+        if (msgIdDetailAccountData.toJS().length > 0) {
+            dataSource = msgIdDetailAccountData.toJS()
+        }
+        if (msgIdDetailOthersData != '') {
+            console.log('msgIdDetailOthersData=========', msgIdDetailOthersData);
+        }
+
+
+
         let totalCount = 50
         return (
             <div className="News">
@@ -70,17 +85,21 @@ class MessageIdDetail extends Component {
                                     <Breadcrumb.Item>消息概览</Breadcrumb.Item>
                                 </Breadcrumb>
                             </div>
-                            <div className="messageDetail_content">
-                                <p><span>消息ID</span><span>bafy2bzacedxasgoviq7dpdn2uuct3kdedehwnws4dfeiu7q7xnk4kw74ugojw</span></p>
-                                <p><span>高度</span><span>412109</span></p>
-                                <p><span>时间</span><span>2021-01-15 08:14:30</span></p>
-                                <p><span>所属区块</span><span>bafy2bzacebhljgx7vgsbsruqvvl6w7epdmiem3uhlbst5oekmay44c7dyx32w</span></p>
-                                <p><span>发送方</span><span>f3wu4i2wt3gbiun7iymuyn2xd2txw7gcgw5ikyjkvavyl5gle2xmi3bksqtqhxclxftlhm2k73bkkprepg6j5qlxftlhm2k73bkkprepg6j5q</span></p>
-                                <p><span>接收方</span><span>f015734</span></p>
-                                <p><span>方法</span><span>SubmitWindowedPoSt</span></p>
-                                <p><span>金额</span><span>0 FIL</span></p>
-                                <p><span>状态</span><span>OK</span></p>
-                            </div>
+                            {
+                                msgIdDetailMsgData != '' && (
+                                    <div className="messageDetail_content">
+                                        <p><span>消息ID</span><span>{msgIdDetailMsgData.MessageId}</span></p>
+                                        <p><span>高度</span><span>{msgIdDetailMsgData.Height}</span></p>
+                                        <p><span>时间</span><span>{msgIdDetailMsgData.Times}</span></p>
+                                        <p><span>所属区块</span><span style={{display: 'flex', flexDirection: 'column'}}>{msgIdDetailMsgData.Blocks.length > 0 && msgIdDetailMsgData.Blocks.map((item, index) => (<span>{item}</span>))}</span></p>
+                                        <p><span>发送方</span><span>{msgIdDetailMsgData.FromAddress}</span></p>
+                                        <p><span>接收方</span><span>{msgIdDetailMsgData.ToAddress}</span></p>
+                                        <p><span>方法</span><span>{msgIdDetailMsgData.Method}</span></p>
+                                        <p><span>金额</span><span>{msgIdDetailMsgData.Balance}</span></p>
+                                        <p><span>状态</span><span>{msgIdDetailMsgData.Status}</span></p>
+                                    </div>
+                                )
+                            }
                         </div>
                         <div className="account_msg_wrap">
                             <div>
@@ -117,17 +136,21 @@ class MessageIdDetail extends Component {
                                     <Breadcrumb.Item>其它信息</Breadcrumb.Item>
                                 </Breadcrumb>
                             </div>
-                            <div className="messageDetail_content">
-                                <p><span>版本</span><span>0</span></p>
-                                <p><span>Nonce</span><span>34820</span></p>
-                                <p><span>Gas Fee Cap</span><span>30.905082856 nanoFIL</span></p>
-                                <p><span>Gas Premium</span><span>147,153 attoFIL</span></p>
-                                <p><span>Gas 限额</span><span>f3wu4i2wt3gbiun7iymuyn2xd2txw7gcgw5ikyjkvavyl5gle2xmi3bksqtqhxclxftlhm2k73bkkprepg6j5qlxftlhm2k73bkkprepg6j5q</span></p>
-                                <p><span>Gas 使用量</span><span>43,682,740</span></p>
-                                <p><span>Base Fee</span><span>6.00036921 nanoFIL</span></p>
-                                <p><span>参数</span><span>f3wu4i2wt3gbiun7iymuyn2xd2txw7gcgw5ikyjkvavyl5gle2xmi3bksqtqhxclxftlhm2k</span></p>
-                                <p><span>返回值</span><span>(无)</span></p>
-                            </div>
+                            {
+                                msgIdDetailOthersData != '' && (
+                                    <div className="messageDetail_content">
+                                        <p><span>版本</span><span>{msgIdDetailOthersData.Version}</span></p>
+                                        <p><span>Nonce</span><span>{msgIdDetailOthersData.Nonce}</span></p>
+                                        <p><span>Gas Fee Cap</span><span>{msgIdDetailOthersData.GasFeeCap}</span></p>
+                                        <p><span>Gas Premium</span><span>{msgIdDetailOthersData.GasPremium}</span></p>
+                                        <p><span>Gas 限额</span><span>{msgIdDetailOthersData.GasLimit}</span></p>
+                                        <p><span>Gas 使用量</span><span>{msgIdDetailOthersData.GasUsed}</span></p>
+                                        <p><span>Base Fee</span><span>{msgIdDetailOthersData.BasFee}</span></p>
+                                        <p><span>参数</span><span><pre style={{whiteSpace: 'pre-wrap'}}>{JSON.stringify(msgIdDetailOthersData.Params)}</pre></span></p>
+                                        <p><span>返回值</span><span>{msgIdDetailOthersData.Return}</span></p>
+                                    </div>
+                                )
+                            }
                         </div>
                     </div>
                 </Layout>
@@ -138,15 +161,18 @@ class MessageIdDetail extends Component {
 
 // 接收方
 const mapStateToProps = (state) => ({
-    isLoading: state.get('minerOverview').get('isLoading')
+    isLoading: state.get('minerOverview').get('isLoading'),
+    msgIdDetailMsgData: state.get('minerOverview').get('msgIdDetailMsgData'),
+    msgIdDetailAccountData: state.get('minerOverview').get('msgIdDetailAccountData'),
+    msgIdDetailOthersData: state.get('minerOverview').get('msgIdDetailOthersData')
 })
 
 
 // 发送方
 const mapDispatchToProps = (dispatch) => ({
-    // handleOverviewEchartsData: (options) => {
-    //     dispatch(actionCreator.handleOverviewEchartsDataAction(options))
-    // }
+    handleMsgIdDetailData: (options) => {
+        dispatch(actionCreator.handleMsgIdDetailDataAction(options))
+    }
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(MessageIdDetail)

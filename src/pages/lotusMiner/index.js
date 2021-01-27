@@ -207,8 +207,8 @@ class LotusMiner extends Component {
                     <div>
                         <Tabs defaultActiveKey="1" onChange={this.handleCallback}>
                             <TabPane tab="storage-deals" key="1">
-                                <Button type="primary" onClick={() => this.handleServerBtn("list")}>list</Button>
-                                <Divider type="vertical" />
+                                {/*<Button type="primary" onClick={() => this.handleServerBtn("list")}>list</Button>*/}
+                                {/*<Divider type="vertical" />*/}
                                 <Button type="primary" onClick={() => this.handleServerBtn("get-ask")}>get-ask</Button>
                             </TabPane>
 

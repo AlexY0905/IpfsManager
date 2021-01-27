@@ -43,10 +43,10 @@ class NodeIdDetail extends Component {
                                             <span>地区（公开IP）</span>
                                             <span style={{display: 'flex'}}>
                                                 <span style={{display: 'flex', marginRight: '5px', flex: '0'}}><img src={nodeDetailMsgData.Location.Flag} style={{width: '20px'}} alt="" /></span>
-                                                <span>亚洲-</span>
-                                                <span>中国-</span>
-                                                <span>江苏省-</span>
-                                                <span>南京市</span>
+                                                <span>{nodeDetailMsgData.Location.ContinentName}-</span>
+                                                <span>{nodeDetailMsgData.Location.CountryName}-</span>
+                                                <span>{nodeDetailMsgData.Location.RegionName}-</span>
+                                                <span>{nodeDetailMsgData.Location.City}</span>
                                                 <span>{nodeDetailMsgData.Location.Ip}</span>
                                             </span>
                                         </p>

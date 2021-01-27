@@ -15,7 +15,11 @@ const defaultState = fromJS({
     accountOverviewData: '',
     nodeDetailMsgData: '',
     accountDetailData: '',
-    blockHeightDataList: ''
+    blockHeightDataList: '',
+    msgIdDetailMsgData: '',
+    msgIdDetailAccountData: [],
+    msgIdDetailOthersData: '',
+    blockIdDetailData: ''
 })
 
 export default (state = defaultState, action) => {
@@ -86,6 +90,28 @@ export default (state = defaultState, action) => {
     if (action.type == types.GET_BLOCKHEIGHTDATA) {
         return state.merge({
             blockHeightDataList: action.payload
+        })
+    }
+    // 处理获取消息id详情数据
+    if (action.type == types.GET_MSGDETAILDATA) {
+        return state.merge({
+            msgIdDetailMsgData: action.payload.MessageSummarys,
+            msgIdDetailAccountData: fromJS(action.payload.TransferInfos),
+            msgIdDetailOthersData: action.payload.OtherInfos
+        })
+    }
+    // 处理获取区块id详情数据
+    if (action.type == types.GET_BLOCKDETAILDATA) {
+        return state.merge({
+            blockIdDetailData: action.payload
+        })
+    }
+    // 处理获取区块id详情表格数据
+    if (action.type == types.GET_BLOCKNEWLISTDATA) {
+        return state.merge({
+            newListData: action.payload.BlockMessageDetails && fromJS(action.payload.BlockMessageDetails), // 将数据数组转换成immutable
+            newListSelectData: action.payload.Methods ? fromJS(action.payload.Methods) : fromJS([]), // 将数据数组转换成immutable
+            totalCount: action.payload.TotalCount
         })
     }
 

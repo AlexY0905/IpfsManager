@@ -123,7 +123,7 @@ export const handleAccountDataAction = (options) => {
         dispatch(getIsLoadingStart())
         api.getOverviewData(options)
             .then((result) => {
-                console.log('::::::::-------', result)
+                // console.log('::::::::-------', result)
                 // 将后台请求过来的成功数据, 派发action, 到store
                 dispatch(handleAccountData(result.msg))
             })
@@ -145,7 +145,7 @@ export const handleNewListAction = (options) => {
         dispatch(getIsLoadingStart())
         api.getOverviewData(options)
             .then((result) => {
-                console.log('::::::::-------', result)
+                // console.log('::::::::-------', result)
                 // 将后台请求过来的成功数据, 派发action, 到store
                 dispatch(handleNewListData(result.msg))
             })
@@ -167,7 +167,7 @@ export const handleGetNodeDetailAction = (options) => {
         dispatch(getIsLoadingStart())
         api.getOverviewData(options)
             .then((result) => {
-                console.log('::::::::-------', result)
+                // console.log('::::::::-------', result)
                 // 将后台请求过来的成功数据, 派发action, 到store
                 dispatch(handleGetNodeDetailData(result.msg))
             })
@@ -189,7 +189,7 @@ export const handleAccountDetailDataAction = (options) => {
         dispatch(getIsLoadingStart())
         api.getOverviewData(options)
             .then((result) => {
-                console.log('::::::::-------', result)
+                // console.log('::::::::-------', result)
                 // 将后台请求过来的成功数据, 派发action, 到store
                 dispatch(handleAccountDetailData(result.msg))
             })
@@ -211,7 +211,7 @@ export const handleBlockHeightDataAction = (options) => {
         dispatch(getIsLoadingStart())
         api.getOverviewData(options)
             .then((result) => {
-                console.log('::::::::-------', result)
+                // console.log('::::::::-------', result)
                 // 将后台请求过来的成功数据, 派发action, 到store
                 dispatch(handleBlockHeightData(result.msg))
             })
@@ -223,3 +223,72 @@ export const handleBlockHeightDataAction = (options) => {
             })
     }
 }
+// 处理消息Id详情数据
+const handleMsgIdDetailData = (payload) => ({
+    type: types.GET_MSGDETAILDATA,
+    payload: payload
+})
+export const handleMsgIdDetailDataAction = (options) => {
+    return (dispatch, getState) => {
+        dispatch(getIsLoadingStart())
+        api.getOverviewData(options)
+            .then((result) => {
+                // console.log('::::::::-------', result)
+                // 将后台请求过来的成功数据, 派发action, 到store
+                dispatch(handleMsgIdDetailData(result.msg))
+            })
+            .catch((err) => {
+                message.error('获取数据失败, 请稍后再试 !')
+            })
+            .finally(() => {
+                dispatch(getIsLoadingEnd())
+            })
+    }
+}
+// 处理区块Id详情数据
+const handleBlockDetailData = (payload) => ({
+    type: types.GET_BLOCKDETAILDATA,
+    payload: payload
+})
+export const handleBlockDetailAction = (options) => {
+    return (dispatch, getState) => {
+        dispatch(getIsLoadingStart())
+        api.getOverviewData(options)
+            .then((result) => {
+                // console.log('::::::::-------', result)
+                // 将后台请求过来的成功数据, 派发action, 到store
+                dispatch(handleBlockDetailData(result.msg))
+            })
+            .catch((err) => {
+                message.error('获取数据失败, 请稍后再试 !')
+            })
+            .finally(() => {
+                dispatch(getIsLoadingEnd())
+            })
+    }
+}
+// 处理区块Id详情页表格数据
+const handleBlockNewListData = (payload) => ({
+    type: types.GET_BLOCKNEWLISTDATA,
+    payload: payload
+})
+export const handleBlockNewListAction = (options) => {
+    return (dispatch, getState) => {
+        dispatch(getIsLoadingStart())
+        api.getOverviewData(options)
+            .then((result) => {
+                // console.log('::::::::-------', result)
+                // 将后台请求过来的成功数据, 派发action, 到store
+                dispatch(handleBlockNewListData(result.msg))
+            })
+            .catch((err) => {
+                message.error('获取数据失败, 请稍后再试 !')
+            })
+            .finally(() => {
+                dispatch(getIsLoadingEnd())
+            })
+    }
+}
+
+
+

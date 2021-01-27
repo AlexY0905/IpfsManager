@@ -31,7 +31,7 @@ class SenderDetail extends Component {
         // 调用发送方函数, 处理有效算力折线图数据
         this.props.handleEchartsData()
         // 调用发送方函数, 处理消息列表数据
-        let newListOptions = {name: 'minermessage', page: 1}
+        let newListOptions = {name: 'minermessage', page: 1, address: this.props.location.state.parameter}
         this.props.handleNewList(newListOptions)
         setInterval(() => {
             this.props.handleEchartsData()
@@ -44,7 +44,8 @@ class SenderDetail extends Component {
         this.setState({newListType: val.target.value, currentPage: 1})
         let options = {
             name: '',
-            page: 1
+            page: 1,
+            address: this.props.location.state.parameter
         }
         if (val.target.value == '消息列表') {
             options.name = 'minermessage'
@@ -59,25 +60,17 @@ class SenderDetail extends Component {
     // 处理消息列表下拉框改变事件
     handleNewListSelectChange (val) {
         console.log('val==============', val);
-        /*
-        if (val == '全部') {
-            this.setState({newListSelectType: 'minermessage'})
-        } else {
-            this.setState({newListSelectType: val})
-        }
-        */
         this.setState({newListSelectType: val, currentPage: 1})
         // 调用发送方函数, 处理消息列表数据
-        let newListOptions = {name: 'minermessage', page: 1, method: val}
+        let newListOptions = {name: 'minermessage', page: 1, method: val, address: this.props.location.state.parameter}
         this.props.handleNewList(newListOptions)
     }
     // 处理表格分页器
     handlePaginationChange (page, pageSize) {
-        console.log(':::::::::-----123', page)
-        console.log(22222222, this.state.newListType);
         let options = {
             name: '',
-            page: page
+            page: page,
+            address: this.props.location.state.parameter
         }
         if (this.state.newListType == '消息列表') {
             options.name = 'minermessage'
@@ -85,14 +78,6 @@ class SenderDetail extends Component {
         } else if (this.state.newListType == '转账列表') {
             options.name = 'minertransfors'
         }
-        /*
-        if (this.state.newListSelectType == 'minermessage') {
-            options.name = 'minermessage'
-        } else {
-            options.name = 'minermessage'
-            options.method = this.state.newListSelectType
-        }
-        */
         // 调用发送方函数, 处理消息列表数据
         this.props.handleNewList(options)
     }
@@ -101,11 +86,6 @@ class SenderDetail extends Component {
 
     render() {
         const { powerEchartsDataList, newListData, newListSelectData, totalCount, accountDetailData } = this.props
-        // ---------------------------------------------- 账户详情数据 ----------------------------------------
-        if (accountDetailData != '') {
-            console.log('accountDetailData-------------', accountDetailData)
-        }
-        // ---------------------------------------------- 账户详情数据 ----------------------------------------
         // ---------------------------------------------- 有效算力折线图数据 ----------------------------------------
         let powerEchartsData = []
         if (powerEchartsDataList.toJS().length > 0) {
@@ -128,24 +108,24 @@ class SenderDetail extends Component {
         if (newListData.toJS().length > 0) {
             if (this.state.newListType == '' || this.state.newListType == '消息列表') {
                 columns = [
-                    { title: () => (<span className='text_title'>消息ID</span>), className: 'txt_bolder', dataIndex: 'Cid', key: 'Cid', align: 'center', ellipsis: true, render: (Cid) => (<span className="cursor_hover" onClick={ () => this.handleGoPage(Cid, 'messageIdDetailPage')}>{Cid}</span>) },
-                    { title: () => (<span className='text_title'>区块高度</span>), className: 'txt_color txt_bolder', dataIndex: 'Height', key: 'Height', align: 'center', ellipsis: true, render: (Height) => (<span className="cursor_hover" style={{color: '#1a4fc9'}} onClick={ () => this.handleGoPage(Height, 'heightDetailPage')}>{Height}</span>) },
-                    { title: () => (<span className='text_title'>时间</span>), className: 'txt_bolder', dataIndex: 'TimeCreate', key: 'TimeCreate', align: 'center', ellipsis: true },
-                    { title: () => (<span className='text_title'>发送方</span>), className: 'txt_bolder', dataIndex: 'From', key: 'From', align: 'center', ellipsis: true, render: (From) => (<span className="cursor_hover" onClick={ () => this.handleGoPage(From, 'senderDetailPage')}>{From}</span>) },
-                    { title: () => (<span className='text_title'>接收方</span>), className: 'txt_bolder', dataIndex: 'To', key: 'To', align: 'center', ellipsis: true },
-                    { title: () => (<span className='text_title'>方法</span>), className: 'txt_bolder', dataIndex: 'Method', key: 'Method', align: 'center', ellipsis: true },
-                    { title: () => (<span className='text_title'>金额</span>), className: 'txt_bolder', dataIndex: 'Balance', key: 'Balance', align: 'center', ellipsis: true },
-                    { title: () => (<span className='text_title'>状态</span>), className: 'txt_bolder', dataIndex: 'Status', key: 'Status', align: 'center', ellipsis: true }
+                    { title: () => (<span className='text_title'>消息ID</span>), dataIndex: 'Cid', key: 'Cid', align: 'center', ellipsis: true, render: (Cid) => (<span className="cursor_hover" onClick={ () => this.handleGoPage(Cid, 'messageIdDetailPage')}>{Cid}</span>) },
+                    { title: () => (<span className='text_title'>区块高度</span>), dataIndex: 'Height', key: 'Height', align: 'center', ellipsis: true, render: (Height) => (<span className="cursor_hover" style={{color: '#1a4fc9'}} onClick={ () => this.handleGoPage(Height, 'heightDetailPage')}>{Height}</span>) },
+                    { title: () => (<span className='text_title'>时间</span>), dataIndex: 'TimeCreate', key: 'TimeCreate', align: 'center', ellipsis: true },
+                    { title: () => (<span className='text_title'>发送方</span>), dataIndex: 'From', key: 'From', align: 'center', ellipsis: true, render: (From) => (<span className="cursor_hover" onClick={ () => this.handleGoPage(From, 'senderDetailPage')}>{From}</span>) },
+                    { title: () => (<span className='text_title'>接收方</span>), dataIndex: 'To', key: 'To', align: 'center', ellipsis: true },
+                    { title: () => (<span className='text_title'>方法</span>), dataIndex: 'Method', key: 'Method', align: 'center', ellipsis: true },
+                    { title: () => (<span className='text_title'>金额</span>), dataIndex: 'Balance', key: 'Balance', align: 'center', ellipsis: true },
+                    { title: () => (<span className='text_title'>状态</span>), dataIndex: 'Status', key: 'Status', align: 'center', ellipsis: true }
                 ]
                 dataSource = newListData.toJS()
             } else if (this.state.newListType == '转账列表') {
                 columns = [
-                    { title: () => (<span className='text_title'>时间</span>), className: 'txt_bolder', dataIndex: 'TimeCreate', key: 'TimeCreate', align: 'center', ellipsis: true},
-                    { title: () => (<span className='text_title'>消息ID</span>), className: 'txt_bolder', dataIndex: 'MessageId', key: 'MessageId', align: 'center', ellipsis: true, render: (MessageId) => (<span className="cursor_hover" onClick={ () => this.handleGoPage(MessageId, 'messageIdDetailPage')}>{MessageId}</span>) },
-                    { title: () => (<span className='text_title'>发送方</span>), className: 'txt_bolder', dataIndex: 'From', key: 'From', align: 'center', ellipsis: true, render: (From) => (<span className="cursor_hover" onClick={ () => this.handleGoPage(From, 'senderDetailPage')}>{From}</span>) },
-                    { title: () => (<span className='text_title'>接收方</span>), className: 'txt_bolder', dataIndex: 'To', key: 'To', align: 'center', ellipsis: true },
-                    { title: () => (<span className='text_title'>净收入</span>), className: 'txt_bolder', dataIndex: 'Balance', key: 'Balance', align: 'center', ellipsis: true },
-                    { title: () => (<span className='text_title'>类型</span>), className: 'txt_bolder', dataIndex: 'TransferType', key: 'TransferType', align: 'center', ellipsis: true }
+                    { title: () => (<span className='text_title'>时间</span>), dataIndex: 'TimeCreate', key: 'TimeCreate', align: 'center', ellipsis: true},
+                    { title: () => (<span className='text_title'>消息ID</span>), dataIndex: 'MessageId', key: 'MessageId', align: 'center', ellipsis: true, render: (MessageId) => (<span className="cursor_hover" onClick={ () => this.handleGoPage(MessageId, 'messageIdDetailPage')}>{MessageId}</span>) },
+                    { title: () => (<span className='text_title'>发送方</span>), dataIndex: 'From', key: 'From', align: 'center', ellipsis: true, render: (From) => (<span className="cursor_hover" onClick={ () => this.handleGoPage(From, 'senderDetailPage')}>{From}</span>) },
+                    { title: () => (<span className='text_title'>接收方</span>), dataIndex: 'To', key: 'To', align: 'center', ellipsis: true },
+                    { title: () => (<span className='text_title'>净收入</span>), dataIndex: 'Balance', key: 'Balance', align: 'center', ellipsis: true },
+                    { title: () => (<span className='text_title'>类型</span>), dataIndex: 'TransferType', key: 'TransferType', align: 'center', ellipsis: true }
                 ]
                 dataSource = newListData.toJS()
             }
@@ -158,7 +138,7 @@ class SenderDetail extends Component {
                     <Breadcrumb style={{ margin: '16px 0', textAlign: 'left', fontSize: '16px' }}>
                         <Breadcrumb.Item>账户 <span>f3wu4i2wt3gbiun7iymuyn2xd2txw7gcgw5ikyjkvavyl5gle2xmi3bksqtqhxclxftlhm2k73bkkprepg6j5q</span></Breadcrumb.Item>
                     </Breadcrumb>
-                    <div className="accountOverview_content">
+                    <div className="accountOverview_content" style={{color: '#000'}}>
                         <div>
                             <div>
                                 <Breadcrumb style={{ margin: '16px 0', textAlign: 'left', fontSize: '16px' }}>
@@ -175,8 +155,8 @@ class SenderDetail extends Component {
                                         <p><span>消息数</span><span>{accountDetailData.MessageCount}</span></p>
                                         <p><span>创建时间</span><span>{accountDetailData.TimeCreate}</span></p>
                                         <p><span>最新交易</span><span>{accountDetailData.TimeLastedTransaction}</span></p>
-                                        <p><span>名下矿工</span><span>{accountDetailData.Miners.length > 0 && accountDetailData.Miners.map((item, index) => (<span>{item}</span>))}</span></p>
-                                        <p><span>实际工作矿工</span><span>{accountDetailData.Workers.length > 0 && accountDetailData.Workers.map((item, index) => (<span>{item}</span>))}</span></p>
+                                        <p><span>名下矿工</span><span>{accountDetailData.Miners.length > 0 && accountDetailData.Miners.map((item, index) => (<span style={{color: '#1a4fc9'}}>{item}</span>))}</span></p>
+                                        <p><span>实际工作矿工</span><span>{accountDetailData.Workers.length > 0 && accountDetailData.Workers.map((item, index) => (<span style={{color: '#1a4fc9'}}>{item}</span>))}</span></p>
                                     </div>
                                 )
                             }
@@ -258,6 +238,9 @@ class SenderDetail extends Component {
                                     }
                                 </div>
                                 <div className="newList_bottom_wrap">
+                                    <Breadcrumb style={{ margin: '16px 0', textAlign: 'left', fontSize: '16px' }}>
+                                        <Breadcrumb.Item>共 <span>{totalCount != '' && totalCount}</span> 条信息</Breadcrumb.Item>
+                                    </Breadcrumb>
                                     <Table
                                         columns={columns}
                                         dataSource={dataSource}
