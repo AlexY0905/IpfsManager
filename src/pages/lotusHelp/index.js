@@ -110,7 +110,7 @@ class LotusHelp extends Component {
             } else if (queryResName == 'benchcompile') {
                 this.setState({benchceshiBtn: false})
             }
-        } else if (queryResCode != 0 && queryResName != '') { // 执行失败 改变按钮状态
+        } else if (queryResCode == 1 && queryResName != '') { // 执行失败 改变按钮状态
             if (queryResName == 'lotuscompile') {
                 this.setState({bianYiBtn: false})
             } else if (queryResName == 'minerinit') {
@@ -268,7 +268,7 @@ const mapDispatchToProps = (dispatch) => ({
     handleDeploy: (options) => { // 处理部署操作
         dispatch(actionCreator.handleDeployAction(options))
     },
-    handleGetQueryRes: (options) => { // 定时查询操作的返回结果
+    handleGetQueryRes: (options) => { // 查询操作的返回结果
         dispatch(actionCreator.handleGetQueryResAction(options))
     }
 })

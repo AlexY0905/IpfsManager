@@ -29,8 +29,16 @@ class MessageIdDetail extends Component {
     }
     handleGoPage (val, type) {
         if (val == 'N/A') return
-        if (type == 'senderDetailPage') {
+        if (type == 'messageIdDetailPage') {
+            this.props.history.push({ pathname: "/minerOverview/messageIdDetail", state: { parameter: val } })
+        } else if (type == 'heightDetailPage') {
+            this.props.history.push({ pathname: "/minerOverview/heightDetail", state: { parameter: val } })
+        } else if (type == 'senderDetailPage') {
             this.props.history.push({ pathname: "/minerOverview/senderDetail", state: { parameter: val } })
+        } else if (type == 'blockDetailPage') {
+            this.props.history.push({ pathname: "/minerOverview/blockDetail", state: { parameter: val } })
+        } else if (type == 'nodeIdPage') {
+            this.props.history.push({ pathname: "/minerOverview/nodeIdDetail", state: { parameter: val } })
         }
     }
     // 处理表格分页
@@ -89,11 +97,11 @@ class MessageIdDetail extends Component {
                                 msgIdDetailMsgData != '' && (
                                     <div className="messageDetail_content">
                                         <p><span>消息ID</span><span>{msgIdDetailMsgData.MessageId}</span></p>
-                                        <p><span>高度</span><span>{msgIdDetailMsgData.Height}</span></p>
+                                        <p><span>高度</span><span style={{color: '#1a4fc9', cursor: 'pointer'}} onClick={ () => this.handleGoPage(msgIdDetailMsgData.Height, 'heightDetailPage')}>{msgIdDetailMsgData.Height}</span></p>
                                         <p><span>时间</span><span>{msgIdDetailMsgData.Times}</span></p>
-                                        <p><span>所属区块</span><span style={{display: 'flex', flexDirection: 'column'}}>{msgIdDetailMsgData.Blocks.length > 0 && msgIdDetailMsgData.Blocks.map((item, index) => (<span>{item}</span>))}</span></p>
-                                        <p><span>发送方</span><span>{msgIdDetailMsgData.FromAddress}</span></p>
-                                        <p><span>接收方</span><span>{msgIdDetailMsgData.ToAddress}</span></p>
+                                        <p><span>所属区块</span><span style={{display: 'flex', flexDirection: 'column'}}>{msgIdDetailMsgData.Blocks.length > 0 && msgIdDetailMsgData.Blocks.map((item, index) => (<span style={{color: '#1a4fc9', cursor: 'pointer'}} onClick={ () => this.handleGoPage(item, 'blockDetailPage')}>{item}</span>))}</span></p>
+                                        <p><span>发送方</span><span style={{color: '#1a4fc9', cursor: 'pointer'}} onClick={ () => this.handleGoPage(msgIdDetailMsgData.FromAddress, 'senderDetailPage')}>{msgIdDetailMsgData.FromAddress}</span></p>
+                                        <p><span>接收方</span><span style={{color: '#1a4fc9', cursor: 'pointer'}} onClick={() => { this.props.history.push({ pathname: "/minerOverview" }) }}>{msgIdDetailMsgData.ToAddress}</span></p>
                                         <p><span>方法</span><span>{msgIdDetailMsgData.Method}</span></p>
                                         <p><span>金额</span><span>{msgIdDetailMsgData.Balance}</span></p>
                                         <p><span>状态</span><span>{msgIdDetailMsgData.Status}</span></p>

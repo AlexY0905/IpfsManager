@@ -16,6 +16,7 @@ class BlockDetail extends Component {
         }
         this.handleNewListSelectChange = this.handleNewListSelectChange.bind(this)
         this.handlePaginationChange = this.handlePaginationChange.bind(this)
+        this.handleGoPage = this.handleGoPage.bind(this)
     }
     componentDidMount() {
         // console.log(111111111111, this.props.location.state.parameter)
@@ -55,6 +56,20 @@ class BlockDetail extends Component {
         // 调用发送方函数, 处理消息列表数据
         this.props.handleBlockNewList(options)
     }
+    handleGoPage (val, type) {
+        if (val == 'N/A') return
+        if (type == 'messageIdDetailPage') {
+            this.props.history.push({ pathname: "/minerOverview/messageIdDetail", state: { parameter: val } })
+        } else if (type == 'heightDetailPage') {
+            this.props.history.push({ pathname: "/minerOverview/heightDetail", state: { parameter: val } })
+        } else if (type == 'senderDetailPage') {
+            this.props.history.push({ pathname: "/minerOverview/senderDetail", state: { parameter: val } })
+        } else if (type == 'blockDetailPage') {
+            this.props.history.push({ pathname: "/minerOverview/blockDetail", state: { parameter: val } })
+        } else if (type == 'nodeIdPage') {
+            this.props.history.push({ pathname: "/minerOverview/nodeIdDetail", state: { parameter: val } })
+        }
+    }
 
 
 
@@ -68,7 +83,7 @@ class BlockDetail extends Component {
                 columns = [
                     { title: () => (<span className='text_title'>消息ID</span>), dataIndex: 'Cid', key: 'Cid', align: 'center', ellipsis: true, render: (Cid) => (<span className="cursor_hover" onClick={ () => this.handleGoPage(Cid, 'messageIdDetailPage')}>{Cid}</span>) },
                     { title: () => (<span className='text_title'>发送方</span>), dataIndex: 'From', key: 'From', align: 'center', ellipsis: true, render: (From) => (<span className="cursor_hover" onClick={ () => this.handleGoPage(From, 'senderDetailPage')}>{From}</span>) },
-                    { title: () => (<span className='text_title'>接收方</span>), dataIndex: 'To', key: 'To', align: 'center', ellipsis: true },
+                    { title: () => (<span className='text_title' onClick={() => { this.props.history.push({ pathname: "/minerOverview" }) }}>接收方</span>), dataIndex: 'To', key: 'To', align: 'center', ellipsis: true },
                     { title: () => (<span className='text_title'>方法</span>), dataIndex: 'Method', key: 'Method', align: 'center', ellipsis: true },
                     { title: () => (<span className='text_title'>金额</span>), dataIndex: 'Balance', key: 'Balance', align: 'center', ellipsis: true },
                     { title: () => (<span className='text_title'>状态</span>), dataIndex: 'Status', key: 'Status', align: 'center', ellipsis: true }
@@ -95,14 +110,14 @@ class BlockDetail extends Component {
                                 blockIdDetailData != '' && (
                                     <div className="blockDetail_content">
                                         <p><span>区块ID</span><span>{blockIdDetailData.BlockId}</span></p>
-                                        <p><span>高度</span><span>{blockIdDetailData.Height}</span></p>
-                                        <p><span>矿工</span><span>{blockIdDetailData.Miner}</span></p>
+                                        <p><span>高度</span><span style={{color: '#1a4fc9', cursor: 'pointer'}} onClick={ () => this.handleGoPage(blockIdDetailData.Height, 'heightDetailPage')}>{blockIdDetailData.Height}</span></p>
+                                        <p><span>矿工</span><span style={{color: '#1a4fc9', cursor: 'pointer'}} onClick={() => { this.props.history.push({ pathname: "/minerOverview" }) }}>{blockIdDetailData.Miner}</span></p>
                                         <p><span>时间</span><span>{blockIdDetailData.Times}</span></p>
                                         <p><span>大小</span><span>{blockIdDetailData.Size}</span></p>
                                         <p><span>消息</span><span>{blockIdDetailData.MessageCount}</span></p>
                                         <p><span>奖励</span><span>{blockIdDetailData.Reward}</span></p>
                                         <p><span>奖励份数</span><span>{blockIdDetailData.WinCount}</span></p>
-                                        <p><span>父区块</span><span>{blockIdDetailData.ParentBlocks.length > 0 && blockIdDetailData.ParentBlocks.map((item, index) => (<span>{item}</span>))}</span></p>
+                                        <p><span>父区块</span><span>{blockIdDetailData.ParentBlocks.length > 0 && blockIdDetailData.ParentBlocks.map((item, index) => (<span style={{color: '#1a4fc9', cursor: 'pointer'}} onClick={ () => this.handleGoPage(item, 'blockDetailPage')}>{item}</span>))}</span></p>
                                         <p><span>父区块权重</span><span>{blockIdDetailData.ParentWeight}</span></p>
                                         <p><span>罚金</span><span>{blockIdDetailData.Penalty}</span></p>
                                         <p><span>Parent Base Fee</span><span>{blockIdDetailData.ParentBaseFee}</span></p>

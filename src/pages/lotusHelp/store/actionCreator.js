@@ -77,7 +77,7 @@ const handleGetQueryResData = (payload) => ({
     type: types.GET_QUERYRES,
     payload
 })
-// 处理部署页面 定时查询操作的返回结果
+// 处理部署页面 查询操作的返回结果
 export const handleGetQueryResAction = (options) => {
     return (dispatch, getState) => {
         dispatch(getIsLoadingStart())

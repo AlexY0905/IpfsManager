@@ -19,6 +19,7 @@ class SenderDetail extends Component {
         this.handleNewListRadioChange = this.handleNewListRadioChange.bind(this)
         this.handlePaginationChange = this.handlePaginationChange.bind(this)
         this.handleNewListSelectChange = this.handleNewListSelectChange.bind(this)
+        this.handleGoPage = this.handleGoPage.bind(this)
     }
     componentDidMount() {
         console.log(1111111111111, this.props);
@@ -80,6 +81,20 @@ class SenderDetail extends Component {
         }
         // 调用发送方函数, 处理消息列表数据
         this.props.handleNewList(options)
+    }
+    handleGoPage (val, type) {
+        if (val == 'N/A') return
+        if (type == 'messageIdDetailPage') {
+            this.props.history.push({ pathname: "/minerOverview/messageIdDetail", state: { parameter: val } })
+        } else if (type == 'heightDetailPage') {
+            this.props.history.push({ pathname: "/minerOverview/heightDetail", state: { parameter: val } })
+        } else if (type == 'senderDetailPage') {
+            this.props.history.push({ pathname: "/minerOverview/senderDetail", state: { parameter: val } })
+        } else if (type == 'blockDetailPage') {
+            this.props.history.push({ pathname: "/minerOverview/blockDetail", state: { parameter: val } })
+        } else if (type == 'nodeIdPage') {
+            this.props.history.push({ pathname: "/minerOverview/nodeIdDetail", state: { parameter: val } })
+        }
     }
 
 
@@ -155,8 +170,8 @@ class SenderDetail extends Component {
                                         <p><span>消息数</span><span>{accountDetailData.MessageCount}</span></p>
                                         <p><span>创建时间</span><span>{accountDetailData.TimeCreate}</span></p>
                                         <p><span>最新交易</span><span>{accountDetailData.TimeLastedTransaction}</span></p>
-                                        <p><span>名下矿工</span><span>{accountDetailData.Miners.length > 0 && accountDetailData.Miners.map((item, index) => (<span style={{color: '#1a4fc9'}}>{item}</span>))}</span></p>
-                                        <p><span>实际工作矿工</span><span>{accountDetailData.Workers.length > 0 && accountDetailData.Workers.map((item, index) => (<span style={{color: '#1a4fc9'}}>{item}</span>))}</span></p>
+                                        <p><span>名下矿工</span><span>{accountDetailData.Miners.length > 0 && accountDetailData.Miners.map((item, index) => (<span style={{color: '#1a4fc9'}} onClick={() => { this.props.history.push({ pathname: "/minerOverview" }) }}>{item}</span>))}</span></p>
+                                        <p><span>实际工作矿工</span><span>{accountDetailData.Workers.length > 0 && accountDetailData.Workers.map((item, index) => (<span style={{color: '#1a4fc9'}} onClick={() => { this.props.history.push({ pathname: "/minerOverview" }) }}>{item}</span>))}</span></p>
                                     </div>
                                 )
                             }

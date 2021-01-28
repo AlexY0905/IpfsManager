@@ -5,7 +5,7 @@ import "./index.css"
 import { actionCreator } from './store'
 import Layout from 'common/layout'
 import { Breadcrumb } from 'antd'
-import moment from "moment";
+import moment from "moment"
 
 class HeightDetail extends Component {
     constructor(props) {
@@ -13,6 +13,7 @@ class HeightDetail extends Component {
         this.state = {
 
         }
+        this.handleGoPage = this.handleGoPage.bind(this)
     }
     componentDidMount() {
         // 调用发送方函数, 处理获取区块高度数据列表
@@ -25,6 +26,20 @@ class HeightDetail extends Component {
         setInterval(() => {
             this.props.handleBlockHeightData(options)
         }, 7800000)
+    }
+    handleGoPage (val, type) {
+        if (val == 'N/A') return
+        if (type == 'messageIdDetailPage') {
+            this.props.history.push({ pathname: "/minerOverview/messageIdDetail", state: { parameter: val } })
+        } else if (type == 'heightDetailPage') {
+            this.props.history.push({ pathname: "/minerOverview/heightDetail", state: { parameter: val } })
+        } else if (type == 'senderDetailPage') {
+            this.props.history.push({ pathname: "/minerOverview/senderDetail", state: { parameter: val } })
+        } else if (type == 'blockDetailPage') {
+            this.props.history.push({ pathname: "/minerOverview/blockDetail", state: { parameter: val } })
+        } else if (type == 'nodeIdPage') {
+            this.props.history.push({ pathname: "/minerOverview/nodeIdDetail", state: { parameter: val } })
+        }
     }
 
 
@@ -55,7 +70,7 @@ class HeightDetail extends Component {
                                         {
                                             blockHeightDataList.Blocks.length > 0 && blockHeightDataList.Blocks.map((item, index) => (
                                                 <li>
-                                                    <p><span>区块ID</span><span style={{color: '#1a4fc9'}}>{item.Cid}</span></p>
+                                                    <p><span>区块ID</span><span style={{color: '#1a4fc9'}} onClick={ () => this.handleGoPage(item.Cid, 'blockDetailPage')}>{item.Cid}</span></p>
                                                     <p>
                                                         <span>矿工</span>
                                                         <div style={{flex: '1.5', display: 'flex'}}>

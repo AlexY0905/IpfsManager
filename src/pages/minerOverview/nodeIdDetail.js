@@ -38,16 +38,16 @@ class NodeIdDetail extends Component {
                                 nodeDetailMsgData != '' && (
                                     <div>
                                         <p><span>ID</span><span>{nodeDetailMsgData.PeerId}</span></p>
-                                        <p><span>矿工</span><span>{nodeDetailMsgData.Miners}</span></p>
+                                        <p><span>矿工</span><span style={{color: '#1a4fc9', cursor: 'pointer'}} onClick={() => { this.props.history.push({ pathname: "/minerOverview" }) }}>{nodeDetailMsgData.Miners}</span></p>
                                         <p>
                                             <span>地区（公开IP）</span>
                                             <span style={{display: 'flex'}}>
-                                                <span style={{display: 'flex', marginRight: '5px', flex: '0'}}><img src={nodeDetailMsgData.Location.Flag} style={{width: '20px'}} alt="" /></span>
+                                                <span style={{display: 'flex', marginRight: '5px', flex: '0'}}><img src={nodeDetailMsgData.Location.Flag} style={{width: '20px'}} /></span>
                                                 <span>{nodeDetailMsgData.Location.ContinentName}-</span>
                                                 <span>{nodeDetailMsgData.Location.CountryName}-</span>
                                                 <span>{nodeDetailMsgData.Location.RegionName}-</span>
                                                 <span>{nodeDetailMsgData.Location.City}</span>
-                                                <span>{nodeDetailMsgData.Location.Ip}</span>
+                                                <span>{'(' + nodeDetailMsgData.Location.Ip + ')'}</span>
                                             </span>
                                         </p>
                                         <p>

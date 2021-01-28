@@ -86,16 +86,41 @@ export const handleMiningCountsAction = (options) => {
             })
     }
 }
-
+// 处理账户折线图数据
+const handleAccountLineData = (payload) => ({
+    type: types.GET_ACCOUNTLINEDATA,
+    payload: payload
+})
+export const handleAccountLineAction = (options) => {
+    return (dispatch, getState) => {
+        dispatch(getIsLoadingStart())
+        api.getOverviewData(options)
+            .then((result) => {
+                // console.log('::::::::-------', result)
+                if (result.code == 1) {
+                    message.error('暂无数据, 请稍后再试 !')
+                } else {
+                    // 将后台请求过来的成功数据, 派发action, 到store
+                    dispatch(handleAccountLineData(result))
+                }
+            })
+            .catch((err) => {
+                message.error('获取数据失败, 请稍后再试 !')
+            })
+            .finally(() => {
+                dispatch(getIsLoadingEnd())
+            })
+    }
+}
 // 处理算力折线图数据
 const handleEchartsData = (payload) => ({
     type: types.GET_POWERECHARTSDATA,
     payload: payload
 })
-export const handleEchartsDataAction = () => {
+export const handleEchartsDataAction = (options) => {
     return (dispatch, getState) => {
         dispatch(getIsLoadingStart())
-        api.getMinerPower()
+        api.getOverviewData(options)
             .then((result) => {
                 // console.log('::::::::-------', result)
                 if (result.code == 1) {

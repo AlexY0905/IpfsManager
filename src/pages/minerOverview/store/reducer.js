@@ -6,7 +6,10 @@ const defaultState = fromJS({
     isLoading: false,
     overviewEchartsDataList: [],
     accountBalance: '',
+    accountLineData: [],
+    accountLineCompany: '',
     powerEchartsDataList: [],
+    powerLineCompany: '',
     overviewPowerData: '',
     miningCountsData: '',
     newListData: [],
@@ -54,10 +57,18 @@ export default (state = defaultState, action) => {
             miningCountsData: action.payload
         })
     }
+    // 处理账户折线图
+    if (action.type == types.GET_ACCOUNTLINEDATA) {
+        return state.merge({
+            accountLineData: fromJS(action.payload.msg), // 将数据数组转换成immutable
+            accountLineCompany: action.payload.unit
+        })
+    }
     // 处理有效算力折线图
     if (action.type == types.GET_POWERECHARTSDATA) {
         return state.merge({
-            powerEchartsDataList: fromJS(action.payload.msg) // 将数据数组转换成immutable
+            powerEchartsDataList: fromJS(action.payload.msg), // 将数据数组转换成immutable
+            powerLineCompany: action.payload.unit
         })
     }
     // 处理账户概览数据

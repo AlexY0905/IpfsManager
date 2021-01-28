@@ -6,7 +6,7 @@ import "./index.css"
 import { actionCreator } from './store'
 import Layout from 'common/layout'
 import { Breadcrumb, Spin, Radio, Table, Select } from 'antd'
-import { Pie } from '@ant-design/charts';
+import { Pie, Line, DualAxes } from '@ant-design/charts';
 import { Chart, Geom, Axis, Tooltip, Legend } from "bizcharts";
 const { Option } = Select;
 
@@ -55,10 +55,14 @@ class OverviewList extends Component {
         let options = {name: 'minerdetail'}
         this.props.handleOverviewEchartsData(options)
         // 调用发送方函数, 处理挖矿数据
-        let miningOptions = {name: 'powerchanges', time: ''}
+        let miningOptions = {name: 'miningstatistics', time: ''}
         this.props.handleMiningCounts(miningOptions)
+        // 调用发送方函数, 处理账户折线图数据
+        let accountLineOptions = {name: 'accountchanges'}
+        this.props.handleAccountLine(accountLineOptions)
         // 调用发送方函数, 处理有效算力折线图数据
-        this.props.handleEchartsData()
+        let powerLineOptions = {name: 'powerchanges'}
+        this.props.handleEchartsData(powerLineOptions)
         // 调用发送方函数, 处理账户概览数据
         let accountOptions = {name: 'accoutSummary'}
         this.props.handleAccountData(accountOptions)
@@ -68,6 +72,7 @@ class OverviewList extends Component {
         setInterval(() => {
             this.props.handleOverviewEchartsData(options)
             this.props.handleMiningCounts(miningOptions)
+            this.props.handleAccountLine()
             this.props.handleEchartsData()
             this.props.handleAccountData(accountOptions)
             this.props.handleNewList(newListOptions)
@@ -77,7 +82,7 @@ class OverviewList extends Component {
     handleRadioChange (val) {
         miningIsOne = true
         let options = {
-            name: 'powerchanges',
+            name: 'miningstatistics',
             time: val.target.value
         }
         // 调用发送方函数, 处理各个时间段的数据
@@ -85,7 +90,6 @@ class OverviewList extends Component {
     }
     // 处理消息列表单选框改变事件
     handleNewListRadioChange (val) {
-        console.log('val++++++++++++', val.target.value)
         this.setState({newListType: val.target.value, currentPage: 1})
         let options = {
             name: '',
@@ -104,7 +108,6 @@ class OverviewList extends Component {
 
     // 处理消息列表下拉框改变事件
     handleNewListSelectChange (val) {
-        console.log('val==============', val);
         this.setState({newListSelectType: val, currentPage: 1})
         // 调用发送方函数, 处理消息列表数据
         let newListOptions = {name: 'minermessage', page: 1, method: val}
@@ -112,8 +115,6 @@ class OverviewList extends Component {
     }
     // 处理表格分页器
     handlePaginationChange (page, pageSize) {
-        console.log(':::::::::-----123', page)
-        console.log(22222222, this.state.newListType);
         let options = {
             name: '',
             page: page
@@ -148,12 +149,56 @@ class OverviewList extends Component {
 
 
     render() {
+        /*
+        let dataArr = [
+            {
+                qw: '18',
+                er: '19',
+                rt: '20',
+                date: '2015'
+            },
+            {
+                qw: '21',
+                er: '34',
+                rt: '53',
+                date: '2016'
+            },
+            {
+                qw: '34',
+                er: '67',
+                rt: '87',
+                date: '2017'
+            },
+            {
+                qw: '89',
+                er: '87',
+                rt: '88',
+                date: '2018'
+            }
+        ]
+        let arrTep = []
+        dataArr.forEach((item, index) => {
+            for (let key in item) {
+                if (key != 'date') {
+                    arrTep.push({
+                        year: item.date,
+                        value: item[key],
+                        category: key
+                    })
+                }
+            }
+        })
+        */
+
         const {
             accountBalance,
             overviewEchartsDataList,
             overviewPowerData,
             miningCountsData,
+            accountLineData,
+            accountLineCompany,
             powerEchartsDataList,
+            powerLineCompany,
             newListData,
             newListSelectData,
             totalCount,
@@ -233,7 +278,56 @@ class OverviewList extends Component {
         // 有效算力数据结束
         // ---------------------------------------------- 矿工概览数据 --------------------------------------------
 
+        // ---------------------------------------------- 账户折线图 --------------------------------------------
+        let lineConfig = {}
+        if (accountLineData.toJS().length > 0 && accountLineCompany != '') {
+            let COLOR_PLATE_10 = [
+                '#5B8FF9',
+                '#5AD8A6',
+                '#5D7092',
+                '#F6BD16',
+                '#E8684A',
+                '#6DC8EC',
+                '#9270CA',
+                '#FF9D4D',
+                '#269A99',
+                '#FF99C3',
+            ]
+            lineConfig = {
+                data: accountLineData.toJS(),
+                xField: 'times',
+                yField: 'value',
+                seriesField: 'name',
+                yAxis: {
+                    label: {
+                        formatter: function formatter(v) {
+                            return ''.concat(v).replace(/\d{1,3}(?=(\d{3})+$)/g, function (s) {
+                                return ''.concat(s, ',');
+                            }) + ' ' + accountLineCompany;
+                        }
+                    }
+                },
+                color: COLOR_PLATE_10,
+                point: {
+                    style: function style(_ref2) {
+                        let times = _ref2.times;
+                        return { r: Number(times) % 4 ? 0 : 3 };
+                    }
+                },
+                tooltip: {
+                    formatter: function formatter(datum) {
+                        return {
+                            name: datum.name,
+                            value: ''.concat(datum.value + ' ', accountLineCompany),
+                        }
+                    }
+                }
+            }
+        }
+        // ---------------------------------------------- 账户折线图 --------------------------------------------
+
         // ---------------------------------------------- 有效算力折线图数据 ----------------------------------------
+        /*
         let powerEchartsData = []
         if (powerEchartsDataList.toJS().length > 0) {
             powerEchartsData = powerEchartsDataList.toJS();
@@ -248,6 +342,33 @@ class OverviewList extends Component {
                 alias: "有效算力"
             }
         }
+        */
+        let powerConfig = ''
+        if (powerEchartsDataList.toJS().length > 0 && powerLineCompany != '') {
+            console.log('::::::+++++++12321', powerLineCompany);
+            powerConfig = {
+                data: [powerEchartsDataList.toJS(), powerEchartsDataList.toJS()],
+                xField: 'times',
+                yField: ['power_delta', 'effective_power'],
+                geometryOptions: [
+                    { geometry: 'column' },
+                    {
+                        geometry: 'line',
+                        lineStyle: { lineWidth: 2 }
+                    }
+                ],
+                legend: {
+                    itemName: {
+                        formatter: function formatter(text, item) {
+                            return item.value === 'power_delta' ? '有效增量' : '有效算力';
+                        }
+                    }
+                },
+                showTitle: true,
+                title: '账户标题'
+            }
+        }
+
         // ---------------------------------------------- 有效算力折线图数据 ----------------------------------------
         // ---------------------------------------------- 消息列表表格数据 ----------------------------------------
         let columns = []
@@ -384,50 +505,71 @@ class OverviewList extends Component {
                                 )
                             }
                         </div>
-                        <div style={{width: '100%', marginTop: '50px'}}>
-                            <div>
-                                <Breadcrumb style={{ margin: '16px 0', textAlign: 'left', fontSize: '16px' }}>
-                                    <Breadcrumb.Item style={{paddingLeft: '20px'}}>算力变化</Breadcrumb.Item>
-                                </Breadcrumb>
-                            </div>
-                            <div>
-                                <Chart height={400} data={powerEchartsData} scale={cols} forceFit padding={[ 20, 100, 20, 100 ]}>
-                                    <Axis
-                                        name="time"
-                                        line={{
-                                            stroke: "#E6E6E6"
-                                        }}
-                                    />
-                                    <Axis
-                                        name="miner_power_quality"
-                                        label={{
-                                            formatter: val => `${val} TiB`
-                                        }}
-                                    />
-                                    <Tooltip />
-                                    <Legend />
-                                    <Geom
-                                        type="line"
-                                        position="time*miner_power_quality"
-                                        size={1}
-                                        color="l (270) 0:rgba(255, 146, 255, 1) .5:rgba(100, 268, 255, 1) 1:rgba(215, 0, 255, 1)"
-                                        shape="smooth"
-                                        style={{
-                                            shadowColor: "l (270) 0:rgba(21, 146, 255, 0)",
-                                            shadowBlur: 60,
-                                            shadowOffsetY: 6
-                                        }}
-                                        tooltip={['time*miner_power_quality', (time, miner_power_quality) => {
-                                            return {
-                                                name: '有效算力',
-                                                title: time,
-                                                value: miner_power_quality + ' TiB'
-                                            };
-                                        }]}
-                                    />
-                                </Chart>
-                            </div>
+                        <div style={{width: '100%', marginTop: '50px', padding: '20px'}}>
+                            {
+                                accountLineData.toJS().length > 0 && (
+                                    <Line {...lineConfig} />
+                                )
+                            }
                         </div>
+                        {
+                            /*
+                            <div style={{width: '100%', marginTop: '50px'}}>
+                                <div>
+                                    <Breadcrumb style={{ margin: '16px 0', textAlign: 'left', fontSize: '16px' }}>
+                                        <Breadcrumb.Item style={{paddingLeft: '20px'}}>算力变化</Breadcrumb.Item>
+                                    </Breadcrumb>
+                                </div>
+                                <div>
+                                    <Chart height={400} data={powerEchartsData} scale={cols} forceFit padding={[ 20, 100, 20, 100 ]}>
+                                        <Axis
+                                            name="time"
+                                            line={{
+                                                stroke: "#E6E6E6"
+                                            }}
+                                        />
+                                        <Axis
+                                            name="miner_power_quality"
+                                            label={{
+                                                formatter: val => `${val} TiB`
+                                            }}
+                                        />
+                                        <Tooltip />
+                                        <Legend />
+                                        <Geom
+                                            type="line"
+                                            position="time*miner_power_quality"
+                                            size={1}
+                                            color="l (270) 0:rgba(255, 146, 255, 1) .5:rgba(100, 268, 255, 1) 1:rgba(215, 0, 255, 1)"
+                                            shape="smooth"
+                                            style={{
+                                                shadowColor: "l (270) 0:rgba(21, 146, 255, 0)",
+                                                shadowBlur: 60,
+                                                shadowOffsetY: 6
+                                            }}
+                                            tooltip={['time*miner_power_quality', (time, miner_power_quality) => {
+                                                return {
+                                                    name: '有效算力',
+                                                    title: time,
+                                                    value: miner_power_quality + ' TiB'
+                                                };
+                                            }]}
+                                        />
+                                    </Chart>
+                                </div>
+                            </div>
+                             */
+                        }
+
+                        {
+                            powerConfig != '' && (
+                                <div style={{width: '100%', marginTop: '50px', padding: '20px'}}>
+                                    <h3>单位: {powerLineCompany}</h3>
+                                    <DualAxes {...powerConfig} />
+                                </div>
+                            )
+                        }
+
                         <div className="accountOverview_wrap">
                             <div>
                                 <Breadcrumb style={{ margin: '16px 0', textAlign: 'left', fontSize: '16px' }}>
@@ -448,7 +590,7 @@ class OverviewList extends Component {
                                             <p><span>Owner:</span><span style={{color: '#1a4fc9', cursor: 'pointer'}} onClick={() => this.handleGoPage(accountOverviewData.Owner, 'senderDetailPage')}>{accountOverviewData.Owner}</span></p>
                                             <p><span>Worker:</span><span style={{color: '#1a4fc9', cursor: 'pointer'}} onClick={() => this.handleGoPage(accountOverviewData.Worker, 'senderDetailPage')}>{accountOverviewData.Worker}</span></p>
                                             {/*<p><span>地区（公开IP）:</span><span>{accountOverviewData.Location}</span></p>*/}
-                                            <p><span>地区（公开IP）:</span><span><span><img style={{width: '20px', verticalAlign: '-3px', marginRight: '5px'}} src={accountOverviewData.Location.Flag} /></span><span>{accountOverviewData.Location.ContinentName}-</span><span>{accountOverviewData.Location.CountryName}-</span><span>{accountOverviewData.Location.RegionName}-</span><span>{accountOverviewData.Location.City}</span><span>{accountOverviewData.Location.Ip}</span></span></p>
+                                            <p><span>地区（公开IP）:</span><span><span><img style={{width: '20px', verticalAlign: '-3px', marginRight: '5px'}} src={accountOverviewData.Location.Flag} /></span><span>{accountOverviewData.Location.ContinentName}-</span><span>{accountOverviewData.Location.CountryName}-</span><span>{accountOverviewData.Location.RegionName}-</span><span>{accountOverviewData.Location.City}</span><span>{'(' + accountOverviewData.Location.Ip + ')'}</span></span></p>
                                         </div>
                                     </div>
                                 )
@@ -516,6 +658,9 @@ const mapStateToProps = (state) => ({
     isLoading: state.get('minerOverview').get('isLoading'),
     overviewEchartsDataList: state.get('minerOverview').get('overviewEchartsDataList'),
     accountBalance: state.get('minerOverview').get('accountBalance'),
+    accountLineCompany: state.get('minerOverview').get('accountLineCompany'),
+    accountLineData: state.get('minerOverview').get('accountLineData'),
+    powerLineCompany: state.get('minerOverview').get('powerLineCompany'),
     powerEchartsDataList: state.get('minerOverview').get('powerEchartsDataList'),
     overviewPowerData: state.get('minerOverview').get('overviewPowerData'),
     miningCountsData: state.get('minerOverview').get('miningCountsData'),
@@ -531,8 +676,11 @@ const mapDispatchToProps = (dispatch) => ({
     handleOverviewEchartsData: (options) => {
         dispatch(actionCreator.handleOverviewEchartsDataAction(options))
     },
-    handleEchartsData: () => {
-        dispatch(actionCreator.handleEchartsDataAction())
+    handleAccountLine: (options) => {
+        dispatch(actionCreator.handleAccountLineAction(options))
+    },
+    handleEchartsData: (options) => {
+        dispatch(actionCreator.handleEchartsDataAction(options))
     },
     handleMiningCounts: (options) => {
         dispatch(actionCreator.handleMiningCountsAction(options))
