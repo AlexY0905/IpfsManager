@@ -138,6 +138,33 @@ export const handleEchartsDataAction = (options) => {
             })
     }
 }
+// 处理算力折线图数据
+const handlePowerEchartsData = (payload) => ({
+    type: types.GET_POWERECHARTSONEDATA,
+    payload: payload
+})
+export const handlePowerEchartsDataAction = (options) => {
+    return (dispatch, getState) => {
+        dispatch(getIsLoadingStart())
+        api.getOverviewData(options)
+            .then((result) => {
+                // console.log('::::::::-------', result)
+                if (result.code == 1) {
+                    message.error('暂无数据, 请稍后再试 !')
+                } else {
+                    // 将后台请求过来的成功数据, 派发action, 到store
+                    dispatch(handlePowerEchartsData(result))
+                }
+            })
+            .catch((err) => {
+                message.error('获取数据失败, 请稍后再试 !')
+            })
+            .finally(() => {
+                dispatch(getIsLoadingEnd())
+            })
+    }
+}
+
 // 处理账户概览数据
 const handleAccountData = (payload) => ({
     type: types.GET_ACCOUNTDATA,

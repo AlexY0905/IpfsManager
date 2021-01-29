@@ -6,6 +6,7 @@ import { actionCreator } from './store'
 import Layout from 'common/layout'
 import { Breadcrumb, Table, Radio, Select } from 'antd'
 import { Chart, Geom, Axis, Tooltip, Legend } from "bizcharts";
+import { Line } from '@ant-design/charts';
 const { Option } = Select;
 
 class SenderDetail extends Component {
@@ -20,6 +21,7 @@ class SenderDetail extends Component {
         this.handlePaginationChange = this.handlePaginationChange.bind(this)
         this.handleNewListSelectChange = this.handleNewListSelectChange.bind(this)
         this.handleGoPage = this.handleGoPage.bind(this)
+        this.handleRadioChange = this.handleRadioChange.bind(this)
     }
     componentDidMount() {
         console.log(1111111111111, this.props);
@@ -30,12 +32,17 @@ class SenderDetail extends Component {
         }
         this.props.handleAccountDetailData(options)
         // 调用发送方函数, 处理有效算力折线图数据
-        this.props.handleEchartsData()
+        let powerOptions = {
+            name: 'frompowerchanges',
+            address: this.props.location.state.parameter,
+            time: ''
+        }
+        this.props.handlePowerEchartsData(powerOptions)
         // 调用发送方函数, 处理消息列表数据
         let newListOptions = {name: 'minermessage', page: 1, address: this.props.location.state.parameter}
         this.props.handleNewList(newListOptions)
         setInterval(() => {
-            this.props.handleEchartsData()
+            this.props.handlePowerEchartsData(powerOptions)
             this.props.handleNewList(newListOptions)
         }, 7800000)
     }
@@ -65,6 +72,16 @@ class SenderDetail extends Component {
         // 调用发送方函数, 处理消息列表数据
         let newListOptions = {name: 'minermessage', page: 1, method: val, address: this.props.location.state.parameter}
         this.props.handleNewList(newListOptions)
+    }
+    // 处理时间单选框改变事件
+    handleRadioChange (val) {
+        let options = {
+            name: 'frompowerchanges',
+            address: this.props.location.state.parameter,
+            time: val.target.value
+        }
+        // 调用发送方函数, 处理各个时间段的数据
+        this.props.handlePowerEchartsData(options)
     }
     // 处理表格分页器
     handlePaginationChange (page, pageSize) {
@@ -100,22 +117,54 @@ class SenderDetail extends Component {
 
 
     render() {
-        const { powerEchartsDataList, newListData, newListSelectData, totalCount, accountDetailData } = this.props
+        const { powerEchartsOneData, newListData, newListSelectData, totalCount, accountDetailData, powerEchartsCompany } = this.props
         // ---------------------------------------------- 有效算力折线图数据 ----------------------------------------
         let powerEchartsData = []
-        if (powerEchartsDataList.toJS().length > 0) {
-            powerEchartsData = powerEchartsDataList.toJS();
-        }
-        const cols = {
-            time: {
-                nice: true,
-                alias: "时间"
-            },
-            miner_power_quality: {
-                nice: true,
-                alias: "有效算力"
+        let lineConfig = ''
+        if (powerEchartsOneData.toJS().length > 0 && powerEchartsCompany != '') {
+            /*
+            powerEchartsData = powerEchartsOneData.toJS();
+            const cols = {
+                timestamp: {
+                    nice: true,
+                    alias: "时间"
+                },
+                balance: {
+                    nice: true,
+                    alias: "总余额"
+                }
+            }
+            */
+            lineConfig = {
+                data: powerEchartsOneData.toJS(),
+                xField: 'timestamp',
+                yField: 'balance',
+                yAxis: {
+                    label: {
+                        formatter: function formatter(v) {
+                            return ''.concat(v).replace(/\d{1,3}(?=(\d{3})+$)/g, function (s) {
+                                return ''.concat(s, ',');
+                            }) + ' ' + powerEchartsCompany;
+                        }
+                    }
+                },
+                point: {
+                    style: function style(_ref2) {
+                        let times = _ref2.timestamp;
+                        return { r: Number(times) % 4 ? 0 : 3 };
+                    }
+                },
+                tooltip: {
+                    formatter: function formatter(datum) {
+                        return {
+                            name: '总余额',
+                            value: ''.concat(datum.balance + ' ', powerEchartsCompany),
+                        }
+                    }
+                }
             }
         }
+
         // ---------------------------------------------- 有效算力折线图数据 ----------------------------------------
         // ---------------------------------------------- 消息列表表格数据 ----------------------------------------
         let columns = []
@@ -192,43 +241,50 @@ class SenderDetail extends Component {
                                     </Radio.Group>
                                 </div>
                             </div>
-                            <div>
-                                <Chart height={400} data={powerEchartsData} scale={cols} forceFit padding={[ 20, 100, 20, 100 ]}>
-                                    <Axis
-                                        name="time"
-                                        line={{
-                                            stroke: "#E6E6E6"
-                                        }}
-                                    />
-                                    <Axis
-                                        name="miner_power_quality"
-                                        label={{
-                                            formatter: val => `${val} TiB`
-                                        }}
-                                    />
-                                    <Tooltip />
-                                    <Legend />
-                                    <Geom
-                                        type="line"
-                                        position="time*miner_power_quality"
-                                        size={1}
-                                        color="l (270) 0:rgba(255, 146, 255, 1) .5:rgba(100, 268, 255, 1) 1:rgba(215, 0, 255, 1)"
-                                        shape="smooth"
-                                        style={{
-                                            shadowColor: "l (270) 0:rgba(21, 146, 255, 0)",
-                                            shadowBlur: 60,
-                                            shadowOffsetY: 6
-                                        }}
-                                        tooltip={['time*miner_power_quality', (time, miner_power_quality) => {
-                                            return {
-                                                name: '有效算力',
-                                                title: time,
-                                                value: miner_power_quality + ' TiB'
-                                            };
-                                        }]}
-                                    />
-                                </Chart>
-                            </div>
+                            {
+                                powerEchartsOneData.toJS().length > 0 && powerEchartsCompany != '' && (
+                                    /*
+                                    <div>
+                                        <Chart height={400} data={powerEchartsData} scale={cols} forceFit padding={[ 20, 100, 20, 100 ]}>
+                                            <Axis
+                                                name="timestamp"
+                                                line={{
+                                                    stroke: "#E6E6E6"
+                                                }}
+                                            />
+                                            <Axis
+                                                name="balance"
+                                                label={{
+                                                    formatter: val => `${val} ${ powerEchartsCompany}`
+                                                }}
+                                            />
+                                            <Tooltip />
+                                            <Legend />
+                                            <Geom
+                                                type="line"
+                                                position="timestamp*balance"
+                                                size={1}
+                                                color="l (270) 0:rgba(255, 146, 255, 1) .5:rgba(100, 268, 255, 1) 1:rgba(215, 0, 255, 1)"
+                                                shape="smooth"
+                                                style={{
+                                                    shadowColor: "l (270) 0:rgba(21, 146, 255, 0)",
+                                                    shadowBlur: 60,
+                                                    shadowOffsetY: 6
+                                                }}
+                                                tooltip={['timestamp*balance', (timestamp, balance) => {
+                                                    return {
+                                                        name: '总余额',
+                                                        title: timestamp,
+                                                        value: balance + ' ' + powerEchartsCompany
+                                                    };
+                                                }]}
+                                            />
+                                        </Chart>
+                                    </div>
+                                    */
+                                    <Line {...lineConfig} />
+                                )
+                            }
                             <div className="newList_wrap" style={{padding: '0'}}>
                                 <div className="newList_top_wrap">
                                     <div className="top_left_wrap">
@@ -288,18 +344,19 @@ class SenderDetail extends Component {
 // 接收方
 const mapStateToProps = (state) => ({
     isLoading: state.get('minerOverview').get('isLoading'),
-    powerEchartsDataList: state.get('minerOverview').get('powerEchartsDataList'),
+    powerEchartsOneData: state.get('minerOverview').get('powerEchartsOneData'),
     newListData: state.get('minerOverview').get('newListData'),
     newListSelectData: state.get('minerOverview').get('newListSelectData'),
     totalCount: state.get('minerOverview').get('totalCount'),
-    accountDetailData: state.get('minerOverview').get('accountDetailData')
+    accountDetailData: state.get('minerOverview').get('accountDetailData'),
+    powerEchartsCompany: state.get('minerOverview').get('powerEchartsCompany'),
 })
 
 
 // 发送方
 const mapDispatchToProps = (dispatch) => ({
-    handleEchartsData: () => {
-        dispatch(actionCreator.handleEchartsDataAction())
+    handlePowerEchartsData: (options) => {
+        dispatch(actionCreator.handlePowerEchartsDataAction(options))
     },
     handleNewList: (options) => {
         dispatch(actionCreator.handleNewListAction(options))

@@ -84,21 +84,47 @@ export const handleGetQueryResAction = (options) => {
         api.getQueryRes(options)
             .then(result => {
                 console.log('result----------', result)
+                if (result.code == 0) { // 全部执行完毕, 并且成功
+                    result.msg.forEach((item, index) => {
+                        Modal.success({
+                            content: item.Host + '执行完毕'
+                        })
+                    })
+                    return
+                    dispatch(handleGetQueryResData(result))
+                } else if (result.code == 1) { // 正在执行中
+                    result.msg.forEach((item, index) => {
+                        if (item.Code == 0) { // 执行完毕
+                            Modal.success({
+                                content: item.Host + ' 执行完毕'
+                            })
+                        } else if (item.Code == 1) { // 执行失败
+                            Modal.error({
+                                content: item.Host + ' 执行失败'
+                            })
+                        } else if (item.Code == 2) { // 正在执行中
+                            Modal.warning({
+                                content: item.Host + ' 正在执行中, 稍后再看 ... '
+                            })
+                        } else if (item.Code == 3) { // 暂无执行
+                            Modal.warning({
+                                content: item.Host + ' 暂无执行'
+                            })
+                        }
+                    })
+                } else { // 执行失败
+                    Modal.error({
+                        content: '网络错误, 稍后再试 ... '
+                    })
+                    return
+                    dispatch(handleGetQueryResData(result))
+                }
+
                 /*
-                let options = {
-                    result,
-                    timeOut: ''
-                }
-                if (result.code == 2) { // 正在执行中
-                    options.timeOut = 60000
-                }
-                dispatch(handleGetQueryResData(options))
-                */
                 if (result.code == 0) { // 执行成功
                     Modal.success({
                         content: '执行成功'
                     })
-                    dispatch(handleGetQueryResData(result))
                     return false
                 } else if (result.code == 1) { // 执行失败
                     Modal.error({
@@ -111,7 +137,14 @@ export const handleGetQueryResAction = (options) => {
                         content: '正在执行中, 稍后再看 ... '
                     })
                     return false
+                } else if (result.code == 3) { // 暂无执行的脚本
+                    Modal.warning({
+                        content: '暂无执行的脚本 ... '
+                    })
+                    return false
                 }
+                */
+
             })
             .catch(err => {
                 message.error('查询结果失败, 请稍后再试 !')

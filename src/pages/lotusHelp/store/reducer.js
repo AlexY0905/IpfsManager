@@ -40,7 +40,7 @@ export default (state = defaultState, action) => {
     if (action.type == types.GET_QUERYRES) {
         return state.merge({
             queryResName: action.payload.name,
-            queryResCode: action.payload.queryResCode
+            queryResCode: action.payload.code
         })
     }
 

@@ -8,8 +8,10 @@ const defaultState = fromJS({
     accountBalance: '',
     accountLineData: [],
     accountLineCompany: '',
+    powerEchartsOneData: [],
     powerEchartsDataList: [],
     powerLineCompany: '',
+    powerEchartsCompany: '',
     overviewPowerData: '',
     miningCountsData: '',
     newListData: [],
@@ -71,6 +73,13 @@ export default (state = defaultState, action) => {
             powerLineCompany: action.payload.unit
         })
     }
+    // 处理有效算力折线图
+    if (action.type == types.GET_POWERECHARTSONEDATA) {
+        return state.merge({
+            powerEchartsOneData: fromJS(action.payload.msg), // 将数据数组转换成immutable
+            powerEchartsCompany: action.payload.unit
+        })
+    }
     // 处理账户概览数据
     if (action.type == types.GET_ACCOUNTDATA) {
         return state.merge({
@@ -107,7 +116,7 @@ export default (state = defaultState, action) => {
     if (action.type == types.GET_MSGDETAILDATA) {
         return state.merge({
             msgIdDetailMsgData: action.payload.MessageSummarys,
-            msgIdDetailAccountData: fromJS(action.payload.TransferInfos),
+            msgIdDetailAccountData: action.payload.TransferInfos != null ? fromJS(action.payload.TransferInfos) : fromJS([]),
             msgIdDetailOthersData: action.payload.OtherInfos
         })
     }

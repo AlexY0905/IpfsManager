@@ -62,7 +62,7 @@ class OverviewList extends Component {
         this.props.handleAccountLine(accountLineOptions)
         // 调用发送方函数, 处理有效算力折线图数据
         let powerLineOptions = {name: 'powerchanges'}
-        this.props.handleEchartsData(powerLineOptions)
+        // this.props.handleEchartsData(powerLineOptions)
         // 调用发送方函数, 处理账户概览数据
         let accountOptions = {name: 'accoutSummary'}
         this.props.handleAccountData(accountOptions)
@@ -72,8 +72,8 @@ class OverviewList extends Component {
         setInterval(() => {
             this.props.handleOverviewEchartsData(options)
             this.props.handleMiningCounts(miningOptions)
-            this.props.handleAccountLine()
-            this.props.handleEchartsData()
+            this.props.handleAccountLine(accountLineOptions)
+            // this.props.handleEchartsData(powerLineOptions)
             this.props.handleAccountData(accountOptions)
             this.props.handleNewList(newListOptions)
         }, 7800000)
@@ -127,7 +127,7 @@ class OverviewList extends Component {
         } else if (this.state.newListType == '转账列表') {
             options.name = 'minertransfors'
         }
-        console.log('options==========', options)
+        // console.log('options==========', options)
         // 调用发送方函数, 处理消息列表数据
         this.props.handleNewList(options)
     }
@@ -345,7 +345,7 @@ class OverviewList extends Component {
         */
         let powerConfig = ''
         if (powerEchartsDataList.toJS().length > 0 && powerLineCompany != '') {
-            console.log('::::::+++++++12321', powerLineCompany);
+            // console.log('::::::+++++++12321', powerLineCompany);
             powerConfig = {
                 data: [powerEchartsDataList.toJS(), powerEchartsDataList.toJS()],
                 xField: 'times',
@@ -411,7 +411,7 @@ class OverviewList extends Component {
         // ---------------------------------------------- 消息列表表格数据 ----------------------------------------
 
 
-        
+
         return (
             <div className="News">
                 <Layout>
