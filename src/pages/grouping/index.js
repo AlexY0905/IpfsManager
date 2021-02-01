@@ -266,7 +266,7 @@ class Grouping extends Component {
                     </Breadcrumb>
                     <div className="btn_wrap">
                         <div className="upload_wrap">
-                            <Input style={{ width: '300px', marginRight: '10px' }} placeholder="输入上传的地址" onChange={this.handlefileAddress} />
+                            <Input style={{ width: '300px', marginRight: '10px' }} placeholder="例如: /root/xxxx;/root" onChange={this.handlefileAddress} />
                             <Button onClick={this.handleUpLoadBtn} disabled={this.state.upLoadDisable}>
                                 <Icon type="upload" /> 点击上传
                             </Button>

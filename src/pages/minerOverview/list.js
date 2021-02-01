@@ -496,7 +496,7 @@ class OverviewList extends Component {
                                         <div>
                                             <p>算力增速: {miningCountsData.PowerIncreaseRate}</p>
                                             <p>出块份数: {miningCountsData.WeightedBlocksMined}</p>
-                                            <p>抽查成本: {miningCountsData.WindowedPoStFeePer}</p>
+                                            <p>抽查成本: {miningCountsData.WindowedPoStFeePer} FIL/TiB</p>
                                         </div>
                                         <div>
                                             <p>矿机当量: {miningCountsData.EquivalentMiners}</p>

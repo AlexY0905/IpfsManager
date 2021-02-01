@@ -48,23 +48,29 @@ class LotusHelp extends Component {
         if (type == '编译') {
             options.name = 'lotuscompile'
             this.setState({name: 'lotuscompile', bianYiBtn: true})
+            window.localStorage.setItem("commandName", 'lotuscompile')
         } else if (type == '同步区块') {
 
         } else if (type == '初始化矿工') {
             options.name = 'minerinit'
             this.setState({name: 'minerinit', chuShiHuaKuangGongBtn: true})
+            window.localStorage.setItem("commandName", 'minerinit')
         } else if (type == '启动矿工') {
             options.name = 'minerrun'
             this.setState({name: 'minerrun', qiDongKuangGongBtn: true})
+            window.localStorage.setItem("commandName", 'minerrun')
         } else if (type == '启动 worker') {
             options.name = 'workerrun'
             this.setState({name: 'workerrun', qiDongWorkerBtn: true})
+            window.localStorage.setItem("commandName", 'workerrun')
         } else if (type == 'bench 编译') {
             options.name = 'benchcompile'
             this.setState({name: 'benchcompile', benchCompile: true})
+            window.localStorage.setItem("commandName", 'benchcompile')
         } else if (type == 'bench 测试') {
             options.name = 'benchrun'
             this.setState({name: 'benchrun', benchceshiBtn: true})
+            window.localStorage.setItem("commandName", 'benchrun')
         }
         console.log('options-----------', options)
         // 调用发送方函数, 处理部署
@@ -87,9 +93,10 @@ class LotusHelp extends Component {
         this.setState({isShowServerModal: false})
     }
     handleDeployRes () {
+        console.log('::::::::::-------++++++', JSON.parse(window.localStorage.getItem("commandHostList")));
         let options = {
-            name: this.state.name,
-            servers: this.state.selectedRows
+            name: window.localStorage.getItem("commandName"),
+            servers: JSON.parse(window.localStorage.getItem("commandHostList"))
         }
         // 调用发送方函数
         this.props.handleGetQueryRes(options)
@@ -143,6 +150,7 @@ class LotusHelp extends Component {
                 console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
                 // 利用setState方法的回调函数, 可以实时的拿到最新的state中的值, 以用来最新的判断
                 this.setState({selectedRows})
+                window.localStorage.setItem("commandHostList", JSON.stringify(selectedRows))
             }
         };
         const upLoadProps = {
