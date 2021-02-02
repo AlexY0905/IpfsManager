@@ -112,6 +112,9 @@ export const handleGetQueryResAction = (options) => {
                             })
                         }
                     })
+                } else if (result.code == 4) {
+                    message.error(result.msg)
+                    return false
                 } else { // 执行失败
                     Modal.error({
                         content: '网络错误, 稍后再试 ... '

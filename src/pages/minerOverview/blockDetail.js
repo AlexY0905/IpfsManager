@@ -117,7 +117,7 @@ class BlockDetail extends Component {
                                         <p><span>消息</span><span>{blockIdDetailData.MessageCount}</span></p>
                                         <p><span>奖励</span><span>{blockIdDetailData.Reward}</span></p>
                                         <p><span>奖励份数</span><span>{blockIdDetailData.WinCount}</span></p>
-                                        <p><span>父区块</span><span>{blockIdDetailData.ParentBlocks.length > 0 && blockIdDetailData.ParentBlocks.map((item, index) => (<span style={{color: '#1a4fc9', cursor: 'pointer'}} onClick={ () => this.handleGoPage(item, 'blockDetailPage')}>{item}</span>))}</span></p>
+                                        <p><span>父区块</span><span>{blockIdDetailData.ParentBlocks.length > 0 && blockIdDetailData.ParentBlocks.map((item, index) => (<div style={{color: '#1a4fc9', cursor: 'pointer'}} onClick={ () => this.handleGoPage(item, 'blockDetailPage')}>{item}</div>))}</span></p>
                                         <p><span>父区块权重</span><span>{blockIdDetailData.ParentWeight}</span></p>
                                         <p><span>罚金</span><span>{blockIdDetailData.Penalty}</span></p>
                                         <p><span>Parent Base Fee</span><span>{blockIdDetailData.ParentBaseFee}</span></p>
