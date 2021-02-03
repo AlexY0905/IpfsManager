@@ -483,11 +483,11 @@ class HomeList extends Component {
                     </Breadcrumb>
                     <div>
                         <Tabs defaultActiveKey="1" onChange={this.handleCallback}>
-                            <TabPane tab="lotus wallet" key="1">
+                            <TabPane tab="lotus 钱包" key="1">
                                 <Button type="primary" onClick={() => this.handleServerBtn("list")}>list</Button>
                             </TabPane>
 
-                            <TabPane tab="lotus client" key="2">
+                            <TabPane tab="lotus 客服端" key="2">
                                 {
                                     /*
                                     <Button type="primary" onClick={() => this.handleServerBtn("query-ask")}>query-ask</Button>
@@ -497,7 +497,7 @@ class HomeList extends Component {
                                 <Button type="primary" onClick={() => this.handleServerBtn("list-deals")}>list-deals</Button>
                             </TabPane>
 
-                            <TabPane tab="lotus mpool" key="3">
+                            <TabPane tab="lotus 消息池" key="3">
                                 <Button type="primary" onClick={() => this.handleServerBtn("pending")}>pending</Button>
                                 <Divider type="vertical" />
                                 <Button type="primary" onClick={() => this.handleServerBtn("find")}>find</Button>
@@ -507,7 +507,7 @@ class HomeList extends Component {
                                 <Button type="primary" onClick={() => this.handleServerBtn("gas-perf")}>gas-perf</Button>
                             </TabPane>
 
-                            <TabPane tab="lotus state" key="4">
+                            <TabPane tab="lotus 状态" key="4">
                                 <Button type="primary" onClick={() => this.handleServerBtn("power")}>power</Button>
                                 <Divider type="vertical" />
                                 <Button type="primary" onClick={() => this.handleServerBtn("active-sectors")}>active-sectors</Button>
@@ -527,7 +527,7 @@ class HomeList extends Component {
                                 }
                             </TabPane>
 
-                            <TabPane tab="lotus chain" key="5">
+                            <TabPane tab="lotus 链信息" key="5">
                                 <Button type="primary" onClick={() => this.handleServerBtn("getblock")}>getblock</Button>
                                 <Divider type="vertical" />
                                 <Button type="primary" onClick={() => this.handleServerBtn("getmessage")}>getmessage</Button>

@@ -103,6 +103,12 @@ class LotusHelp extends Component {
     }
     handleDeployRes () {
         // console.log('::::::::::-------++++++', JSON.parse(window.localStorage.getItem("commandHostList")));
+        if (!window.localStorage.getItem("commandName")) {
+            notification['warning']({
+                message: '当前没有执行的机器'
+            })
+            return false
+        }
         let options = {
             name: window.localStorage.getItem("commandName"),
             servers: JSON.parse(window.localStorage.getItem("commandHostList"))
@@ -202,8 +208,12 @@ class LotusHelp extends Component {
                     console.log('info.fileList----------', info.fileList);
                     if (info.file.response != "" && info.file.response.code == 0) {
                         message.success(`${info.file.response.name} 上传成功`);
-                    } else if (info.file.response != "") {
+                    } else if (info.file.response != "" && info.file.response.code == 1) {
                         message.error(`${info.file.response.name} 上传失败`);
+                    } else if (info.file.response != "" && info.file.response.code == 2) {
+                        message.error(`配置文件不存在`);
+                    } else if (info.file.response != "" && info.file.response.code == 3) {
+                        message.error(`配置文件不正确`);
                     }
                 }
             }
@@ -244,8 +254,12 @@ class LotusHelp extends Component {
                                 <Divider type="horizontal" />
                                 <Button type="primary" onClick={() => this.handleDeployBtn('进程守护')} disabled={this.state.shouHuBtn}>进程守护</Button>
                                 <Divider type="horizontal" />
-                                <Button type="primary" onClick={() => this.handleDeployBtn('初始化矿工')} disabled={this.state.chuShiHuaKuangGongBtn}>初始化矿工</Button>
-                                <Divider type="horizontal" />
+                                {
+                                    /*
+                                    <Button type="primary" onClick={() => this.handleDeployBtn('初始化矿工')} disabled={this.state.chuShiHuaKuangGongBtn}>初始化矿工</Button>
+                                    <Divider type="horizontal" />
+                                     */
+                                }
                                 <Button type="primary" onClick={() => this.handleDeployBtn('启动矿工')} disabled={this.state.qiDongKuangGongBtn}>启动矿工</Button>
                                 <Divider type="horizontal" />
                                 <Button type="primary" onClick={() => this.handleDeployBtn('启动 worker')} disabled={this.state.qiDongWorkerBtn}>启动 worker</Button>

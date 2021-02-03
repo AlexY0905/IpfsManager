@@ -206,13 +206,13 @@ class LotusMiner extends Component {
                     </Breadcrumb>
                     <div>
                         <Tabs defaultActiveKey="1" onChange={this.handleCallback}>
-                            <TabPane tab="storage-deals" key="1">
+                            <TabPane tab="存储交易" key="1">
                                 {/*<Button type="primary" onClick={() => this.handleServerBtn("list")}>list</Button>*/}
                                 {/*<Divider type="vertical" />*/}
                                 <Button type="primary" onClick={() => this.handleServerBtn("get-ask")}>get-ask</Button>
                             </TabPane>
 
-                            <TabPane tab="pieces" key="2">
+                            <TabPane tab="片信息" key="2">
                                 {
                                     /*
                                         <Button type="primary" onClick={() => this.handleServerBtn("list-cids")}>list-cids</Button>
@@ -222,7 +222,7 @@ class LotusMiner extends Component {
                                 <Button type="primary" onClick={() => this.handleServerBtn("cid-info")}>cid-info</Button>
                             </TabPane>
 
-                            <TabPane tab="sectors" key="3">
+                            <TabPane tab="区块信息" key="3">
                                 {
                                     /*
                                     <Button type="primary" onClick={() => this.handleServerBtn("sectorslist")}>sectorslist</Button>

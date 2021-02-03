@@ -87,7 +87,7 @@ export const handleDownFileAction = (options) => {
                 if (result.msg == 'success') {
                     message.success('下载成功')
                 } else {
-                    message.success('下载失败, 请稍后再试 !')
+                    message.error('下载失败, 请稍后再试 !')
                 }
             })
             .catch(err => {

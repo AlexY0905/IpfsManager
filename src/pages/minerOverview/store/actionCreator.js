@@ -27,7 +27,8 @@ export const handleOverviewEchartsDataAction = (options) => {
         dispatch(getIsLoadingStart(options))
         api.getOverviewData(options)
             .then(result => {
-                // console.log(':::::::::::::::', result.msg)
+                console.log(':::::::::::::::', result.msg)
+
                 /**
                  * 矿工概览数据
                  * */
@@ -38,13 +39,18 @@ export const handleOverviewEchartsDataAction = (options) => {
                         type: Object.keys(item)[0] == 'AvailableBalance' && '可用余额' || Object.keys(item)[0] == 'StoragePledge' && '扇区抵押' || Object.keys(item)[0] == 'Staking' && '挖矿锁仓',
                         value: Number(Object.values(item)[0].split(' ')[0])
                     })
+                    console.log(22222222211111, Number(Object.values(item)[0].split(' ')[0]));
+                    console.log('1111111111', Object.values(item)[0].split(' ')[0] * 1)
                 })
+                console.log('overviewEchartsData-----------', overviewEchartsData);
+                return
                 let options = {
                     accountBalance: result.msg.MinerAccounts.MinerBalance,
                     overviewEchartsData
                 }
                 dispatch(handleOverviewEchartsData(options))
                 /* 概览图表数据 */
+
                 /* 有效算力数据 */
                 let minerPowersData = result.msg.MinerPowers
                 dispatch(handleOverviewPowerData(minerPowersData))

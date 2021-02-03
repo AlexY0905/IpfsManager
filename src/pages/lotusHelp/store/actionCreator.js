@@ -61,8 +61,13 @@ export const handleDeployAction = (options) => {
                             })
                         }
                     })
+                } else {
+                    notification['error']({
+                        message: `执行失败, 稍后再试`,
+                        duration: null
+                    })
+                    return false
                 }
-
             })
             .catch(err => {
                 message.error('操作失败, 请稍后再试 !')
@@ -90,7 +95,6 @@ export const handleGetQueryResAction = (options) => {
                             content: item.Host + '执行完毕'
                         })
                     })
-                    return
                     dispatch(handleGetQueryResData(result))
                 } else if (result.code == 1) { // 正在执行中
                     result.msg.forEach((item, index) => {
@@ -106,48 +110,21 @@ export const handleGetQueryResAction = (options) => {
                             Modal.warning({
                                 content: item.Host + ' 正在执行中, 稍后再看 ... '
                             })
-                        } else if (item.Code == 3) { // 暂无执行
+                        } else if (item.Code == 3) { // 查询失败
                             Modal.warning({
-                                content: item.Host + ' 暂无执行'
+                                content: item.Host + ' 查询失败'
                             })
                         }
                     })
-                } else if (result.code == 4) {
+                } else if (result.code == 4) { // 暂无可查询的指令
                     message.error(result.msg)
                     return false
                 } else { // 执行失败
                     Modal.error({
                         content: '网络错误, 稍后再试 ... '
                     })
-                    return
                     dispatch(handleGetQueryResData(result))
                 }
-
-                /*
-                if (result.code == 0) { // 执行成功
-                    Modal.success({
-                        content: '执行成功'
-                    })
-                    return false
-                } else if (result.code == 1) { // 执行失败
-                    Modal.error({
-                        content: '执行失败, 稍后再试 ... '
-                    })
-                    dispatch(handleGetQueryResData(result))
-                    return false
-                } else if (result.code == 2) { // 正在执行中
-                    Modal.warning({
-                        content: '正在执行中, 稍后再看 ... '
-                    })
-                    return false
-                } else if (result.code == 3) { // 暂无执行的脚本
-                    Modal.warning({
-                        content: '暂无执行的脚本 ... '
-                    })
-                    return false
-                }
-                */
-
             })
             .catch(err => {
                 message.error('查询结果失败, 请稍后再试 !')
