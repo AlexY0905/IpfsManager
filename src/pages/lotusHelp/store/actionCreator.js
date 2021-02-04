@@ -119,9 +119,9 @@ export const handleGetQueryResAction = (options) => {
                 } else if (result.code == 4) { // 暂无可查询的指令
                     message.error(result.msg)
                     return false
-                } else { // 执行失败
+                } else if (result.code == 2)  { // 执行失败
                     Modal.error({
-                        content: '网络错误, 稍后再试 ... '
+                        content: '执行失败, 稍后再试 ... '
                     })
                     dispatch(handleGetQueryResData(result))
                 }

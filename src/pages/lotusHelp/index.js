@@ -10,6 +10,7 @@ const { TabPane } = Tabs;
 const { confirm } = Modal
 
 let timer = null
+let isOneRender = true
 class LotusHelp extends Component {
     constructor(props) {
         super(props)
@@ -28,7 +29,11 @@ class LotusHelp extends Component {
             benchCompile: true,
             benchceshiBtn: true,
             workRunModal: false,
-            process: ''
+            process: '',
+            benchCeShiBtnModal: false,
+            benchCeShiIptVal: '',
+            benchBianYiBtnModal: false,
+            benchBianYiIptVal: ''
         }
         this.handleDeployBtn = this.handleDeployBtn.bind(this)
         this.handleSeeServer = this.handleSeeServer.bind(this)
@@ -38,6 +43,12 @@ class LotusHelp extends Component {
         this.handleWorkRunModalCancel = this.handleWorkRunModalCancel.bind(this)
         this.handleWorkRunModalOk = this.handleWorkRunModalOk.bind(this)
         this.handleWorkRunIpt = this.handleWorkRunIpt.bind(this)
+        this.handleBenchCeShiModalCancel = this.handleBenchCeShiModalCancel.bind(this)
+        this.handleBenchCeShiModalOk = this.handleBenchCeShiModalOk.bind(this)
+        this.handleBenchCeShiIpt = this.handleBenchCeShiIpt.bind(this)
+        this.handleBenchBianYiModalCancel = this.handleBenchBianYiModalCancel.bind(this)
+        this.handleBenchBianYiModalOk = this.handleBenchBianYiModalOk.bind(this)
+        this.handleBenchBianYiIpt = this.handleBenchBianYiIpt.bind(this)
     }
     componentDidMount() {
         // 调用发送方的数据 显示服务器列表
@@ -47,6 +58,7 @@ class LotusHelp extends Component {
         if (timer != null) {
             clearInterval(timer)
         }
+        isOneRender = true
         let options = {
             name: '',
             servers: this.state.selectedRows
@@ -74,12 +86,14 @@ class LotusHelp extends Component {
             return false
         } else if (type == 'bench 编译') {
             options.name = 'benchcompile'
-            this.setState({name: 'benchcompile', benchCompile: true})
+            this.setState({name: 'benchcompile', benchCompile: true, benchBianYiBtnModal: true})
             window.localStorage.setItem("commandName", 'benchcompile')
+            return false
         } else if (type == 'bench 测试') {
             options.name = 'benchrun'
-            this.setState({name: 'benchrun', benchceshiBtn: true})
+            this.setState({name: 'benchrun', benchceshiBtn: true, benchCeShiBtnModal: true})
             window.localStorage.setItem("commandName", 'benchrun')
+            return false
         }
         console.log('options-----------', options)
         // 调用发送方函数, 处理部署
@@ -120,12 +134,14 @@ class LotusHelp extends Component {
         this.setState({workRunModal: false})
     }
     handleWorkRunModalOk () {
+        /*
         if (this.state.process == '') {
             notification['warning']({
                 message: '输入框不能为空 !'
             })
             return false
         }
+        */
         let options = {
             name: 'workerrun',
             process: this.state.process
@@ -139,24 +155,78 @@ class LotusHelp extends Component {
         this.setState({process: e.target.value})
     }
 
+    handleBenchCeShiModalCancel () {
+        this.setState({benchCeShiBtnModal: false})
+    }
+    handleBenchCeShiModalOk () {
+        /*
+        if (this.state.benchCeShiIptVal == '') {
+            notification['warning']({
+                message: '输入框不能为空 !'
+            })
+            return false
+        }
+        */
+
+        let options = {
+            name: 'benchrun',
+            process: this.state.benchCeShiIptVal
+        }
+        // 调用发送方函数, 处理部署
+        this.props.handleDeploy(options)
+        this.setState({benchCeShiBtnModal: false})
+    }
+    handleBenchCeShiIpt (e) {
+        this.setState({benchCeShiIptVal: e.target.value})
+    }
+
+    handleBenchBianYiModalCancel () {
+        this.setState({benchBianYiBtnModal: false})
+    }
+    handleBenchBianYiModalOk () {
+        /*
+        if (this.state.benchBianYiIptVal == '') {
+            notification['warning']({
+                message: '输入框不能为空 !'
+            })
+            return false
+        }
+        */
+
+        let options = {
+            name: 'benchcompile',
+            process: this.state.benchBianYiIptVal
+        }
+        // 调用发送方函数, 处理部署
+        this.props.handleDeploy(options)
+        this.setState({benchBianYiBtnModal: false})
+    }
+    handleBenchBianYiIpt (e) {
+        this.setState({benchBianYiIptVal: e.target.value})
+    }
+
 
     render() {
         let columns = []
         let dataSource = []
         let { serverhostlist, queryResCode, queryResName } = this.props
-        if (queryResCode == 0 && queryResName != '') { // 执行成功 改变按钮状态
+
+        if (isOneRender && queryResCode == 0 && queryResName != '') { // 执行成功 改变按钮状态
             if (queryResName == 'lotuscompile') {
                 this.setState({shouHuBtn: false})
             } else if (queryResName == 'lotusdaemon') {
-                this.setState({chuShiHuaKuangGongBtn: false})
-            } else if (queryResName == 'minerinit') {
                 this.setState({qiDongKuangGongBtn: false})
             } else if (queryResName == 'minerrun') {
                 this.setState({qiDongWorkerBtn: false})
+            } else if (queryResName == 'workerrun') {
+                this.setState({bianYiBtn: false})
+            } else if (queryResName == 'benchrun') {
+                this.setState({benchCompile: false})
             } else if (queryResName == 'benchcompile') {
                 this.setState({benchceshiBtn: false})
             }
-        } else if (queryResCode == 1 && queryResName != '') { // 执行失败 改变按钮状态
+            isOneRender = false
+        } else if (isOneRender && queryResCode != 0 && queryResName != '') { // 执行失败 改变按钮状态
             if (queryResName == 'lotuscompile') {
                 this.setState({bianYiBtn: false})
             } else if (queryResName == 'lotusdaemon') {
@@ -172,7 +242,11 @@ class LotusHelp extends Component {
             } else if (queryResName == 'benchrun') {
                 this.setState({benchceshiBtn: false})
             }
+            isOneRender = false
         }
+
+
+
 
         if (serverhostlist.toJS().length > 0) {
             columns = [
@@ -275,7 +349,7 @@ class LotusHelp extends Component {
                     </div>
                     <Modal
                         title='机器信息'
-                        okText='编译'
+                        okText='确定'
                         cancelText='取消'
                         destroyOnClose={true}
                         visible={this.state.isShowServerModal}
@@ -299,7 +373,7 @@ class LotusHelp extends Component {
                         </div>
                     </Modal>
                     <Modal
-                        okText='确定'
+                        okText='执行'
                         cancelText='取消'
                         destroyOnClose={true}
                         visible={this.state.workRunModal}
@@ -308,6 +382,30 @@ class LotusHelp extends Component {
                     >
                         <div style={{marginTop: '20px'}}>
                             <Input placeholder="输入节点" onChange={this.handleWorkRunIpt} />
+                        </div>
+                    </Modal>
+                    <Modal
+                        okText='执行'
+                        cancelText='取消'
+                        destroyOnClose={true}
+                        visible={this.state.benchCeShiBtnModal}
+                        onCancel={this.handleBenchCeShiModalCancel}
+                        onOk={this.handleBenchCeShiModalOk}
+                    >
+                        <div style={{marginTop: '20px'}}>
+                            <Input placeholder="输入节点" onChange={this.handleBenchCeShiIpt} />
+                        </div>
+                    </Modal>
+                    <Modal
+                        okText='执行'
+                        cancelText='取消'
+                        destroyOnClose={true}
+                        visible={this.state.benchBianYiBtnModal}
+                        onCancel={this.handleBenchBianYiModalCancel}
+                        onOk={this.handleBenchBianYiModalOk}
+                    >
+                        <div style={{marginTop: '20px'}}>
+                            <Input placeholder="输入节点" onChange={this.handleBenchBianYiIpt} />
                         </div>
                     </Modal>
                 </Layout>

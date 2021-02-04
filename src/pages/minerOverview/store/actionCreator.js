@@ -39,11 +39,7 @@ export const handleOverviewEchartsDataAction = (options) => {
                         type: Object.keys(item)[0] == 'AvailableBalance' && '可用余额' || Object.keys(item)[0] == 'StoragePledge' && '扇区抵押' || Object.keys(item)[0] == 'Staking' && '挖矿锁仓',
                         value: Number(Object.values(item)[0].split(' ')[0])
                     })
-                    console.log(22222222211111, Number(Object.values(item)[0].split(' ')[0]));
-                    console.log('1111111111', Object.values(item)[0].split(' ')[0] * 1)
                 })
-                console.log('overviewEchartsData-----------', overviewEchartsData);
-                return
                 let options = {
                     accountBalance: result.msg.MinerAccounts.MinerBalance,
                     overviewEchartsData

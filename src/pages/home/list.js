@@ -487,7 +487,7 @@ class HomeList extends Component {
                                 <Button type="primary" onClick={() => this.handleServerBtn("list")}>list</Button>
                             </TabPane>
 
-                            <TabPane tab="lotus 客服端" key="2">
+                            <TabPane tab="lotus 客户端" key="2">
                                 {
                                     /*
                                     <Button type="primary" onClick={() => this.handleServerBtn("query-ask")}>query-ask</Button>

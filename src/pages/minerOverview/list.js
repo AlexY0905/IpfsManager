@@ -62,7 +62,7 @@ class OverviewList extends Component {
         this.props.handleAccountLine(accountLineOptions)
         // 调用发送方函数, 处理有效算力折线图数据
         let powerLineOptions = {name: 'powerchanges'}
-        // this.props.handleEchartsData(powerLineOptions)
+        this.props.handleEchartsData(powerLineOptions)
         // 调用发送方函数, 处理账户概览数据
         let accountOptions = {name: 'accoutSummary'}
         this.props.handleAccountData(accountOptions)
@@ -73,7 +73,7 @@ class OverviewList extends Component {
             this.props.handleOverviewEchartsData(options)
             this.props.handleMiningCounts(miningOptions)
             this.props.handleAccountLine(accountLineOptions)
-            // this.props.handleEchartsData(powerLineOptions)
+            this.props.handleEchartsData(powerLineOptions)
             this.props.handleAccountData(accountOptions)
             this.props.handleNewList(newListOptions)
         }, 7800000)
@@ -360,12 +360,27 @@ class OverviewList extends Component {
                 legend: {
                     itemName: {
                         formatter: function formatter(text, item) {
-                            return item.value === 'power_delta' ? '有效增量' : '有效算力';
+                            return item.value === 'power_delta' ? '有效算力增量' : '有效算力';
                         }
                     }
                 },
                 showTitle: true,
-                title: '账户标题'
+                title: '账户标题',
+                tooltip: {
+                    formatter: function formatter(datum) {
+                        if (datum.effective_power || datum.effective_power == 0) { // 有效算力
+                            return {
+                                name: '有效算力',
+                                value: datum.effective_power + powerLineCompany
+                            }
+                        } else if (datum.power_delta || datum.power_delta == 0) { // 有效算力增量
+                            return {
+                                name: '有效算力增量',
+                                value: datum.power_delta + powerLineCompany
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -442,7 +457,7 @@ class OverviewList extends Component {
                                     <h2>有效算力</h2>
                                     <div className="power_num">
                                         <span style={{fontSize: '24px'}}>{this.state.avialiablePower != '' && this.state.avialiablePower}</span>
-                                        <span>占比: {this.state.powerRate != '' && this.state.powerRate}</span>
+                                        <span>占比: {this.state.powerRate != '' && this.state.powerRate} %</span>
                                         <span>排名: {this.state.powerRank != '' && this.state.powerRank}</span>
                                     </div>
                                 </div>
