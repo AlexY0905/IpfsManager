@@ -134,17 +134,10 @@ class LotusHelp extends Component {
         this.setState({workRunModal: false})
     }
     handleWorkRunModalOk () {
-        /*
-        if (this.state.process == '') {
-            notification['warning']({
-                message: '输入框不能为空 !'
-            })
-            return false
-        }
-        */
         let options = {
             name: 'workerrun',
-            process: this.state.process
+            process: this.state.process,
+            servers: this.state.selectedRows
         }
         // 调用发送方函数, 处理部署
         this.props.handleDeploy(options)
@@ -159,18 +152,10 @@ class LotusHelp extends Component {
         this.setState({benchCeShiBtnModal: false})
     }
     handleBenchCeShiModalOk () {
-        /*
-        if (this.state.benchCeShiIptVal == '') {
-            notification['warning']({
-                message: '输入框不能为空 !'
-            })
-            return false
-        }
-        */
-
         let options = {
             name: 'benchrun',
-            process: this.state.benchCeShiIptVal
+            process: this.state.benchCeShiIptVal,
+            servers: this.state.selectedRows
         }
         // 调用发送方函数, 处理部署
         this.props.handleDeploy(options)
@@ -184,18 +169,10 @@ class LotusHelp extends Component {
         this.setState({benchBianYiBtnModal: false})
     }
     handleBenchBianYiModalOk () {
-        /*
-        if (this.state.benchBianYiIptVal == '') {
-            notification['warning']({
-                message: '输入框不能为空 !'
-            })
-            return false
-        }
-        */
-
         let options = {
             name: 'benchcompile',
-            process: this.state.benchBianYiIptVal
+            process: this.state.benchBianYiIptVal,
+            servers: this.state.selectedRows
         }
         // 调用发送方函数, 处理部署
         this.props.handleDeploy(options)
