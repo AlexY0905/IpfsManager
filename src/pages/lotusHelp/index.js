@@ -111,7 +111,7 @@ class LotusHelp extends Component {
     handleSelectServerOk () {
         console.log(':::::------------', this.state.selectedRows);
         if (this.state.selectedRows.length > 0) {
-            this.setState({bianYiBtn: false, benchceshiBtn: false})
+            this.setState({bianYiBtn: false, benchCompile: false})
         }
         this.setState({isShowServerModal: false})
     }
@@ -220,10 +220,10 @@ class LotusHelp extends Component {
                 this.setState({qiDongWorkerBtn: false})
             } else if (queryResName == 'workerrun') {
                 this.setState({bianYiBtn: false})
-            } else if (queryResName == 'benchrun') {
-                this.setState({benchCompile: false})
             } else if (queryResName == 'benchcompile') {
                 this.setState({benchceshiBtn: false})
+            } else if (queryResName == 'benchrun') {
+                this.setState({benchCompile: false})
             }
             isOneRender = false
         } else if (isOneRender && queryResCode != 0 && queryResName != '') { // 执行失败 改变按钮状态
@@ -341,9 +341,9 @@ class LotusHelp extends Component {
                             </TabPane>
 
                             <TabPane tab="测试" key="2">
-                                <Button type="primary" onClick={() => this.handleDeployBtn('bench 测试')} disabled={this.state.benchceshiBtn}>bench 测试</Button>
-                                <Divider type="horizontal" />
                                 <Button type="primary" onClick={() => this.handleDeployBtn('bench 编译')} disabled={this.state.benchCompile}>bench 编译</Button>
+                                <Divider type="horizontal" />
+                                <Button type="primary" onClick={() => this.handleDeployBtn('bench 测试')} disabled={this.state.benchceshiBtn}>bench 测试</Button>
                             </TabPane>
                         </Tabs>
                     </div>
