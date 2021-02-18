@@ -8,6 +8,7 @@ import { actionCreator } from './store'
 
 const { TabPane } = Tabs;
 const { Search } = Input;
+const { confirm } = Modal
 
 let timer = null
 class LotusMiner extends Component {
@@ -18,12 +19,18 @@ class LotusMiner extends Component {
             visible: false,
             modalType: '',
             isShowSearch: '',
-            modalOrder: ''
+            modalOrder: '',
+            tiBiVisible: false,
+            tiBiNumber: ''
         }
         this.handleServerBtn = this.handleServerBtn.bind(this)
         this.handleCancel = this.handleCancel.bind(this)
         this.handleCallback = this.handleCallback.bind(this)
         this.handleSearchBtn = this.handleSearchBtn.bind(this)
+        this.handleTiBi = this.handleTiBi.bind(this)
+        this.handleTiBiOk = this.handleTiBiOk.bind(this)
+        this.handleTiBiCancel = this.handleTiBiCancel.bind(this)
+        this.handleTiBiNumber = this.handleTiBiNumber.bind(this)
     }
     componentDidMount() {
         // 在生命周期调用发送方的数据, 处理minerInfo数据
@@ -95,7 +102,43 @@ class LotusMiner extends Component {
         // 调用发送方函数, 处理搜索
         this.props.handleSearch(options)
     }
-    // -----------------------------------
+    // ----------------------------------- 处理提币按钮
+    handleTiBi () {
+        this.setState({tiBiVisible: true})
+    }
+    handleTiBiOk () {
+        let _this = this
+        if (this.state.tiBiNumber == '') {
+            notification['warning']({
+                message: '输入框不能为空 !'
+            })
+            return false
+        }
+        confirm({
+            title: '确定要进行提币吗 ?',
+            content: '',
+            onOk() {
+                // 调用发送方函数, 处理提币
+                let options = {
+                    num: this.state.tiBiNumber
+                }
+                // _this.props.handleTiBiData(options)
+                _this.setState({tiBiVisible: false})
+            },
+            onCancel() {
+                console.log('Cancel');
+            }
+        })
+    }
+    handleTiBiCancel () {
+        this.setState({tiBiVisible: false})
+    }
+    handleTiBiNumber (e) {
+        // console.log(e.target.value)
+        this.setState({tiBiNumber: e.target.value})
+    }
+    // ----------------------------------- 处理提币按钮
+
 
     render() {
         let dataSource = [];
@@ -205,6 +248,9 @@ class LotusMiner extends Component {
                         <Breadcrumb.Item>LotusMiner</Breadcrumb.Item>
                     </Breadcrumb>
                     <div>
+                        <Button type="primary" onClick={() => this.handleTiBi()}>提币</Button>
+                    </div>
+                    <div>
                         <Tabs defaultActiveKey="1" onChange={this.handleCallback}>
                             <TabPane tab="存储交易" key="1">
                                 {/*<Button type="primary" onClick={() => this.handleServerBtn("list")}>list</Button>*/}
@@ -277,6 +323,18 @@ class LotusMiner extends Component {
                             )}
                         />
                     </div>
+                    <div>
+                        <Modal
+                            title="提币"
+                            cancelText='取消'
+                            okText='确认'
+                            visible={this.state.tiBiVisible}
+                            onOk={this.handleTiBiOk}
+                            onCancel={this.handleTiBiCancel}
+                        >
+                            <Input placeholder="输入提币的数量" onChange={this.handleTiBiNumber} />
+                        </Modal>
+                    </div>
                 </Layout>
             </div>
         )
@@ -301,6 +359,9 @@ const mapDispatchToProps = (dispatch) => ({
     },
     handleMinerInfo: () => {
         dispatch(actionCreator.handleMinerInfoAction())
+    },
+    handleTiBiData: (options) => {
+        dispatch(actionCreator.handleTiBiDataAction(options))
     }
 
 })

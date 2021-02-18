@@ -101,6 +101,11 @@ export const API_CONFIG = {
         '/v5/lotusinfo',
         'get'
     ],
+    // lotusMiner页面 提币接口
+    getTiBiData: [
+        '/v5/lotusinfo',
+        'get'
+    ],
     // lotus命令页面, 折线图接口
     getMinerPower: [
         '/v6/minerpower',

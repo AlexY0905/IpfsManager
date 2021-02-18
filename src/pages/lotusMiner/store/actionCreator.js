@@ -19,7 +19,7 @@ export const handleLotusMinerAction = (options) => {
         dispatch(getIsLoadingStart())
         api.getLotusMiner(options)
             .then((result) => {
-                console.log("----------", result);
+                // console.log("----------", result);
                 if (result.code == 1) {
                     message.warning('暂无数据, 请稍后再试 !')
                     return false
@@ -74,16 +74,31 @@ export const handleMinerInfoAction = () => {
         dispatch(getIsLoadingStart())
         api.getMinerInfoData()
             .then((result) => {
-                console.log('result---------', result)
                 let data = []
                 for (let key in result.msg) {
                     data.push({[key]: result.msg[key]})
                 }
-                console.log('data--------', data)
                 dispatch(handleMinerInfoData(data))
             })
             .catch((err) => {
                 message.error('获取数据失败, 请稍后再试 !')
+            })
+            .finally(() => {
+                dispatch(getIsLoadingEnd())
+            })
+    }
+}
+// 处理提币
+export const handleTiBiDataAction = (options) => {
+    return (dispatch, getState) => {
+        dispatch(getIsLoadingStart())
+        api.getTiBiData(options)
+            .then((result) => {
+                console.log('result---------', result)
+
+            })
+            .catch((err) => {
+                message.error('网络错误, 请稍后再试 !')
             })
             .finally(() => {
                 dispatch(getIsLoadingEnd())
