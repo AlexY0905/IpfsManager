@@ -95,7 +95,11 @@ export const handleTiBiDataAction = (options) => {
         api.getTiBiData(options)
             .then((result) => {
                 console.log('result---------', result)
-
+                if (result.msg && result.msg == 'balance invalid') {
+                    message.error(result.msg)
+                } else {
+                    message.success(result.msg)
+                }
             })
             .catch((err) => {
                 message.error('网络错误, 请稍后再试 !')

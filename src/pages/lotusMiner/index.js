@@ -120,9 +120,10 @@ class LotusMiner extends Component {
             onOk() {
                 // 调用发送方函数, 处理提币
                 let options = {
-                    num: this.state.tiBiNumber
+                    name: 'withdrawbalance',
+                    num: _this.state.tiBiNumber
                 }
-                // _this.props.handleTiBiData(options)
+                _this.props.handleTiBiData(options)
                 _this.setState({tiBiVisible: false})
             },
             onCancel() {
